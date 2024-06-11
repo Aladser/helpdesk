@@ -16,15 +16,15 @@
         <form method="POST" action="{{ route('login') }}">
             @csrf
 
-            <!-- Email Address -->
+            <!-- Логин -->
             <div>
                 <p class='text-xl text-center p-2'>Вход в систему</p>
-                <x-label for="email" :value="__('Почта')" />
+                <x-label for="email" :value="__('Логин')" />
 
-                <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus />
+                <x-input id="email" class="block mt-1 w-full" type="text" name="name" :value="old('email')" required autofocus />
             </div>
 
-            <!-- Password -->
+            <!-- Пароль -->
             <div class="mt-4">
                 <x-label for="password" :value="__('Пароль')" />
 
