@@ -6,13 +6,13 @@ use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     *
-     * @return void
-     */
+    // запуск миграции с сидами: php artisan migrate:refresh --seed
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
+        $userRoleSeeder = new UserRoleSeeder();
+        $userSeeder = new UserSeeder();
+
+        $userRoleSeeder->run();
+        $userSeeder->run();
     }
 }
