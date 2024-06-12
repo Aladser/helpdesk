@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use \Illuminate\Support\Facades\Auth;
+use App\Models\Task;
 
 class TaskController extends Controller
 {
@@ -12,7 +14,11 @@ class TaskController extends Controller
      */
     public function index()
     {
-        return \Illuminate\Support\Facades\Auth::user() ? view('task.index') : redirect('/login');
+        if (Auth::user()) {
+            return view('task.index', ['tasks' => Task::all()]);
+        } else {
+            return redirect(route('login'));
+        }
     }
 
     /**
