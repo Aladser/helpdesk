@@ -29,6 +29,7 @@
 
             <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
                 Контент (index.blade)
+                <?var_dump($tasks)?>
             </div>
         </div>
     </body>
