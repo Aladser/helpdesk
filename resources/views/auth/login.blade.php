@@ -19,9 +19,9 @@
             <!-- Логин -->
             <div>
                 <p class='text-xl text-center p-2'>Вход в систему</p>
-                <x-label for="email" :value="__('Логин')" />
+                <x-label for="login" :value="__('Логин')" />
 
-                <x-input id="email" class="block mt-1 w-full" type="text" name="name" :value="old('email')" required autofocus />
+                <x-input id="login" class="block mt-1 w-full" type="text" name="login" :value="old('email')" required autofocus />
             </div>
 
             <!-- Пароль -->
