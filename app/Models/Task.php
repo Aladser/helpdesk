@@ -12,9 +12,11 @@ class Task extends Model
 
     public $timestamps = false;
 
-    protected $fillable = [
-        'status',
-    ];
+    // статус
+    public function status()
+    {
+        return $this->belongsTo(Status::class, 'status_id', 'id');
+    }
 
     // автор задачи
     public function author()

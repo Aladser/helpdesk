@@ -11,7 +11,7 @@ class TaskSeeder extends Seeder
     {
         for ($i=0;$i<3; $i++) {
             Task::create([
-                'status' => "new",
+                'status_id' => 1,
                 'executor_id' => $i+2,
                 'author_id' => $i+5,
                 'header' => 'Тема №'.($i+1),
