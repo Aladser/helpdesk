@@ -15,4 +15,16 @@ class Task extends Model
     protected $fillable = [
         'status',
     ];
+
+    // автор задачи
+    public function author()
+    {
+        return $this->belongsTo(User::class, 'author_id', 'id');
+    }
+
+    // исполнитель задачи
+    public function executor()
+    {
+        return $this->belongsTo(User::class, 'executor_id', 'id');
+    }
 }

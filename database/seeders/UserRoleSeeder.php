@@ -11,6 +11,6 @@ class UserRoleSeeder extends Seeder
     {
         UserRole::create(['name' => "admin",'description' => "Администратор",]);
         UserRole::create(['name' => "executor",'description' => "Исполнитель",]);
-        UserRole::create(['name' => "client",'description' => "Заявитель",]);
+        UserRole::create(['name' => "author",'description' => "Автор",]);
     }
 }

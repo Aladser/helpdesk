@@ -28,8 +28,9 @@
                 @foreach ($tasks as $task)
                 <div class='border border-current px-24 py-2 mb-2'>
                     <p>Статус: <?=$task->status?></p>
-                    <p>Заявитель: <?=$task->author_id?></p>
-                    <p>Исполнитель: <?=$task->executor_id?></p>
+                    <p>Заявитель: <?=$task->author->name?></p>
+                    <p>Исполнитель: <?=$task->executor->name?></p>
+                    <p>Тема: <?=$task->header?></p>
                     <p>Содержание: <?=$task->content?></p>
                     <p>Последняя активность: <?=$task->last_activity?></p>
                 </div>

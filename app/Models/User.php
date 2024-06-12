@@ -31,4 +31,16 @@ class User extends Authenticatable
     {
         return $this->belongsTo(UserRole::class, 'role_id', 'id');
     }
+
+    // авторы задач
+    public function authors()
+    {
+        return $this->hasMany(Task::class, 'author_id', 'id');
+    }
+
+    // исполнители задач
+    public function executors()
+    {
+        return $this->hasMany(Task::class, 'executor_id', 'id');
+    }
 }

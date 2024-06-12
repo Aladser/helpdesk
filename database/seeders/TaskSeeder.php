@@ -14,7 +14,8 @@ class TaskSeeder extends Seeder
                 'status' => "new",
                 'executor_id' => $i+2,
                 'author_id' => $i+5,
-                'content' => 'сообщение заявителя',
+                'header' => 'Тема №'.($i+1),
+                'content' => 'сообщение автора №'.($i+1).': много, много, много букв',
             ]);
         }
     }
