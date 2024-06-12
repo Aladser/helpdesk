@@ -11,10 +11,12 @@ class DatabaseSeeder extends Seeder
     {
         $userRoleSeeder = new UserRoleSeeder();
         $userSeeder = new UserSeeder();
+        $statusSeeder = new StatusSeeder();
         $taskSeeder = new TaskSeeder();
 
         $userRoleSeeder->run();
         $userSeeder->run();
+        $statusSeeder->run();
         $taskSeeder->run();
     }
 }

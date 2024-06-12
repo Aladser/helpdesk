@@ -27,7 +27,7 @@
             <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
                 @foreach ($tasks as $task)
                 <div class='border border-current px-24 py-2 mb-2'>
-                    <p>Статус: <?=$task->status?></p>
+                    <p>Статус: <?=$task->status->description?></p>
                     <p>Заявитель: <?=$task->author->name?></p>
                     <p>Исполнитель: <?=$task->executor->name?></p>
                     <p>Тема: <?=$task->header?></p>
