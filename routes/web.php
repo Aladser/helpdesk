@@ -8,7 +8,6 @@ use App\Http\Controllers\TaskController;
 Route::get('/', [TaskController::class, 'index'])->name('index');
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    return view('dashboard', ['auth_user' => Auth::user()]);
 })->middleware(['auth'])->name('dashboard');
-
 require __DIR__.'/auth.php';
