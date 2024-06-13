@@ -7,6 +7,7 @@
         <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="css/index.css">
         <script src="https://cdn.tailwindcss.com"></script>
+        <script src="js/index.js" defer></script>
     </head>
     <body class="antialiased">
         <div class="relative flex items-top justify-center min-h-screen bg-gray-100 dark:bg-gray-900 sm:items-center py-4 sm:pt-0">
@@ -32,7 +33,7 @@
                         @endforeach
                     </tr>
                     @foreach ($tasks as $task)
-                    <tr>
+                    <tr class='task-table__row'>
                         <td><?=$task->id?></td>
                         <td><?=$task->header?></td>
                         <td><?="{$task->author->surname} {$task->author->name}{$task->author->patronym}"?></td>

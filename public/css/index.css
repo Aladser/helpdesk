@@ -1,30 +1,24 @@
-.task-table {
-    width: 100%;
-}
+.task-table {width: 100%;}
+
 
 /*строки*/
-.task-table tr{
-    border-bottom: 1px solid lightgray;
-}
+.task-table tr{border-bottom: 1px solid lightgray;}
 /*строка заголовков*/
-.task-table tr:first-child{
-    background-color: lightgrey;
-}
+.task-table tr:first-child{background-color: lightgrey;}
+
 
 /*ячейки*/
 .task-table td{
     padding: 1rem;
     border-right: 1px solid lightgray;
 }
-.task-table td:first-child{
-    border-left: 1px solid lightgray;
-}
-.task-table td:nth-child(2){
-    width: 30%;
-}
-.task-table tr:first-child td{
-    border-right: 1px solid rgb(180, 180, 180);
-}
-.task-table tr:first-child td:last-child{
-    border-right: none;
-}
+/*первые ячейки строк*/
+.task-table td:first-child{border-left: 1px solid lightgray;}
+/*строка темы*/
+.task-table td:nth-child(2){width: 30%;}
+
+
+/*заголовки*/
+.task-table tr:first-child td{border-right: 1px solid rgb(180, 180, 180);}
+/*последний заголовок*/
+.task-table tr:first-child td:last-child{border-right: none;}
