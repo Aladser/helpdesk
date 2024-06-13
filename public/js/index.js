@@ -1,5 +1,4 @@
 const TASK_ELEMENT_URL_PART = '/task';
-/**табличные строки задач*/
 const TASK_ROWS = document.querySelectorAll('.task-table__row');
 
 /**переходы на страницу задачи*/
