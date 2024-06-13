@@ -3,10 +3,11 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title><?=env('APP_NAME')?></title>
-        <!-- Fonts -->
+        <title><?=env('APP_NAME')?> - обращения</title>
         <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="css/index.css">
         <script src="https://cdn.tailwindcss.com"></script>
+        <script src="js/index.js" defer></script>
     </head>
     <body class="antialiased">
         <div class="relative flex items-top justify-center min-h-screen bg-gray-100 dark:bg-gray-900 sm:items-center py-4 sm:pt-0">
@@ -24,17 +25,25 @@
                 </div>
             @endif
 
-            <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
-                @foreach ($tasks as $task)
-                <div class='border border-current px-24 py-2 mb-2'>
-                    <p>Статус: <?=$task->status->description?></p>
-                    <p>Заявитель: <?=$task->author->name?></p>
-                    <p>Исполнитель: <?=$task->executor->name?></p>
-                    <p>Тема: <?=$task->header?></p>
-                    <p>Содержание: <?=$task->content?></p>
-                    <p>Последняя активность: <?=$task->last_activity?></p>
-                </div>
-                @endforeach
+            <div class="mx-auto w-full px-8">
+                <table class="task-table">
+                    <tr>
+                        @foreach ($table_headers as $header)
+                            <td><?=$header?></td>
+                        @endforeach
+                    </tr>
+                    @foreach ($tasks as $task)
+                    <tr class='task-table__row' id="<?=$task->id?>">
+                        <td><?=$task->id?></td>
+                        <td><?=$task->header?></td>
+                        <td><?="{$task->author->surname} {$task->author->name}{$task->author->patronym}"?></td>
+                        <td><?=mb_substr($task->created_at, 0, 16)?></td>
+                        <td><?="{$task->executor->surname} {$task->executor->name}{$task->executor->patronym}"?></td>
+                        <td><?=$task->status->description?></td>
+                        <td><?=mb_substr($task->updated_at,0,16)?></td>
+                    </tr>
+                    @endforeach
+                </table>
             </div>
         </div>
     </body>
