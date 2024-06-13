@@ -33,7 +33,7 @@
                         @endforeach
                     </tr>
                     @foreach ($tasks as $task)
-                    <tr class='task-table__row' id="<?=$task->id?>">
+                    <tr class='task-table__row' id="task-<?=$task->id?>">
                         <td><?=$task->id?></td>
                         <td><?=$task->header?></td>
                         <td><?="{$task->author->surname} {$task->author->name}{$task->author->patronym}"?></td>
