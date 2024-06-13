@@ -28,11 +28,12 @@
                 @foreach ($tasks as $task)
                 <div class='border border-current px-24 py-2 mb-2'>
                     <p>Статус: <?=$task->status->description?></p>
-                    <p>Заявитель: <?=$task->author->name?></p>
-                    <p>Исполнитель: <?=$task->executor->name?></p>
+                    <p>Заявитель: <?=$task->author->login?></p>
+                    <p>Исполнитель: <?=$task->executor->login?></p>
                     <p>Тема: <?=$task->header?></p>
                     <p>Содержание: <?=$task->content?></p>
-                    <p>Последняя активность: <?=$task->last_activity?></p>
+                    <p>Создана: <?=$task->created_at?></p>
+                    <p>Последняя активность: <?=$task->updated_at?></p>
                 </div>
                 @endforeach
             </div>
