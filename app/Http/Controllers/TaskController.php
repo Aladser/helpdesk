@@ -26,6 +26,9 @@ class TaskController extends Controller
     /**Список заявок*/
     public function index()
     {
+        // заголовки таблицы
+        $table_headers = ['ID', 'Тема', 'Постановщик', 'Создана', 'Исполнитель', 'Статус', 'Посл.активность'];
+        // массив заявок
         $tasks = Task::all();
         for ($i = 0; $i < count($tasks); ++$i) {
             $tasks[$i]->author->name = mb_substr($tasks[$i]->author->name, 0, 1).'.';
@@ -34,7 +37,7 @@ class TaskController extends Controller
             $tasks[$i]->executor->patronym = mb_substr($tasks[$i]->executor->patronym, 0, 1).'.';
         }
 
-        return view('task.index', ['tasks' => $tasks]);
+        return view('task.index', ['tasks' => $tasks, 'table_headers' => $table_headers]);
     }
 
     /**
