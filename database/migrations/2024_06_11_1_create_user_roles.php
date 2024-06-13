@@ -10,8 +10,8 @@ class CreateUserRoles extends Migration
     {
         Schema::create('user_roles', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique()->nullable(false);
-            $table->text('description');
+            $table->string('name', 255)->unique();
+            $table->string('description', 255)->unique();
         });
     }
 

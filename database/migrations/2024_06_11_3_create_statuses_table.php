@@ -10,8 +10,8 @@ class CreateStatusesTable extends Migration
     {
         Schema::create('statuses', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique();
-            $table->text('description');
+            $table->string('name', 255)->unique();
+            $table->string('description', 255)->unique();
         });
     }
 

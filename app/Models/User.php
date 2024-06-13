@@ -16,9 +16,7 @@ class User extends Authenticatable
     public $timestamps = false;
 
     protected $fillable = [
-        'name',
         'password',
-        'role_id'
     ];
 
     protected $hidden = [
