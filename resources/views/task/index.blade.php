@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title><?=env('APP_NAME')?></title>
+        <title><?php echo env('APP_NAME'); ?></title>
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
         <script src="https://cdn.tailwindcss.com"></script>
@@ -27,13 +27,14 @@
             <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
                 @foreach ($tasks as $task)
                 <div class='border border-current px-24 py-2 mb-2'>
-                    <p>Статус: <?=$task->status->description?></p>
-                    <p>Заявитель: <?=$task->author->login?></p>
-                    <p>Исполнитель: <?=$task->executor->login?></p>
-                    <p>Тема: <?=$task->header?></p>
-                    <p>Содержание: <?=$task->content?></p>
-                    <p>Создана: <?=$task->created_at?></p>
-                    <p>Последняя активность: <?=$task->updated_at?></p>
+                    <p>ID: <?php echo $task->id; ?></p>
+                    <p>Статус: <?php echo $task->status->description; ?></p>
+                    <p>Заявитель: <?php echo "{$task->author->surname} {$task->author->name}{$task->author->patronym}"; ?></p>
+                    <p>Исполнитель: <?php echo "{$task->executor->surname} {$task->executor->name}{$task->executor->patronym}"; ?></p>
+                    <p>Тема: <?php echo $task->header; ?></p>
+                    <p>Содержание: <?php echo $task->content; ?></p>
+                    <p>Создана: <?php echo $task->created_at; ?></p>
+                    <p>Последняя активность: <?php echo $task->updated_at; ?></p>
                 </div>
                 @endforeach
             </div>
