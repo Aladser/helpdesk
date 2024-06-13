@@ -17,9 +17,9 @@ class CreateTasksTable extends Migration
             $table->foreign('author_id')->references('id')->on('users')->cascadeOnDelete();
             $table->bigInteger('executor_id')->unsigned();
             $table->foreign('executor_id')->references('id')->on('users')->cascadeOnDelete();
-            $table->dateTime('last_activity')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->bigInteger('status_id')->unsigned();
             $table->foreign('status_id')->references('id')->on('statuses')->cascadeOnDelete();
+            $table->timestamps();         
         });
     }
 

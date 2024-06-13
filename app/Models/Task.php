@@ -10,7 +10,7 @@ class Task extends Model
 {
     use HasFactory;
 
-    public $timestamps = false;
+    public $timestamps = true;
 
     // статус
     public function status()
