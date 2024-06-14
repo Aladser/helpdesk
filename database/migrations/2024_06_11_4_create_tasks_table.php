@@ -13,7 +13,7 @@ class CreateTasksTable extends Migration
             $table->string('header', 100);
             $table->text('content');
             $table->bigInteger('author_id')->unsigned();
-            $table->bigInteger('executor_id')->unsigned();
+            $table->bigInteger('executor_id')->unsigned()->nullable(true);
             $table->bigInteger('status_id')->unsigned();
             $table->timestamps();
             

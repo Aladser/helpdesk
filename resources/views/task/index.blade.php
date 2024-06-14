@@ -36,11 +36,15 @@
                     <tr class='task-table__row' id="task-<?=$task->id?>">
                         <td> <?=$task->id?> </td>
                         <td> <a href="<?=route('task.show', $task->id)?>" class='underline'><?=$task->header?></a> </td>
-                        <td> <?="{$task->author->surname} {$task->author->name}{$task->author->patronym}"?> </td>
-                        <td> <?=$task->created_at?> </td>
-                        <td> <?="{$task->executor->surname} {$task->executor->name}{$task->executor->patronym}"?> </td>
+                        <td> <?=$task->author->short_full_name()?>  </td>
+                        <td> <?=$task->created_at->format('d-m-Y h:m')?> </td>
+                        @if($task->executor)
+                            <td> <?=$task->executor->short_full_name()?> </td>
+                        @else
+                            <td> </td>
+                        @endif
                         <td> <?=$task->status->description?> </td>
-                        <td> <?=$task->updated_at?> </td>
+                        <td> <?=$task->updated_at->format('d-m-Y h:m')?> </td>
                     </tr>
                     @endforeach
                 </table>
