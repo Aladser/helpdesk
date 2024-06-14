@@ -6,11 +6,12 @@
         <title><?=env('APP_NAME')?> - обращения</title>
         <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="css/index.css">
+        <link rel="stylesheet" href="css/theme.css">
         <script src="https://cdn.tailwindcss.com"></script>
         <script src="js/index.js" defer></script>
     </head>
-    <body class="antialiased">
-        <div class="relative flex items-top justify-center min-h-screen bg-gray-100 dark:bg-gray-900 sm:items-center py-4 sm:pt-0">
+    <body class="antialiased bg-theme color-theme">
+        <div class="relative flex items-top justify-center min-h-screen sm:items-center py-4 sm:pt-0">
             @if (Route::has('login'))
                 <div class="hidden fixed top-0 right-0 px-6 py-4 sm:block">
                     @auth
@@ -26,12 +27,12 @@
             @endif
 
             <div class="mx-auto w-full px-8">
-                <table class="task-table">
-                    <tr>
-                        <td class='text-center'><?=$table_headers[0]?></td>
-                        <td><?=$table_headers[1]?></td>
+                <table class="task-table shadow-md">
+                    <tr class='bg-dark-theme'>
+                        <td class='text-center color-light-theme'><?=$table_headers[0]?></td>
+                        <td class='color-light-theme'><?=$table_headers[1]?></td>
                         @for ($i=2; $i<count($table_headers); $i++)
-                        <td class='text-center'><?=$table_headers[$i]?></td>
+                        <td class='text-center color-light-theme'><?=$table_headers[$i]?></td>
                         @endfor
                     </tr>
                     @foreach ($tasks as $task)
