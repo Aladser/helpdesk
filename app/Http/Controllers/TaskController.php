@@ -23,7 +23,7 @@ use Illuminate\Http\Request;
 
 class TaskController extends Controller
 {
-    /**Список заявок*/
+    /**cписок заявок*/
     public function index()
     {
         // заголовки таблицы
@@ -58,15 +58,10 @@ class TaskController extends Controller
     {
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param int $id
-     *
-     * @return \Illuminate\Http\Response
-     */
+    /*cтраница задачи*/
     public function show($id)
     {
+        return view('task.show', ['task'=>Task::find($id)]);
     }
 
     /**

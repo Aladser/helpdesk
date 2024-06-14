@@ -35,7 +35,7 @@
                     @foreach ($tasks as $task)
                     <tr class='task-table__row' id="task-<?=$task->id?>">
                         <td><?=$task->id?></td>
-                        <td><?=$task->header?></td>
+                        <td><a href="<?=route('task.show', $task->id)?>" class='underline'><?=$task->header?></a></td>
                         <td><?="{$task->author->surname} {$task->author->name}{$task->author->patronym}"?></td>
                         <td><?=mb_substr($task->created_at, 0, 16)?></td>
                         <td><?="{$task->executor->surname} {$task->executor->name}{$task->executor->patronym}"?></td>
