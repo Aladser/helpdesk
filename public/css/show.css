@@ -21,9 +21,18 @@
     border-bottom-width: 2px;
 }
 
-/*кнопка времени комментария*/
+/*автор комментария*/
+.cmt-list-block__author {
+    display: inline-block;
+    font-weight: 600;
+    margin-inline-end: 0.5rem;
+    margin-left: 0.5rem;
+}
+/*время комментария*/
 .cmt-list-block__time {
-    color: rgb(148 163 184);
-    text-align: end;
-    font-style: italic;
+    display: inline-block;
+    font-weight: 600;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    color: rgb(156 163 175);
 }
