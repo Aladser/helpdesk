@@ -28,23 +28,34 @@
             <div class="mx-auto w-full px-8">
                 <table class="task-table">
                     <tr>
-                        @foreach ($table_headers as $header)
-                            <td><?=$header?></td>
-                        @endforeach
+                        <td class='text-center'><?=$table_headers[0]?></td>
+                        <td><?=$table_headers[1]?></td>
+                        @for ($i=2; $i<count($table_headers); $i++)
+                        <td class='text-center'><?=$table_headers[$i]?></td>
+                        @endfor
                     </tr>
                     @foreach ($tasks as $task)
                     <tr class='task-table__row' id="task-<?=$task->id?>">
-                        <td> <?=$task->id?> </td>
+                        <td class='text-center'> <?=$task->id?> </td>
                         <td> <a href="<?=route('task.show', $task->id)?>" class='underline'><?=$task->header?></a> </td>
-                        <td> <?=$task->author->short_full_name()?>  </td>
-                        <td> <?=$task->created_at->format('d-m-Y h:m')?> </td>
+                        <td class='text-center'> <?=$task->author->short_full_name()?>  </td>
+                        <td class='text-center'> <?=$task->created_at->format('d-m-Y h:m')?> </td>
+
                         @if($task->executor)
-                            <td> <?=$task->executor->short_full_name()?> </td>
+                        <td class='text-center'> <?=$task->executor->short_full_name()?> </td>
                         @else
-                            <td> </td>
+                        <td> </td>
                         @endif
-                        <td> <?=$task->status->description?> </td>
-                        <td> <?=$task->updated_at->format('d-m-Y h:m')?> </td>
+
+                        @if($task->status->name == 'new')
+                        <td class='text-center font-semibold text-rose-600'><?=$task->status->description?></td>
+                        @elseif($task->status->name == 'process')
+                        <td class='text-center font-semibold text-amber-500'><?=$task->status->description?></td>
+                        @elseif($task->status->name == 'completed')
+                        <td class='text-center font-semibold text-green-500'><?=$task->status->description?></td>
+                        @endif
+
+                        <td class='text-center'> <?=$task->updated_at->format('d-m-Y h:m')?> </td>
                     </tr>
                     @endforeach
                 </table>

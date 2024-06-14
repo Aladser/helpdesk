@@ -10,15 +10,15 @@
             <p class='mb-1'><span>Постановщик: </span><?="{$task->author->full_name()}"?></p>
 
             @if($task->executor)
-                <p class='mb-2'><span>Исполнитель: </span><?="{$task->executor->full_name()}"?></p>
+            <p class='mb-2'><span>Исполнитель: </span><?="{$task->executor->full_name()}"?></p>
             @endif
 
             @if($task->status->name == 'new')
-                <p class='mb-2'>Статус: <span class='font-semibold text-rose-600'><?=$task->status->description?></span></p>
+            <p class='mb-2'>Статус: <span class='font-semibold text-rose-600'><?=$task->status->description?></span></p>
             @elseif($task->status->name == 'process')
-                <p class='mb-2'>Статус: <span class='font-semibold text-amber-500'><?=$task->status->description?></span></p>
+            <p class='mb-2'>Статус: <span class='font-semibold text-amber-500'><?=$task->status->description?></span></p>
             @elseif($task->status->name == 'completed')
-                <p class='mb-2'>Статус: <span class='font-semibold text-green-500'><?=$task->status->description?></span></p>
+            <p class='mb-2'>Статус: <span class='font-semibold text-green-500'><?=$task->status->description?></span></p>
             @endif
 
             <p class='mb-2'><span>Последняя активность: </span> <?=$task->updated_at->format('d-m-Y h:m')?></p>
