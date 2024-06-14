@@ -61,13 +61,7 @@ class TaskController extends Controller
     /*Страница задачи*/
     public function show($id)
     {
-        $task = Task::find($id);
-
-        return view('task.show', [
-            'task'=>$task, 
-            'created_at'=>mb_substr($task->created_at,0,16), 
-            'updated_at'=>mb_substr($task->updated_at,0,16)
-        ]);
+        return view('task.show', ['task'=>Task::find($id)]);
     }
 
     /**

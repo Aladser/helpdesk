@@ -42,15 +42,13 @@ class User extends Authenticatable
         return $this->hasMany(Task::class, 'executor_id', 'id');
     }
 
-    public function full_name($id) {
-        $user = User::find($id);
-        return "{$user->surname} {$user->name} {$user->patronym}";
+    public function full_name() {
+        return "{$this->surname} {$this->name} {$this->patronym}";
     }
 
-    public function short_full_name($id) {
-        $user = User::find($id);
-        $name = mb_substr($user->name, 0, 1).'.';
-        $patronym = mb_substr($user->patronym, 0, 1).'.';
-        return "{$user->surname} $name $patronym";
+    public function short_full_name() {
+        $name = mb_substr($this->name, 0, 1).'.';
+        $patronym = mb_substr($this->patronym, 0, 1).'.';
+        return "{$this->surname} $name $patronym";
     }
 }
