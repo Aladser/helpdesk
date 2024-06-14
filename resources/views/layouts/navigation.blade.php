@@ -8,9 +8,7 @@
                     <x-application-logo class="block h-10 w-auto fill-current text-gray-600" />
                 </div>
                 <!-- Главная -->
-                <div class="shrink-0 flex items-center me-4">
-                    <a href="{{ route('index') }}">Главная</a>
-                </div>
+                <div class="shrink-0 flex items-center me-4"><a href="{{ route('index') }}">Главная</a></div>
             </div>
 
             <!-- Settings Dropdown -->
@@ -29,9 +27,7 @@
                     </x-slot>
 
                     <x-slot name="content">
-                            <x-dropdown-link :href="route('dashboard')">
-                                Профиль
-                            </x-dropdown-link>
+                            <x-dropdown-link :href="route('dashboard')">Профиль</x-dropdown-link>
                         <!-- Authentication -->
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
