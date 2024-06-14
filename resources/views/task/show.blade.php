@@ -1,8 +1,8 @@
 <x-app-layout>
     <x-slot name='header'>
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">Задача № <?=$task->id?></h2>
+        <h2 class="font-semibold text-xl leading-tight">Задача № <?=$task->id?></h2>
     </x-slot>
-    <div class="py-12">
+    <div class="py-12 mx-4">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 p-4 bg-white shadow-md">
             <div class='flex justify-between mb-2'>
                 @if($task->status->name == 'new')
