@@ -11,7 +11,7 @@ class TaskSeeder extends Seeder
     {
         for ($i = 0; $i < 3; ++$i) {
             Task::create([
-                'status_id' => 1,
+                'status_id' => $i + 1,
                 'executor_id' => $i + 2,
                 'author_id' => $i + 5,
                 'header' => 'Абзац 1.10.33 "de Finibus Bonorum et Malorum", написанный Цицероном в 45 году н.э. '.mt_rand(1000, 9999),

@@ -23,7 +23,7 @@ use Illuminate\Http\Request;
 
 class TaskController extends Controller
 {
-    /**cписок заявок*/
+    /**Список заявок*/
     public function index()
     {
         // заголовки таблицы
@@ -58,10 +58,16 @@ class TaskController extends Controller
     {
     }
 
-    /*cтраница задачи*/
+    /*Страница задачи*/
     public function show($id)
     {
-        return view('task.show', ['task'=>Task::find($id)]);
+        $task = Task::find($id);
+
+        return view('task.show', [
+            'task'=>$task, 
+            'created_at'=>mb_substr($task->created_at,0,16), 
+            'updated_at'=>mb_substr($task->updated_at,0,16)
+        ]);
     }
 
     /**
