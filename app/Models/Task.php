@@ -29,4 +29,14 @@ class Task extends Model
     {
         return $this->belongsTo(User::class, 'executor_id', 'id');
     }
+
+    public function get_datetime(string $type): string {
+        if ($type == 'created_at') {
+            return $this->created_at->format('d-m-Y h:i');
+        } elseif($type == 'updated_at') {
+            return $this->updated_at->format('d-m-Y h:i');
+        } else {
+            return '';
+        }
+    }
 }

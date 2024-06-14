@@ -1,23 +1,27 @@
 <x-app-layout>
+    @section('css')
+    <link rel="stylesheet" href="{{ asset('css/index.css') }}">
+    @endsection
+
     <x-slot name='header'>
         <h2 class="font-semibold text-xl leading-tight">Задачи</h2>
     </x-slot>
     <div class="py-12">
         <div class="mx-auto w-full px-8">
             <table class="task-table shadow-md">
-                <tr class='bg-dark-theme'>
-                    <td class='text-center color-light-theme'><?=$table_headers[0]?></td>
-                    <td class='color-light-theme'><?=$table_headers[1]?></td>
+                <tr class='bg-dark-theme color-light-theme'>
+                    <td class='text-center'><?=$table_headers[0]?></td>
+                    <td><?=$table_headers[1]?></td>
                     @for ($i=2; $i<count($table_headers); $i++)
-                    <td class='text-center color-light-theme'><?=$table_headers[$i]?></td>
+                    <td class='text-center'><?=$table_headers[$i]?></td>
                     @endfor
                 </tr>
                 @foreach ($tasks as $task)
                 <tr class='task-table__row' id="task-<?=$task->id?>">
                     <td class='text-center'> <?=$task->id?> </td>
-                    <td> <a href="<?=route('task.show', $task->id)?>" class='underline'><?=$task->header?></a> </td>
+                    <td> <a href="<?=route('task.show', $task->id)?>" class='underline w-1/3'><?=$task->header?></a> </td>
                     <td class='text-center'> <?=$task->author->short_full_name()?>  </td>
-                    <td class='text-center'> <?=$task->created_at->format('d-m-Y h:m')?> </td>
+                    <td class='text-center'> <?=$task->get_datetime('created_at')?> </td>
 
                     @if($task->executor)
                     <td class='text-center'> <?=$task->executor->short_full_name()?> </td>
@@ -33,7 +37,7 @@
                     <td class='text-center font-semibold text-green-500'><?=$task->status->description?></td>
                     @endif
 
-                    <td class='text-center'> <?=$task->updated_at->format('d-m-Y h:m')?> </td>
+                    <td class='text-center'> <?=$task->get_datetime('updated_at')?> </td>
                 </tr>
                 @endforeach
             </table>

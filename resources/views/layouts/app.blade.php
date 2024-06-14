@@ -10,7 +10,9 @@
         <!-- Scripts -->
         <link rel="stylesheet" href="{{ asset('css/app.css') }}">
         <link rel="stylesheet" href="{{ asset('css/theme.css') }}">
-        <link rel="stylesheet" href="{{ asset('css/index.css') }}">
+        <!--подключение из blade -->
+        @yield('css')
+        
         <script src="{{ asset('js/app.js') }}" defer></script>
         <script src="https://cdn.tailwindcss.com"></script>
     </head>
