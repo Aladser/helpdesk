@@ -33,8 +33,10 @@ class TaskController extends Controller
         for ($i = 0; $i < count($tasks); ++$i) {
             $tasks[$i]->author->name = mb_substr($tasks[$i]->author->name, 0, 1).'.';
             $tasks[$i]->author->patronym = mb_substr($tasks[$i]->author->patronym, 0, 1).'.';
-            $tasks[$i]->executor->name = mb_substr($tasks[$i]->executor->name, 0, 1).'.';
-            $tasks[$i]->executor->patronym = mb_substr($tasks[$i]->executor->patronym, 0, 1).'.';
+            if ($tasks[$i]->executor) {
+                $tasks[$i]->executor->name = mb_substr($tasks[$i]->executor->name, 0, 1).'.';
+                $tasks[$i]->executor->patronym = mb_substr($tasks[$i]->executor->patronym, 0, 1).'.';
+            }
         }
 
         return view('task.index', ['tasks' => $tasks, 'table_headers' => $table_headers]);
@@ -58,15 +60,10 @@ class TaskController extends Controller
     {
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param int $id
-     *
-     * @return \Illuminate\Http\Response
-     */
+    /*Страница задачи*/
     public function show($id)
     {
+        return view('task.show', ['task'=>Task::find($id)]);
     }
 
     /**

@@ -13,9 +13,10 @@ class CreateTasksTable extends Migration
             $table->string('header', 100);
             $table->text('content');
             $table->bigInteger('author_id')->unsigned();
-            $table->bigInteger('executor_id')->unsigned();
+            $table->bigInteger('executor_id')->unsigned()->nullable(true);
             $table->bigInteger('status_id')->unsigned();
             $table->timestamps();
+            
             $table->foreign('author_id')->references('id')->on('users')->cascadeOnDelete();
             $table->foreign('executor_id')->references('id')->on('users')->cascadeOnDelete();
             $table->foreign('status_id')->references('id')->on('statuses')->cascadeOnDelete();
