@@ -1,4 +1,8 @@
 <x-app-layout>
+    @section('title')
+    <title>{{env('APP_NAME')}} - задачи</title>
+    @endsection
+
     @section('css')
     <link rel="stylesheet" href="{{ asset('css/index.css') }}">
     @endsection
@@ -18,7 +22,7 @@
                 @foreach ($tasks as $task)
                 <tr class='task-table__row' id="task-{{$task->id}}">
                     <td class='text-center'> {{$task->id}} </td>
-                    <td> <a href="{{route('task.show', $task->id)}}" class='underline w-1/3'><?=$task->header?></a> </td>
+                    <td> <a href="{{route('task.show', $task->id)}}" class='underline w-1/3'><?php echo $task->header; ?></a> </td>
                     <td class='text-center'> {{$task->author->short_full_name()}}  </td>
                     <td class='text-center'> {{$task->get_datetime('created_at')}} </td>
 

@@ -1,7 +1,20 @@
 <x-app-layout>
-    <!-- подключение в layout-->
+    <!-- подключение секций в layout-->
+    @section('meta')
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    @endsection
+
+    @section('title')
+    <title>{{env('APP_NAME')}} - задача № {{$task->id}}</title>
+    @endsection
+
     @section('css')
     <link rel="stylesheet" href="{{ asset('css/show.css') }}">
+    @endsection
+
+    @section('js')
+    <script src="/js/ServerRequest.js" defer></script>
+    <script src="/js/show.js" defer></script>
     @endsection
 
     <x-slot name='header'><x-header> Задача № {{$task->id}}</x-header></x-slot>
@@ -19,17 +32,21 @@
                 
                 <p class='text-slate-400 italic' title='время создания'>{{$task->get_datetime('created_at')}}</p>
             </div>
-
+            
+            <input id='task-id' type="hidden" value='{{$task->id}}'>
             <h3 class="font-semibold text-lg mb-4">{{$task->header}}</h3>
-            <p class='border-t border-b py-2 mb-3'><?= str_repeat('&nbsp;', 4); ?>{{$task->content}}</p>
+            <p class='border-t border-b py-2 mb-3'><?php echo str_repeat('&nbsp;', 4); ?>{{$task->content}}</p>
 
+            <!--кнопки Взять в работу и Выполнить-->
             <div class='mb-2'>
+                
                 @if($task->status->name == 'new')
                 <button id='btn-take-task'class='border px-4 py-2 rounded bg-dark-theme color-light-theme'>Взять в работу</button>
                 @elseif($task->status->name == 'process' && $task->executor->id == $auth_user->id)
                 <button id='btn-complete-task'class='border px-4 py-2 rounded bg-dark-theme color-light-theme'>Выполнить</button>
                 @endif
             </div>
+            
             <p class='mb-1'>Постановщик: {{$task->author->full_name()}}</p>
             
             @if($task->executor)

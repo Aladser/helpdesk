@@ -44,24 +44,6 @@ class TaskController extends Controller
         return view('task.index', ['tasks' => $tasks, 'table_headers' => $table_headers]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-    }
-
     /* Страница задачи */
     public function show($id)
     {
@@ -69,40 +51,32 @@ class TaskController extends Controller
         $comments = Comment::where('task_id', $id)->orderBy('created_at', 'desc')->get();
 
         return view(
-            'task.show', 
+            'task.show',
             ['auth_user' => Auth::user(), 'task' => $task, 'comments' => $comments]
         );
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param int $id
-     *
-     * @return \Illuminate\Http\Response
-     */
+    // работает только с CSRF-токеном
+    // запрос можно отправить только из JS
+    public function update(Request $request, $id)
+    {
+        $data = $request->all();
+
+        return json_encode($data);
+    }
+
+    public function create()
+    {
+    }
+
+    public function store(Request $request)
+    {
+    }
+
     public function edit($id)
     {
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param int $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
     }

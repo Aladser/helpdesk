@@ -1,4 +1,8 @@
 <x-app-layout>
+    @section('title')
+    <title>{{env('APP_NAME')}} - профиль</title>
+    @endsection
+
     <x-slot name="header"><x-header>Профиль</x-header></x-slot>
 
     <div class="py-12">
