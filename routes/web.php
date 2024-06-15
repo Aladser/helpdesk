@@ -19,3 +19,7 @@ Route::get('/profile', function () {
 
 // AUTH папка
 require __DIR__.'/auth.php';
+
+Route::get('/dashboard', function() {
+    return redirect('/');
+})->middleware(['auth']);
