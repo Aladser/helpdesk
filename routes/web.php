@@ -14,7 +14,7 @@ Route::resource('/task', TaskController::class)->middleware(['auth']);
 
 // профиль пользователя
 Route::get('/profile', function () {
-    return view('dashboard', ['auth_user' => Auth::user()]);
+    return view('profile', ['auth_user' => Auth::user()]);
 })->middleware(['auth'])->name('profile');
 
 // AUTH
