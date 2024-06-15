@@ -33,9 +33,9 @@
 
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 p-4 bg-white shadow-md">
             <h3 class='font-semibold text-lg mb-2'>Комментарии</h3>
-            <div class='relative text-sm'>
-                <textarea  rows=3 class='w-full resize-none px-2 py-1 rounded-md' placeholder='Введите сообщение здесь ...'></textarea>
-                <button class='btn-submit-comment bg-dark-theme color-light-theme'>Отправить</button>
+            <div class='block-submit relative text-sm'>
+                <textarea  rows=3 class='block-submit__textarea w-full resize-none px-2 py-1 rounded-md' placeholder='Введите сообщение здесь ...'></textarea>
+                <button class='block-submit__btn bg-dark-theme color-light-theme'>Отправить</button>
             </div>
 
             <div id='cmt-list-block'>

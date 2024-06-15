@@ -1,6 +1,17 @@
-.bg-theme {background-color:rgb(235, 240, 250);}
-.bg-dark-theme {background-color: rgb(43, 114, 202);}
+* {
+    --color-theme: rgb(64, 88, 83);
+    --color-lighter-theme: rgb(43, 114, 202);
+    --color-light-theme: rgb(244, 247, 252);
+    --color-grey-theme: rgb(180, 180, 180);
+}
 
-.color-theme {color:rgb(64, 88, 83);}
-.color-lighter-theme {color:rgb(43, 114, 202);}
-.color-light-theme {color:rgb(244, 247, 252);}
+.bg-theme {background-color:var(--color-light-theme);}
+.bg-dark-theme {background-color: var(--color-lighter-theme);}
+
+.color-theme {color:var(--color-theme);}
+.color-lighter-theme {color:var(--color-lighter-theme);}
+.color-light-theme {color:var(--color-light-theme);}
+
+.main-link:hover {
+    background-color: var(--color-light-theme);
+  }
