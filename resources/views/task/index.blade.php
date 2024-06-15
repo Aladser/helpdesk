@@ -3,11 +3,14 @@
     <title>{{env('APP_NAME')}} - задачи</title>
     @endsection
 
+    @section('header')
+    <x-header>Задачи</x-header>
+    @endsection
+    
     @section('css')
     <link rel="stylesheet" href="{{ asset('css/index.css') }}">
     @endsection
 
-    <x-slot name='header'><x-header>Задачи</x-header></x-slot>
     <div class="py-12">
         <div class="mx-auto w-full px-8">
             <table class="task-table shadow-md">

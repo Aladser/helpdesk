@@ -56,13 +56,24 @@ class TaskController extends Controller
         );
     }
 
-    // работает только с CSRF-токеном
-    // запрос можно отправить только из JS
+    // работает только с CSRF-токеном, PUT-запрос можно отправить только из JS
     public function update(Request $request, $id)
     {
         $data = $request->all();
+        $task = Task::find($data['id']);
 
-        return json_encode($data);
+        if ($data['action'] == 'take-task') {
+            $task->status_id = 2;
+            $task->executor_id = Auth::user()->id;
+            $isSaved = $task->save();
+        } elseif ($data['action'] == 'complete-task') {
+            $task->status_id = 3;
+            $isSaved = $task->save();
+        } else {
+            $isSaved = -1;
+        }
+
+        return json_encode(['is_updated' => (int) $isSaved, 'status' => $task->status->description]);
     }
 
     public function create()

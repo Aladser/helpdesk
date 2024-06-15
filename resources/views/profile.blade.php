@@ -3,7 +3,9 @@
     <title>{{env('APP_NAME')}} - профиль</title>
     @endsection
 
-    <x-slot name="header"><x-header>Профиль</x-header></x-slot>
+    @section('header')
+    <x-header>Профиль</x-header>
+    @endsection
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
