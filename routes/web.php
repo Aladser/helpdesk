@@ -8,10 +8,14 @@ use Illuminate\Support\Facades\Route;
 
 // индексная страница
 Route::get('/', [TaskController::class, 'index'])->middleware(['auth'])->name('index');
+
 // задачи
 Route::resource('/task', TaskController::class)->middleware(['auth']);
 
-Route::get('/dashboard', function () {
+// профиль пользователя
+Route::get('/profile', function () {
     return view('dashboard', ['auth_user' => Auth::user()]);
 })->middleware(['auth'])->name('dashboard');
+
+// AUTH
 require __DIR__.'/auth.php';
