@@ -7,7 +7,7 @@ const TASK_EXECUTOR_NODE = document.querySelector('#task__executor');
 
 const COMMENT_LIST_CONTAINER_NODE = document.querySelector('#comment-list-container');
 
-let task_btn_block = document.querySelector('#task__btn-block');
+const TASK_BTN_BLOCK = document.querySelector('#task__btn-block');
 let take_task_btn = document.querySelector('#btn-take-task');
 let complete_task_btn = document.querySelector('#btn-complete-task');
 
@@ -33,12 +33,12 @@ function sendUpdateRequest(task_id, action){
     params.id = task_id;
 
     ServerRequest.execute(
-        `/task/${task_id}`,
-        (data) => handleTask(data),
-        "put",
-        null,
-        JSON.stringify(params),
-        headers
+        URL = `/task/${task_id}`, 
+        processFunc = (data) => handleTask(data), 
+        method = "put", 
+        errorPrg = null, 
+        data = JSON.stringify(params), 
+        headers = headers
     );
 }
 
@@ -71,14 +71,14 @@ function handleTask(response) {
             complete_task_btn.className = 'border px-4 py-2 rounded bg-dark-theme color-light-theme';
             complete_task_btn.textContent = 'Выполнить';
             complete_task_btn.addEventListener('click', () => sendUpdateRequest(TASK_ID, 'complete-task'));
-            task_btn_block.removeChild(take_task_btn);
-            task_btn_block.appendChild(complete_task_btn);
+            TASK_BTN_BLOCK.removeChild(take_task_btn);
+            TASK_BTN_BLOCK.appendChild(complete_task_btn);
         } else if(responseData['action'] == 'complete-task') {
             // статус
             TASK_STATUS_NODE.textContent = 'Выполнена';
             TASK_STATUS_NODE.classList.remove('text-amber-500');
             TASK_STATUS_NODE.classList.add('text-green-500');
-            task_btn_block.removeChild(complete_task_btn);
+            TASK_BTN_BLOCK.removeChild(complete_task_btn);
         }
     }
 }

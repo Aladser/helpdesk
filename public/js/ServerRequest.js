@@ -30,7 +30,7 @@ class ServerRequest {
                 processFunc(data);
                 break;
             case 419:
-                window.open("/csrf_error", "_self");
+                window.open("/auth_error", "_self");
                 break;
             case 500:
                 window.open("/access_denied", "_self");
