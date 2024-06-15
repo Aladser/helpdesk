@@ -17,5 +17,5 @@ Route::get('/profile', function () {
     return view('profile', ['auth_user' => Auth::user()]);
 })->middleware(['auth'])->name('profile');
 
-// AUTH
+// AUTH папка
 require __DIR__.'/auth.php';
