@@ -1,9 +1,8 @@
 <x-guest-layout>
     <x-auth-card>
         <x-slot name="logo">
-            <a href="/">
-                <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
-            </a>
+            <img class='mx-auto' src="/images/favicon-64.png" alt="Лого">
+            <h1 class='text-2xl text-center mt-2'>{{env('APP_NAME')}}</h1>
         </x-slot>
 
         <!-- Validation Errors -->
@@ -11,12 +10,13 @@
 
         <form method="POST" action="{{ route('register') }}">
             @csrf
+            <p class='text-xl text-center p-2'>Регистрация пользователя</p>
 
             <!-- Name -->
             <div>
                 <x-label for="name" :value="__('Name')" />
 
-                <x-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus />
+                <x-input id="name" class="block mt-1 w-full" type="text" name="login" :value="old('login')" required autofocus />
             </div>
 
             <!-- Email Address -->

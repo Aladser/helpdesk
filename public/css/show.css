@@ -1,5 +1,5 @@
 /*кнопка отправки комментариев*/
-.btn-submit-comment {
+.block-submit__btn {
     position: absolute;
     right: 0;
     top:0;
@@ -7,11 +7,15 @@
     padding: 0 1rem;
     border-radius: 0.375rem;
 }
+.block-submit__textarea {
+    border: 1px solid var(--color-grey-theme);
+}
 
-/*кнопка комментария*/
+
+/*комментарий*/
 .cmt-list-block__comment {
-    padding-left: 0.5rem;
-    padding-right: 0.5rem;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
     padding-top: 0.25rem;
     padding-bottom: 0.25rem;
     margin-bottom: 0.25rem;
@@ -19,11 +23,21 @@
     line-height: 1.25rem;
     border-style: dotted;
     border-bottom-width: 2px;
+    text-align: justify;
 }
 
-/*кнопка времени комментария*/
+/*автор комментария*/
+.cmt-list-block__author {
+    display: inline-block;
+    font-weight: 600;
+    margin-inline-end: 0.5rem;
+    margin-left: 0.5rem;
+}
+/*время комментария*/
 .cmt-list-block__time {
-    color: rgb(148 163 184);
-    text-align: end;
-    font-style: italic;
+    display: inline-block;
+    font-weight: 600;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    color: rgb(156 163 175);
 }

@@ -2,20 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class UserRole extends Model
 {
-    use HasFactory;
-
     // без времени создания
     public $timestamps = false;
-
-    protected $fillable = [
-        'name',
-        'description'
-    ];
 
     // пользователи
     public function users()

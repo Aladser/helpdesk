@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Comment;
 use App\Models\Task;
 use Illuminate\Http\Request;
 
@@ -60,10 +61,13 @@ class TaskController extends Controller
     {
     }
 
-    /*Страница задачи*/
+    /* Страница задачи */
     public function show($id)
     {
-        return view('task.show', ['task'=>Task::find($id)]);
+        $task = Task::find($id);
+        $comments = Comment::where('task_id', $id)->orderBy('created_at', 'desc')->get();
+
+        return view('task.show', ['task' => $task, 'comments' => $comments]);
     }
 
     /**

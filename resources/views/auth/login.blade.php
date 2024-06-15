@@ -1,10 +1,12 @@
 <x-guest-layout>
+    @section('title')
+    <title>{{env('APP_NAME')}} - вход в систему</title>
+    @endsection
+
     <x-auth-card>
         <x-slot name="logo">
-            <a href="/">
-                <img class='mx-auto' src="/images/favicon-64.png" alt="Лого">
-                <h1 class='text-2xl text-center mt-2'><?=env('APP_NAME')?></h1>
-            </a>
+            <img class='mx-auto' src="/images/favicon-64.png" alt="Лого">
+            <h1 class='text-2xl text-center mt-2'>{{env('APP_NAME')}}</h1>
         </x-slot>
 
         <!-- Session Status -->
@@ -15,10 +17,10 @@
 
         <form method="POST" action="{{ route('login') }}">
             @csrf
-
+            <p class='text-xl text-center p-2'>Вход в систему</p>
+            
             <!-- Логин -->
             <div>
-                <p class='text-xl text-center p-2'>Вход в систему</p>
                 <x-label for="login" :value="__('Логин')" />
 
                 <x-input id="login" class="block mt-1 w-full" type="text" name="login" :value="old('email')" required autofocus />

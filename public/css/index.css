@@ -21,6 +21,10 @@
 
 
 /*заголовки*/
-.task-table tr:first-child td{border-right: 1px solid rgb(180, 180, 180);}
+.task-table tr:first-child td{border-right: 1px solid var(--color-grey-theme);}
 /*последний заголовок*/
 .task-table tr:first-child td:last-child{border-right: none;}
+
+.task-table__row:hover {
+    background-color:rgb(240,240,240);
+}
