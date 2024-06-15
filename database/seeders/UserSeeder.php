@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
 {
@@ -13,11 +14,12 @@ class UserSeeder extends Seeder
 
     public function run()
     {
+        $hash_password = Hash::make(12345678);
         // Пароль: 12345678
         User::create([
             'login' => "admin",
             'role_id' => 1,
-            'password' => '$2y$10$5lGrEwgHQ8/bv/KHPDeS8O8ZmxPBpKASM34Tni73DNrx9HzaNBOe2',
+            'password' => $hash_password,
             'name' => 'Админ',
             'surname' => 'Админов',
             'patronym' => 'Админыч'
@@ -26,7 +28,7 @@ class UserSeeder extends Seeder
             User::create([
                 'login' => "executor_".($i+1),
                 'role_id' => 2,
-                'password' => '$2y$10$5lGrEwgHQ8/bv/KHPDeS8O8ZmxPBpKASM34Tni73DNrx9HzaNBOe2',//12345678
+                'password' => $hash_password,
                 'name' => $this->names[$i],
                 'surname' => $this->surnames[$i],
                 'patronym' => $this->patronyms[$i]
@@ -36,7 +38,7 @@ class UserSeeder extends Seeder
             User::create([
                 'login' => "client_".($i+1),
                 'role_id' => 3,
-                'password' => '$2y$10$5lGrEwgHQ8/bv/KHPDeS8O8ZmxPBpKASM34Tni73DNrx9HzaNBOe2',//12345678
+                'password' => $hash_password,
                 'name' => $this->names[$i],
                 'surname' => $this->surnames[$i],
                 'patronym' => $this->patronyms[$i]
