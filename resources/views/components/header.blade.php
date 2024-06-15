@@ -1,0 +1,1 @@
+<h2 class="font-semibold text-xl leading-tight color-theme">{{ $slot }}</h2>

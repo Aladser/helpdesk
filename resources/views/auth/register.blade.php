@@ -12,23 +12,16 @@
             @csrf
             <p class='text-xl text-center p-2'>Регистрация пользователя</p>
 
-            <!-- Name -->
+            <!-- Логин -->
             <div>
-                <x-label for="name" :value="__('Name')" />
+                <x-label for="name" :value="__('Логин')" />
 
                 <x-input id="name" class="block mt-1 w-full" type="text" name="login" :value="old('login')" required autofocus />
             </div>
 
-            <!-- Email Address -->
+            <!-- Пароль -->
             <div class="mt-4">
-                <x-label for="email" :value="__('Email')" />
-
-                <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required />
-            </div>
-
-            <!-- Password -->
-            <div class="mt-4">
-                <x-label for="password" :value="__('Password')" />
+                <x-label for="password" :value="__('Пароль')" />
 
                 <x-input id="password" class="block mt-1 w-full"
                                 type="password"
@@ -36,9 +29,9 @@
                                 required autocomplete="new-password" />
             </div>
 
-            <!-- Confirm Password -->
+            <!-- Подтвердите пароль -->
             <div class="mt-4">
-                <x-label for="password_confirmation" :value="__('Confirm Password')" />
+                <x-label for="password_confirmation" :value="__('Подтвердите пароль')" />
 
                 <x-input id="password_confirmation" class="block mt-1 w-full"
                                 type="password"
@@ -47,12 +40,10 @@
 
             <div class="flex items-center justify-end mt-4">
                 <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('login') }}">
-                    {{ __('Already registered?') }}
+                    Зарегистрированы?
                 </a>
 
-                <x-button class="ml-4">
-                    {{ __('Register') }}
-                </x-button>
+                <x-button class="ml-4">Зарегистрироваться</x-button>
             </div>
         </form>
     </x-auth-card>

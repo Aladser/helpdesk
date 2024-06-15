@@ -4,9 +4,7 @@
     <link rel="stylesheet" href="{{ asset('css/show.css') }}">
     @endsection
 
-    <x-slot name='header'>
-        <h2 class="font-semibold text-xl leading-tight"> Задача № {{$task->id}} </h2>
-    </x-slot>
+    <x-slot name='header'><x-header> Задача № {{$task->id}}</x-header></x-slot>
 
     <div class="py-12 mx-4">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 p-4 bg-white shadow-md mb-4">

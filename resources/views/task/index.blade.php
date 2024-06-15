@@ -3,18 +3,17 @@
     <link rel="stylesheet" href="{{ asset('css/index.css') }}">
     @endsection
 
-    <x-slot name='header'>
-        <h2 class="font-semibold text-xl leading-tight">Задачи</h2>
-    </x-slot>
+    <x-slot name='header'><x-header>Задачи</x-header></x-slot>
     <div class="py-12">
         <div class="mx-auto w-full px-8">
             <table class="task-table shadow-md">
                 <tr class='bg-dark-theme color-light-theme'>
                     <td class='text-center'>{{$table_headers[0]}}</td>
                     <td>{{$table_headers[1]}}</td>
-                    @for ($i=2; $i<count($table_headers); $i++)
+                    @for ($i=2; $i<count($table_headers)-1; $i++)
                     <td class='text-center'>{{$table_headers[$i]}}</td>
                     @endfor
+                    <td class='text-center' title='Последняя активность'>{{$table_headers[6]}}</td>
                 </tr>
                 @foreach ($tasks as $task)
                 <tr class='task-table__row' id="task-{{$task->id}}">
