@@ -8,6 +8,10 @@
     <title>{{env('APP_NAME')}} - задача № {{$task->id}}</title>
     @endsection
 
+    @section('header')
+    <x-header>Задача № {{$task->id}}</x-header>
+    @endsection
+    
     @section('css')
     <link rel="stylesheet" href="{{ asset('css/show.css') }}">
     @endsection
@@ -16,8 +20,6 @@
     <script src="/js/ServerRequest.js" defer></script>
     <script src="/js/show.js" defer></script>
     @endsection
-
-    <x-slot name='header'><x-header> Задача № {{$task->id}}</x-header></x-slot>
 
     <div class="py-12 mx-4">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 p-4 bg-white shadow-md mb-4">
@@ -37,7 +39,7 @@
             <h3 class="font-semibold text-lg mb-4">{{$task->header}}</h3>
             <p class='border-t border-b py-2 mb-3'><?php echo str_repeat('&nbsp;', 4); ?>{{$task->content}}</p>
 
-            <!--кнопки Взять в работу и Выполнить-->
+            <!--кнопки Взять в работу или Выполнить-->
             <div class='mb-2'>
                 
                 @if($task->status->name == 'new')
