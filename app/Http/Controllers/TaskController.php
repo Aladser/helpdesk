@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Comment;
 use App\Models\Task;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 /*
 | GET|HEAD  | task                            | task.index          | App\Http\Controllers\TaskController@index   | web                                                |
@@ -67,7 +68,10 @@ class TaskController extends Controller
         $task = Task::find($id);
         $comments = Comment::where('task_id', $id)->orderBy('created_at', 'desc')->get();
 
-        return view('task.show', ['task' => $task, 'comments' => $comments]);
+        return view(
+            'task.show', 
+            ['auth_user' => Auth::user(), 'task' => $task, 'comments' => $comments]
+        );
     }
 
     /**

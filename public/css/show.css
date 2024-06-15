@@ -6,9 +6,20 @@
     height: 93%;
     padding: 0 1rem;
     border-radius: 0.375rem;
+    cursor: pointer;
 }
 .block-submit__textarea {
     border: 1px solid var(--color-grey-theme);
+    resize: none;
+    width: 100%;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+    border-radius: 0.375rem;
+}
+.block-submit__textarea:disabled, .block-submit__btn:disabled{
+    opacity: 0.75;
 }
 
 
