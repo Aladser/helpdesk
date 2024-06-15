@@ -31,7 +31,7 @@ class TaskController extends Controller
         // заголовки таблицы
         $table_headers = ['ID', 'Тема', 'Постановщик', 'Создана', 'Исполнитель', 'Статус', 'Посл.активность'];
         // массив заявок
-        $tasks = Task::all();
+        $tasks = Task::orderBy('updated_at', 'desc')->get();
         for ($i = 0; $i < count($tasks); ++$i) {
             $tasks[$i]->author->name = mb_substr($tasks[$i]->author->name, 0, 1).'.';
             $tasks[$i]->author->patronym = mb_substr($tasks[$i]->author->patronym, 0, 1).'.';
@@ -61,19 +61,24 @@ class TaskController extends Controller
     {
         $data = $request->all();
         $task = Task::find($data['id']);
+        $executor = Auth::user();
 
         if ($data['action'] == 'take-task') {
             $task->status_id = 2;
-            $task->executor_id = Auth::user()->id;
+            $task->executor_id = $executor->id;
             $isSaved = $task->save();
         } elseif ($data['action'] == 'complete-task') {
             $task->status_id = 3;
             $isSaved = $task->save();
         } else {
-            $isSaved = -1;
+            return ['is_updated' => -1];
         }
 
-        return json_encode(['is_updated' => (int) $isSaved, 'status' => $task->status->description]);
+        return json_encode([
+            'is_updated' => (int) $isSaved,
+            'action' => $data['action'],
+            'executor' => $executor->full_name(),
+        ]);
     }
 
     public function create()
