@@ -26,5 +26,5 @@
 .task-table tr:first-child td:last-child{border-right: none;}
 
 .task-table__row:hover {
-    color:var(--color-lighter-theme);
+    background-color:rgb(240,240,240);
 }
