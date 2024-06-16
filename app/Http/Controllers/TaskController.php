@@ -28,28 +28,34 @@ class TaskController extends Controller
     /**Список заявок*/
     public function index()
     {
-        // заголовки таблицы
+        $user_role = Auth::user()->role->name;
         $table_headers = ['ID', 'Тема', 'Постановщик', 'Создана', 'Исполнитель', 'Статус', 'Посл.активность'];
-        // массив заявок
-        $tasks = Task::orderBy('updated_at', 'desc')->get();
-        for ($i = 0; $i < count($tasks); ++$i) {
-            $tasks[$i]->author->name = mb_substr($tasks[$i]->author->name, 0, 1).'.';
-            $tasks[$i]->author->patronym = mb_substr($tasks[$i]->author->patronym, 0, 1).'.';
-            if ($tasks[$i]->executor) {
-                $tasks[$i]->executor->name = mb_substr($tasks[$i]->executor->name, 0, 1).'.';
-                $tasks[$i]->executor->patronym = mb_substr($tasks[$i]->executor->patronym, 0, 1).'.';
+        // задачи
+        $user = Auth::user();
+        if ($user->role->name === 'executor') {
+            $tasks = Task::orderBy('updated_at', 'desc')->get();
+        } elseif ($user->role->name == 'author') {
+            $tasks = Task::where('author_id', $user->id)->orderBy('updated_at', 'desc')->get();
+        }
+
+        foreach ($tasks as $task) {
+            $task->author->name = mb_substr($task->author->name, 0, 1).'.';
+            $task->author->patronym = mb_substr($task->author->patronym, 0, 1).'.';
+            if ($task->executor) {
+                $task->executor->name = mb_substr($task->executor->name, 0, 1).'.';
+                $task->executor->patronym = mb_substr($task->executor->patronym, 0, 1).'.';
             }
         }
 
-        return view('task.index', ['tasks' => $tasks, 'table_headers' => $table_headers]);
+        return view('task.index', ['tasks' => $tasks, 'table_headers' => $table_headers, 'user_role' => $user_role]);
     }
 
     /* Страница задачи */
     public function show($id)
     {
         $comments = Comment::where('task_id', $id)->orderBy('created_at', 'desc')->get();
-        foreach($comments as $comment) {
-            $comment->created_at = mb_substr($comment->created_at,0,16);
+        foreach ($comments as $comment) {
+            $comment->created_at = mb_substr($comment->created_at, 0, 16);
         }
 
         return view(
@@ -68,16 +74,16 @@ class TaskController extends Controller
         if ($data['action'] == 'take-task') {
             $task->status_id = 2;
             $task->executor_id = $executor->id;
-            $isSaved = $task->save();
+            $isUpdated = $task->save();
         } elseif ($data['action'] == 'complete-task') {
             $task->status_id = 3;
-            $isSaved = $task->save();
+            $isUpdated = $task->save();
         } else {
             return ['is_updated' => -1];
         }
 
         return json_encode([
-            'is_updated' => (int) $isSaved,
+            'is_updated' => (int) $isUpdated,
             'action' => $data['action'],
             'executor' => $executor->full_name(),
         ]);
