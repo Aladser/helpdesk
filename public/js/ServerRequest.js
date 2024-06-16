@@ -33,7 +33,7 @@ class ServerRequest {
                 window.open("/auth_error", "_self");
                 break;
             case 500:
-                window.open("/access_denied", "_self");
+                window.open("/500", "_self");
                 break;
             default:
                 if (errorPrg) {

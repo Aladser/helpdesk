@@ -6,6 +6,8 @@ const TASK_STATUS_NODE = document.querySelector('#task__status');
 const TASK_EXECUTOR_NODE = document.querySelector('#task__executor');
 
 const NEW_CMT_FORM_BLOCK = document.querySelector('#new-cmt-form-block');
+const NEW_CMT_FORM = document.querySelector('#new-cmt-form');
+const CMT_LIST_BLOCK = document.querySelector('#cmt-list-block');
 
 const TASK_BTN_BLOCK = document.querySelector('#task__btn-block');
 let take_task_btn = document.querySelector('#btn-take-task');
@@ -22,12 +24,11 @@ if(take_task_btn) {
 }
 
 // сохранить комментарий------
-const NEW_CMT_FORM = document.querySelector('#new-cmt-form');
 NEW_CMT_FORM.addEventListener('submit', function(e){
     e.preventDefault();
     ServerRequest.execute({
         URL: "/comment",
-        processFunc: (data) => console.log(data),
+        processFunc: (data) => handleStoreComment(data),
         method: "post",
         data: new FormData(this)
     });
@@ -48,15 +49,15 @@ function sendUpdateRequest(task_id, action){
 
     ServerRequest.execute({
         URL: `/task/${task_id}`, 
-        processFunc: (data) => handleTask(data), 
+        processFunc: (data) => handleUpdateTask(data), 
         method: "put", 
         data: JSON.stringify(params), 
         headers: headers
     });
 }
 
-//**обработать ответа сервера*/
-function handleTask(response) {
+//**обновить статус задачи - обработать ответа сервера*/
+function handleUpdateTask(response) {
     let responseData = JSON.parse(response);
 
     if (responseData.is_updated === 1) {
@@ -94,5 +95,31 @@ function handleTask(response) {
             TASK_STATUS_NODE.classList.add('text-green-500');
             TASK_BTN_BLOCK.removeChild(complete_task_btn);
         }
+    }
+}
+
+/**Сохранить комментарий - обработка ответа сервера*/
+function handleStoreComment(response) {
+    /*
+    <div class="cmt-list-block__comment">
+        <div>
+            <div class="cmt-list-block__author text-amber-500">Хохлова А. В.</div>
+            <div class="cmt-list-block__time">2024-06-16 08:56</div>
+        </div>
+        <div>cообщение</div>
+    </div>
+    */
+    let responseData = JSON.parse(response);
+    if (response) {
+        let comment_node = document.createElement('div');
+        comment_node.className = 'cmt-list-block__comment';
+        comment_node.innerHTML = `
+            <div>
+                <div class="cmt-list-block__author color-lighter-theme">${responseData.executor_name}</div>
+                <div class="cmt-list-block__time">${responseData.created_at}</div>
+            </div>
+            <div>${responseData.message}</div>
+        `;
+        CMT_LIST_BLOCK.prepend(comment_node);
     }
 }

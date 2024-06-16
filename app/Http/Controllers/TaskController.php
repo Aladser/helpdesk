@@ -47,12 +47,14 @@ class TaskController extends Controller
     /* Страница задачи */
     public function show($id)
     {
-        $task = Task::find($id);
         $comments = Comment::where('task_id', $id)->orderBy('created_at', 'desc')->get();
+        foreach($comments as $comment) {
+            $comment->created_at = mb_substr($comment->created_at,0,16);
+        }
 
         return view(
             'task.show',
-            ['auth_user' => Auth::user(), 'task' => $task, 'comments' => $comments]
+            ['auth_user' => Auth::user(), 'task' => Task::find($id), 'comments' => $comments]
         );
     }
 
