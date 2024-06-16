@@ -38,8 +38,12 @@
                     @endif
 
                     <td class='text-center'> {{$task->get_datetime('created_at')}} </td>
-                    <td class='text-center'> <?if($task->executor):?>{{$task->executor->short_full_name()}}<?endif?></td>
-
+                    
+                    @if ($task->executor)
+                    <td class='text-center'> {{$task->executor->short_full_name()}}</td>
+                    @else
+                    <td class='text-center'></td>
+                    @endif
                     
                     @if($task->status->name == 'new')
                     <td class='text-center font-semibold text-rose-600'>{{$task->status->description}}</td>
