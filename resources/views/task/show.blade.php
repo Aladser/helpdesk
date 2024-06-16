@@ -56,7 +56,13 @@
 
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 p-4 bg-white shadow-md">
             <h3 class='font-semibold text-lg mb-2'>Комментарии</h3>
-            <div id='new-cmt-form-block' class='block-submit relative text-sm <?if($task->status->name=='new'):?>hidden<?endif?>'>
+
+            <!-- форма отправки комментария-->
+            @if($task->status->name=='new')
+            <div id='new-cmt-form-block' class='block-submit relative text-sm hidden'>
+            @else
+            <div id='new-cmt-form-block' class='block-submit relative text-sm'>
+            @endif
                 <form id='new-cmt-form' methof='POST' action="{{route('comment.store')}}">
                     @csrf
                     <input id='task__id' name='task_id' type="hidden" value='{{$task->id}}'>
@@ -65,6 +71,7 @@
                 </form>
             </div>
 
+            <!-- комментарии -->
             <div id='cmt-list-block'>
                 @foreach($comments as $comment)
                 <div class='cmt-list-block__comment'>
