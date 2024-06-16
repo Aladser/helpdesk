@@ -55,9 +55,9 @@
             @endif
         </div>
 
-        <div id='comment-list-container' class="max-w-7xl mx-auto sm:px-6 lg:px-8 p-4 bg-white shadow-md <?if($task->status->name=='new'):?>hidden<?endif?>">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 p-4 bg-white shadow-md">
             <h3 class='font-semibold text-lg mb-2'>Комментарии</h3>
-            <div class='block-submit relative text-sm'>
+            <div id='new-cmt-form-block' class='block-submit relative text-sm <?if($task->status->name=='new'):?>hidden<?endif?>'>
                 <form methof='POST' action="#">
                     @csrf
                     <input type="hidden" name='author_id' value='{{$auth_user->id}}'>

@@ -5,7 +5,7 @@ const TASK_NODE = document.querySelector('#task');
 const TASK_STATUS_NODE = document.querySelector('#task__status');
 const TASK_EXECUTOR_NODE = document.querySelector('#task__executor');
 
-const COMMENT_LIST_CONTAINER_NODE = document.querySelector('#comment-list-container');
+const NEW_CMT_FORM_BLOCK = document.querySelector('#new-cmt-form-block');
 
 const TASK_BTN_BLOCK = document.querySelector('#task__btn-block');
 let take_task_btn = document.querySelector('#btn-take-task');
@@ -50,7 +50,7 @@ function handleTask(response) {
         if(responseData['action'] == 'take-task') {
             // взять задачу в работу
 
-            COMMENT_LIST_CONTAINER_NODE.classList.remove('hidden');
+            NEW_CMT_FORM_BLOCK.classList.remove('hidden');
             // исполнитель
             // p id='task__executor' class='mb-2'>Исполнитель: {{$task->executor->full_name()}}</p>
             let executor_node = document.createElement('p');
@@ -75,6 +75,7 @@ function handleTask(response) {
             TASK_BTN_BLOCK.appendChild(complete_task_btn);
         } else if(responseData['action'] == 'complete-task') {
             // статус
+            NEW_CMT_FORM_BLOCK.classList.add('hidden');
             TASK_STATUS_NODE.textContent = 'Выполнена';
             TASK_STATUS_NODE.classList.remove('text-amber-500');
             TASK_STATUS_NODE.classList.add('text-green-500');
