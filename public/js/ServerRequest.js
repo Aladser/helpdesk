@@ -9,7 +9,7 @@ class ServerRequest {
      * @param {*} data данные
      * @param {*} headers заголовки
      */
-    static async execute(URL, processFunc, method, errorPrg = null, data = null, headers = null) {
+    static async execute({URL, processFunc, method, errorPrg = null, data = null, headers = null}) {
         let response;
         if (headers) {
             response = await fetch(URL, {
@@ -30,7 +30,7 @@ class ServerRequest {
                 processFunc(data);
                 break;
             case 419:
-                window.open("/csrf_error", "_self");
+                window.open("/auth_error", "_self");
                 break;
             case 500:
                 window.open("/access_denied", "_self");

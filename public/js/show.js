@@ -5,9 +5,9 @@ const TASK_NODE = document.querySelector('#task');
 const TASK_STATUS_NODE = document.querySelector('#task__status');
 const TASK_EXECUTOR_NODE = document.querySelector('#task__executor');
 
-const COMMENT_LIST_CONTAINER_NODE = document.querySelector('#comment-list-container');
+const NEW_CMT_FORM_BLOCK = document.querySelector('#new-cmt-form-block');
 
-let task_btn_block = document.querySelector('#task__btn-block');
+const TASK_BTN_BLOCK = document.querySelector('#task__btn-block');
 let take_task_btn = document.querySelector('#btn-take-task');
 let complete_task_btn = document.querySelector('#btn-complete-task');
 
@@ -21,6 +21,20 @@ if(take_task_btn) {
     }
 }
 
+// сохранить комментарий------
+const NEW_CMT_FORM = document.querySelector('#new-cmt-form');
+NEW_CMT_FORM.addEventListener('submit', function(e){
+    e.preventDefault();
+    ServerRequest.execute({
+        URL: "/comment",
+        processFunc: (data) => console.log(data),
+        method: "post",
+        data: new FormData(this)
+    });
+});
+
+
+// --------- ФУНКЦИИ --------
 /**отправить запрос на обновление ресурсов*/
 function sendUpdateRequest(task_id, action){
     let headers = {
@@ -32,14 +46,13 @@ function sendUpdateRequest(task_id, action){
     params.action = action;
     params.id = task_id;
 
-    ServerRequest.execute(
-        `/task/${task_id}`,
-        (data) => handleTask(data),
-        "put",
-        null,
-        JSON.stringify(params),
-        headers
-    );
+    ServerRequest.execute({
+        URL: `/task/${task_id}`, 
+        processFunc: (data) => handleTask(data), 
+        method: "put", 
+        data: JSON.stringify(params), 
+        headers: headers
+    });
 }
 
 //**обработать ответа сервера*/
@@ -50,7 +63,7 @@ function handleTask(response) {
         if(responseData['action'] == 'take-task') {
             // взять задачу в работу
 
-            COMMENT_LIST_CONTAINER_NODE.classList.remove('hidden');
+            NEW_CMT_FORM_BLOCK.classList.remove('hidden');
             // исполнитель
             // p id='task__executor' class='mb-2'>Исполнитель: {{$task->executor->full_name()}}</p>
             let executor_node = document.createElement('p');
@@ -71,14 +84,15 @@ function handleTask(response) {
             complete_task_btn.className = 'border px-4 py-2 rounded bg-dark-theme color-light-theme';
             complete_task_btn.textContent = 'Выполнить';
             complete_task_btn.addEventListener('click', () => sendUpdateRequest(TASK_ID, 'complete-task'));
-            task_btn_block.removeChild(take_task_btn);
-            task_btn_block.appendChild(complete_task_btn);
+            TASK_BTN_BLOCK.removeChild(take_task_btn);
+            TASK_BTN_BLOCK.appendChild(complete_task_btn);
         } else if(responseData['action'] == 'complete-task') {
             // статус
+            NEW_CMT_FORM_BLOCK.classList.add('hidden');
             TASK_STATUS_NODE.textContent = 'Выполнена';
             TASK_STATUS_NODE.classList.remove('text-amber-500');
             TASK_STATUS_NODE.classList.add('text-green-500');
-            task_btn_block.removeChild(complete_task_btn);
+            TASK_BTN_BLOCK.removeChild(complete_task_btn);
         }
     }
 }
