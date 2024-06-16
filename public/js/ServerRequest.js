@@ -9,7 +9,7 @@ class ServerRequest {
      * @param {*} data данные
      * @param {*} headers заголовки
      */
-    static async execute(URL, processFunc, method, errorPrg = null, data = null, headers = null) {
+    static async execute({URL, processFunc, method, errorPrg = null, data = null, headers = null}) {
         let response;
         if (headers) {
             response = await fetch(URL, {

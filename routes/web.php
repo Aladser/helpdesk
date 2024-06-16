@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\CommentController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -8,18 +9,14 @@ use Illuminate\Support\Facades\Route;
 
 // индексная страница
 Route::get('/', [TaskController::class, 'index'])->middleware(['auth'])->name('index');
-
+Route::get('/dashboard', function() {return redirect('/');})->middleware(['auth']);
 // задачи
 Route::resource('/task', TaskController::class)->middleware(['auth']);
-
 // профиль пользователя
 Route::get('/profile', function () {
     return view('profile', ['auth_user' => Auth::user()]);
 })->middleware(['auth'])->name('profile');
-
 // AUTH папка
 require __DIR__.'/auth.php';
-
-Route::get('/dashboard', function() {
-    return redirect('/');
-})->middleware(['auth']);
+// сохранение комментариев
+Route::post('/comment', [CommentController::class, 'store'])->name('comment.store');

@@ -35,7 +35,6 @@
                 <p class='text-slate-400 italic' title='время создания'>{{$task->get_datetime('created_at')}}</p>
             </div>
             
-            <input id='task__id' type="hidden" value='{{$task->id}}'>
             <h3 class="font-semibold text-lg mb-4">{{$task->header}}</h3>
             <p class='border-t border-b py-2 mb-3'><?=str_repeat('&nbsp;', 4)?>{{$task->content}}</p>
 
@@ -58,9 +57,9 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 p-4 bg-white shadow-md">
             <h3 class='font-semibold text-lg mb-2'>Комментарии</h3>
             <div id='new-cmt-form-block' class='block-submit relative text-sm <?if($task->status->name=='new'):?>hidden<?endif?>'>
-                <form methof='POST' action="#">
+                <form id='new-cmt-form' methof='POST' action="{{route('comment.store')}}">
                     @csrf
-                    <input type="hidden" name='author_id' value='{{$auth_user->id}}'>
+                    <input id='task__id' name='task_id' type="hidden" value='{{$task->id}}'>
                     <textarea  rows=3 class='block-submit__textarea' placeholder='Введите сообщение здесь ...' name='message' required></textarea>
                     <input type='submit' class='block-submit__btn bg-dark-theme color-light-theme'>
                 </form>

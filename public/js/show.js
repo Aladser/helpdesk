@@ -21,6 +21,20 @@ if(take_task_btn) {
     }
 }
 
+// сохранить комментарий------
+const NEW_CMT_FORM = document.querySelector('#new-cmt-form');
+NEW_CMT_FORM.addEventListener('submit', function(e){
+    e.preventDefault();
+    ServerRequest.execute({
+        URL: "/comment",
+        processFunc: (data) => console.log(data),
+        method: "post",
+        data: new FormData(this)
+    });
+});
+
+
+// --------- ФУНКЦИИ --------
 /**отправить запрос на обновление ресурсов*/
 function sendUpdateRequest(task_id, action){
     let headers = {
@@ -32,14 +46,13 @@ function sendUpdateRequest(task_id, action){
     params.action = action;
     params.id = task_id;
 
-    ServerRequest.execute(
-        URL = `/task/${task_id}`, 
-        processFunc = (data) => handleTask(data), 
-        method = "put", 
-        errorPrg = null, 
-        data = JSON.stringify(params), 
-        headers = headers
-    );
+    ServerRequest.execute({
+        URL: `/task/${task_id}`, 
+        processFunc: (data) => handleTask(data), 
+        method: "put", 
+        data: JSON.stringify(params), 
+        headers: headers
+    });
 }
 
 //**обработать ответа сервера*/
