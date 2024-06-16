@@ -121,5 +121,6 @@ function handleStoreComment(response) {
             <div>${responseData.message}</div>
         `;
         CMT_LIST_BLOCK.prepend(comment_node);
+        NEW_CMT_FORM.message.value = '';
     }
 }
