@@ -34,7 +34,7 @@ if (take_task_btn) {
 NEW_CMT_FORM.addEventListener("submit", function (e) {
     sendStoreComment(e, new FormData(this));
 });
-// отпускание клавиши Shift и Enter
+// отпускание клавиши Shift или Enter
 let pressed_keys = [];
 NEW_CMT_FORM_MSG_FILED.addEventListener("keyup", function (e) {
     if (e.key == "Enter" && !pressed_keys.includes("Shift")) {
@@ -68,7 +68,7 @@ function sendUpdateTaskStatus(task_id, action) {
 
     ServerRequest.execute({
         URL: `/task/${task_id}`,
-        processFunc: (data) => handleUpdateTask(data),
+        processFunc: (data) => handleUpdateTaskStatus(data),
         method: "put",
         data: JSON.stringify(params),
         headers: headers,
@@ -76,7 +76,7 @@ function sendUpdateTaskStatus(task_id, action) {
 }
 
 //**обработать ответ сервера на Обновить статус задачи*/
-function handleUpdateTask(response) {
+function handleUpdateTaskStatus(response) {
     let responseData = JSON.parse(response);
 
     if (responseData.is_updated === 1) {
