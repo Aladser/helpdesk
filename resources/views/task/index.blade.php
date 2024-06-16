@@ -17,24 +17,30 @@
                 <tr class='bg-dark-theme color-light-theme'>
                     <td class='text-center'>{{$table_headers[0]}}</td>
                     <td>{{$table_headers[1]}}</td>
-                    @for ($i=2; $i<count($table_headers)-1; $i++)
+
+                    @if($user_role !== 'author')
+                    <td class='text-center'>{{$table_headers[2]}}</td>
+                    @endif
+                    
+                    @for ($i=3; $i<count($table_headers)-1; $i++)
                     <td class='text-center'>{{$table_headers[$i]}}</td>
+                    
                     @endfor
                     <td class='text-center' title='Последняя активность'>{{$table_headers[6]}}</td>
                 </tr>
                 @foreach ($tasks as $task)
                 <tr class='task-table__row' id="task-{{$task->id}}">
                     <td class='text-center'> {{$task->id}} </td>
-                    <td> <a href="{{route('task.show', $task->id)}}" class='underline w-1/3'><?php echo $task->header; ?></a> </td>
+                    <td> <a href="{{route('task.show', $task->id)}}" class='underline w-1/3 block h-full w-full'>{{$task->header}}</a> </td>
+                    
+                    @if($user_role !== 'author')
                     <td class='text-center'> {{$task->author->short_full_name()}}  </td>
-                    <td class='text-center'> {{$task->get_datetime('created_at')}} </td>
-
-                    @if($task->executor)
-                    <td class='text-center'> {{$task->executor->short_full_name()}} </td>
-                    @else
-                    <td> </td>
                     @endif
 
+                    <td class='text-center'> {{$task->get_datetime('created_at')}} </td>
+                    <td class='text-center'> <?if($task->executor):?>{{$task->executor->short_full_name()}}<?endif?></td>
+
+                    
                     @if($task->status->name == 'new')
                     <td class='text-center font-semibold text-rose-600'>{{$task->status->description}}</td>
                     @elseif($task->status->name == 'process')
