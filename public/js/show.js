@@ -15,29 +15,30 @@ let complete_task_btn = document.querySelector('#btn-complete-task');
 
 //-----взять в работу-----
 if(take_task_btn) {
-    take_task_btn.addEventListener('click', () => sendUpdateRequest(TASK_ID, 'take-task'));
+    take_task_btn.addEventListener('click', () => sendUpdateTaskStatus(TASK_ID, 'take-task'));
 } else {
     //-----выполнить работу-----
     if(complete_task_btn) {
-        complete_task_btn.addEventListener('click', () => sendUpdateRequest(TASK_ID, 'complete-task'));
+        complete_task_btn.addEventListener('click', () => sendUpdateTaskStatus(TASK_ID, 'complete-task'));
     }
 }
 
 // сохранить комментарий------
-NEW_CMT_FORM.addEventListener('submit', function(e){
-    e.preventDefault();
-    ServerRequest.execute({
-        URL: "/comment",
-        processFunc: (data) => handleStoreComment(data),
-        method: "post",
-        data: new FormData(this)
-    });
+NEW_CMT_FORM.addEventListener('submit', function(e){sendStoreComment(e, new FormData(this));});
+document.querySelector("#new-cmt-form__msg-field").addEventListener('keyup', function(e) {
+    if (e.key == 'Enter') {
+        let formData = new FormData();
+        formData.append('_token', NEW_CMT_FORM._token.value);
+        formData.append('message', NEW_CMT_FORM.message.value);
+        formData.append('task_id', NEW_CMT_FORM.task_id.value);
+        sendStoreComment(e, formData);
+    }
 });
 
 
 // --------- ФУНКЦИИ --------
-/**отправить запрос на обновление ресурсов*/
-function sendUpdateRequest(task_id, action){
+/**Обновить статус задачи*/
+function sendUpdateTaskStatus(task_id, action){
     let headers = {
         "X-CSRF-TOKEN": CSRF_TOKEN.getAttribute("content"),
         "Content-Type": "application/json",
@@ -56,7 +57,7 @@ function sendUpdateRequest(task_id, action){
     });
 }
 
-//**обновить статус задачи - обработать ответа сервера*/
+//**обработать ответ сервера на Обновить статус задачи*/
 function handleUpdateTask(response) {
     let responseData = JSON.parse(response);
 
@@ -84,7 +85,7 @@ function handleUpdateTask(response) {
             complete_task_btn.id = 'btn-complete-task';
             complete_task_btn.className = 'border px-4 py-2 rounded bg-dark-theme color-light-theme';
             complete_task_btn.textContent = 'Выполнить';
-            complete_task_btn.addEventListener('click', () => sendUpdateRequest(TASK_ID, 'complete-task'));
+            complete_task_btn.addEventListener('click', () => sendUpdateTaskStatus(TASK_ID, 'complete-task'));
             TASK_BTN_BLOCK.removeChild(take_task_btn);
             TASK_BTN_BLOCK.appendChild(complete_task_btn);
         } else if(responseData['action'] == 'complete-task') {
@@ -98,7 +99,18 @@ function handleUpdateTask(response) {
     }
 }
 
-/**Сохранить комментарий - обработка ответа сервера*/
+/**Сохранить комментарий в БД*/
+function sendStoreComment(e, formData) {
+    e.preventDefault();
+    ServerRequest.execute({
+        URL: "/comment",
+        processFunc: (data) => handleStoreComment(data),
+        method: "post",
+        data: formData
+    });
+}
+
+/**обработать ответ сервера на Сохранить комментарий в БД*/
 function handleStoreComment(response) {
     /*
     <div class="cmt-list-block__comment">
