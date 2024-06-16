@@ -36,7 +36,7 @@
             </div>
             
             <h3 class="font-semibold text-lg mb-4">{{$task->header}}</h3>
-            <p class='border-t border-b py-2 mb-3'><?=str_repeat('&nbsp;', 4)?>{{$task->content}}</p>
+            <p class='border-t border-b py-2 mb-3'><?php echo str_repeat('&nbsp;', 4); ?>{{$task->content}}</p>
 
             <!--кнопки Взять в работу или Выполнить-->
             <div id='task__btn-block' class='mb-2'>
@@ -60,7 +60,7 @@
                 <form id='new-cmt-form' methof='POST' action="{{route('comment.store')}}">
                     @csrf
                     <input id='task__id' name='task_id' type="hidden" value='{{$task->id}}'>
-                    <textarea  rows=3 class='block-submit__textarea' placeholder='Введите сообщение здесь ...' name='message' required></textarea>
+                    <textarea rows=3  id='new-cmt-form__msg-field' class='block-submit__textarea' placeholder='Введите сообщение здесь ...' name='message' required></textarea>
                     <input type='submit' class='block-submit__btn bg-dark-theme color-light-theme'>
                 </form>
             </div>
