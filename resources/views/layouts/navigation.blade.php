@@ -8,7 +8,9 @@
                     <x-application-logo class="block h-10 w-auto fill-current text-gray-600" />
                 </div>
                 <!-- Главная -->
-                <div class="main-link shrink-0 flex items-center me-4 px-2"><a href="{{ route('index') }}">Главная</a></div>
+                <a href="{{ route('index') }}">
+                    <div class="h-full main-link shrink-0 flex items-center me-4 px-2">Главная</div>
+                </a>
             </div>
 
             <!-- Settings Dropdown -->
