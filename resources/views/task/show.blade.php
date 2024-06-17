@@ -23,7 +23,7 @@
     <script src="/js/pages/show.js" defer></script>
     @endsection
 
-    <div class="py-12 mx-4">
+    <div class="py-8 mx-4">
         <div id='task' class="max-w-7xl mx-auto sm:px-6 lg:px-8 p-4 bg-white shadow-md mb-4">
             <div class='flex justify-between mb-2 font-semibold'>
                 <!--статус-->
@@ -45,9 +45,9 @@
             <!--кнопки Взять в работу или Выполнить-->
             <div id='task__btn-block' class='mb-2'>
                 @if($task->status->name == 'new')
-                <button id='btn-take-task'class='border px-4 py-2 rounded bg-dark-theme color-light-theme'>Взять в работу</button>
+                <button id='btn-take-task'class='button-theme'>Взять в работу</button>
                 @elseif($task->status->name == 'process' && $task->executor->id == $auth_user->id)
-                <button id='btn-complete-task'class='border px-4 py-2 rounded bg-dark-theme color-light-theme'>Выполнить</button>
+                <button id='btn-complete-task'class='button-theme'>Выполнить</button>
                 @endif
             </div>
             @endif
@@ -89,7 +89,7 @@
 
                         <div class='cmt-list-block__time'>{{$comment->created_at}}</div>
                     </div>
-                    <div>{{$comment->content}}</div>
+                    <div><?php echo $comment->content; ?></div>
                 </div>
                 @endforeach
             </div>

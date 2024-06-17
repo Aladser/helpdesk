@@ -45,7 +45,7 @@
             </div>
 
             <div class="flex items-center justify-center mt-4">
-                <x-button class="ml-3 w-1/2 text-center bg-dark-theme color-light-theme">{{ __('Войти') }}</x-button>
+                <x-button class="button-theme w-1/2">{{ __('Войти') }}</x-button>
             </div>
         </form>
     </x-auth-card>

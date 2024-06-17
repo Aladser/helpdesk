@@ -31,7 +31,7 @@ class StoreCommentHandler{
             <div>cообщение</div>
         </div>
         */
-
+       
         let response_data = JSON.parse(response);
         if (response_data.is_stored) {
             let comment_node = document.createElement("div");
