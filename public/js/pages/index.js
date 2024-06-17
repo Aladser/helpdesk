@@ -3,9 +3,9 @@ let filter_form = document.querySelector('#task-filter-form');
 /**кнопки фильтра задач*/
 let filter_switchers = new Map([
     ['all', document.querySelector('#task-filter-form__all')],
-    ['opened', document.querySelector('#task-filter-form__opened')],
+    ['new', document.querySelector('#task-filter-form__new')],
     ['process', document.querySelector('#task-filter-form__process')],
-    ['closed', document.querySelector('#task-filter-form__closed')]
+    ['completed', document.querySelector('#task-filter-form__completed')]
   ]);
 
 filter_switchers.forEach(switcher => {

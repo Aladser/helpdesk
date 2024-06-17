@@ -25,16 +25,46 @@ class TaskController extends Controller
     public function index(Request $request)
     {
         $data = $request->all();
-        $task_filter = isset($data['filter']) ? $data['filter'] : 'all';
+        $task_filter = isset($data['filter']) ? $data['filter'] : 'new';
         $user_role = Auth::user()->role->name;
         $table_headers = ['ID', 'Тема', 'Постановщик', 'Создана', 'Исполнитель', 'Статус', 'Посл.активность'];
         $user = Auth::user();
 
         // задачи
         if ($user->role->name === 'executor') {
-            $tasks = Task::orderBy('updated_at', 'desc')->get();
+            switch ($task_filter) {
+                case 'all':
+                    $tasks = Task::orderBy('updated_at', 'desc')->get();
+                    break;
+                case 'new':
+                    $tasks = Task::where('status_id', 1)->orderBy('updated_at', 'desc')->get();
+                    break;
+                case 'process':
+                    $tasks = Task::where('status_id', 2)->orderBy('updated_at', 'desc')->get();
+                    break;
+                case 'completed':
+                    $tasks = Task::where('status_id', 3)->orderBy('updated_at', 'desc')->get();
+                    break;
+                default:
+                    return;
+            }
         } elseif ($user->role->name == 'author') {
-            $tasks = Task::where('author_id', $user->id)->orderBy('updated_at', 'desc')->get();
+            switch ($task_filter) {
+                case 'all':
+                    $tasks = Task::where('author_id', $user->id)->orderBy('updated_at', 'desc')->get();
+                    break;
+                case 'new':
+                    $tasks = Task::where('author_id', $user->id)->where('status_id', 1)->orderBy('updated_at', 'desc')->get();
+                    break;
+                case 'process':
+                    $tasks = Task::where('author_id', $user->id)->where('status_id', 2)->orderBy('updated_at', 'desc')->get();
+                    break;
+                case 'completed':
+                    $tasks = Task::where('author_id', $user->id)->where('status_id', 3)->orderBy('updated_at', 'desc')->get();
+                    break;
+                default:
+                    return;
+            }
         }
 
         foreach ($tasks as $task) {
