@@ -14,7 +14,7 @@
     <div class="py-8">
         <div class="mx-auto w-full px-8">
             @if($user_role == 'author')
-            <a href="{{route('task.create')}}" class='inline-block border px-4 py-2 rounded bg-dark-theme color-light-theme mb-2'>Создать заявку</a>
+            <a href="{{route('task.create')}}" class='button-theme mb-2'>Создать заявку</a>
             @endif
 
             <table class="task-table shadow-md">

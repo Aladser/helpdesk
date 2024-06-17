@@ -45,9 +45,9 @@
             <!--кнопки Взять в работу или Выполнить-->
             <div id='task__btn-block' class='mb-2'>
                 @if($task->status->name == 'new')
-                <button id='btn-take-task'class='border px-4 py-2 rounded bg-dark-theme color-light-theme'>Взять в работу</button>
+                <button id='btn-take-task'class='button-theme'>Взять в работу</button>
                 @elseif($task->status->name == 'process' && $task->executor->id == $auth_user->id)
-                <button id='btn-complete-task'class='border px-4 py-2 rounded bg-dark-theme color-light-theme'>Выполнить</button>
+                <button id='btn-complete-task'class='button-theme'>Выполнить</button>
                 @endif
             </div>
             @endif

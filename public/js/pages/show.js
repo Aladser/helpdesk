@@ -13,21 +13,21 @@ new_comment_form.addEventListener("submit", function (e) {
     storeCommentHandler.send(e, new FormData(this));
 });
 // отпускание клавиши Shift или Enter
-let pressed_keys = [];
+let isShiftPressed = false;
 new_cmt_from_msg_field.addEventListener("keyup", function (e) {
-    if (e.key == "Enter" && !pressed_keys.includes("Shift")) {
+    if (e.key == "Enter" && !isShiftPressed) {
         let formData = new FormData();
         formData.append("_token", new_comment_form._token.value);
         formData.append("message", new_comment_form.message.value);
         formData.append("task_id", new_comment_form.task_id.value);
         storeCommentHandler.send(e, formData);
     } else if (e.key == "Shift") {
-        pressed_keys.pop();
+        isShiftPressed = false;
     }
 });
 // Нажатие Shift
 new_cmt_from_msg_field.addEventListener("keydown", function (e) {
     if (e.key == "Shift") {
-        pressed_keys.push("Shift");
+        isShiftPressed = true;
     }
 });

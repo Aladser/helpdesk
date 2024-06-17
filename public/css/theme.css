@@ -6,18 +6,42 @@
     --color-grey-theme: rgb(180, 180, 180);
 }
 
-.bg-theme {background-color:var(--color-light-theme);}
-.bg-dark-theme {background-color: var(--color-lighter-theme);}
+.bg-theme {
+    background-color: var(--color-light-theme);
+}
+.bg-dark-theme {
+    background-color: var(--color-lighter-theme);
+}
 
-.color-theme {color:var(--color-theme);}
-.color-lighter-theme {color:var(--color-lighter-theme);}
-.color-light-theme {color:var(--color-light-theme);}
+.color-theme {
+    color: var(--color-theme);
+}
+.color-lighter-theme {
+    color: var(--color-lighter-theme);
+}
+.color-light-theme {
+    color: var(--color-light-theme);
+}
 
 .border-theme {
     border: 1px solid var(--color-theme);
 }
 
+/*кнопки*/
+.button-theme {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    color: var(--color-light-theme);
+    background-color: var(--color-lighter-theme);
+}
+.button-theme:hover {
+    background-color: var(--color-theme);
+}
+.button-theme:active {
+    box-shadow: 0 0.1rem 0.5rem var(--color-lighter-theme);
+}
+
 .main-link:hover {
     background-color: var(--color-theme);
 }
-

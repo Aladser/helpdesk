@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Comment;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Comment;
-use App\Models\Status;
-use Carbon\Carbon;
 
 class CommentController extends Controller
 {
@@ -14,6 +13,7 @@ class CommentController extends Controller
     {
         $auth_user = Auth::user();
         $data = $request->all();
+
         $data['author_name'] = $auth_user->short_full_name();
         $data['author_role'] = $auth_user->role->name;
         $data['created_at'] = Carbon::now();
@@ -29,6 +29,5 @@ class CommentController extends Controller
         unset($data['task_id']);
 
         return $data;
-
     }
 }

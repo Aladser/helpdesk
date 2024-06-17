@@ -25,7 +25,6 @@ use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
-    /**Список заявок*/
     public function index()
     {
         $user_role = Auth::user()->role->name;
@@ -50,7 +49,6 @@ class TaskController extends Controller
         return view('task.index', ['tasks' => $tasks, 'table_headers' => $table_headers, 'user_role' => $user_role]);
     }
 
-    /* Страница задачи */
     public function show($id)
     {
         $comments = Comment::where('task_id', $id)->orderBy('created_at', 'desc')->get();
@@ -64,9 +62,9 @@ class TaskController extends Controller
         );
     }
 
-    // работает только с CSRF-токеном, PUT-запрос можно отправить только из JS
     public function update(Request $request, $id)
     {
+        // работает только с CSRF-токеном, PUT-запрос можно отправить только из JS
         $data = $request->all();
         $task = Task::find($id);
         $executor = Auth::user();
@@ -91,18 +89,19 @@ class TaskController extends Controller
 
     public function create()
     {
-        echo 'страница создания задачи';
+        return view('task.create', ['auth_user' => Auth::user()]);
     }
 
     public function store(Request $request)
     {
-    }
+        $data = $request->all();
+        $task = new Task();
+        $task->status_id = 1;
+        $task->author_id = Auth::user()->id;
+        $task->header = $data['header'];
+        $task->content = $data['content'];
+        $task->save();
 
-    public function edit($id)
-    {
-    }
-
-    public function destroy($id)
-    {
+        return redirect()->route('task.show', $task->id);
     }
 }
