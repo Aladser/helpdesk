@@ -11,6 +11,7 @@ class UserSeeder extends Seeder
     private $surnames = ['Харитонов','Казаков','Дмитриев', 'Аксёнова','Хохлова','Селезнёва'];
     private $names = ['Нисон','Мечеслав','Анатолий','Юнона','Ася','Нева'];
     private $patronyms = ['Борисович','Антонович','Макарович','Пётровна','Витальевна','Даниловна'];
+    private $logins = ['haritonov','kazakov','dmitriev', 'aksenova','hohlova','selezneva']; 
 
     public function run()
     {
@@ -26,7 +27,7 @@ class UserSeeder extends Seeder
         ]);
         for ($i = 0; $i < 3; ++$i) {
             User::create([
-                'login' => "executor_".($i+1),
+                'login' => $this->logins[$i],
                 'role_id' => 2,
                 'password' => $hash_password,
                 'name' => $this->names[$i],
@@ -36,7 +37,7 @@ class UserSeeder extends Seeder
         }
         for ($i = 3; $i < 6; ++$i) {
             User::create([
-                'login' => "client_".($i+1),
+                'login' => $this->logins[$i],
                 'role_id' => 3,
                 'password' => $hash_password,
                 'name' => $this->names[$i],

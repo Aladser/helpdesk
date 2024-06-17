@@ -15,6 +15,8 @@
         <div class="mx-auto w-full px-8">
             @if($user_role == 'author')
             <a href="{{route('task.create')}}" class='button-theme mb-2'>Создать заявку</a>
+            @else
+            <button id='btn-filter' class='button-theme mb-2'>Фильтры</button>
             @endif
 
             <table class="task-table shadow-md">
