@@ -16,7 +16,14 @@
             @if($user_role == 'author')
             <a href="{{route('task.create')}}" class='button-theme mb-2'>Создать заявку</a>
             @else
-            <button id='btn-filter' class='button-theme mb-2'>Фильтры</button>
+            <div>
+                <form action="{{route('task.index')}}" method='get'>
+                    <span><input type="radio" name="filter" value="Все">Все</span>
+                    <span><input type="radio" name="filter" value='Открытые'>Открытые</span>
+                    <span><input type="radio" name="filter" value="В процессе">В процессе</span>
+                    <span><input type="radio" name="filter" value="Закрытые">Закрытые</span>
+                </form>
+            </div>
             @endif
 
             <table class="task-table shadow-md">
