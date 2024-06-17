@@ -31,9 +31,9 @@ class Task extends Model
     public function get_datetime(string $type): string
     {
         if ($type == 'created_at') {
-            return $this->created_at->format('d-m-Y h:i');
+            return $this->created_at->format('d-m-Y H:i');
         } elseif ($type == 'updated_at') {
-            return $this->updated_at->format('d-m-Y h:i');
+            return $this->updated_at->format('d-m-Y H:i');
         } else {
             return '';
         }

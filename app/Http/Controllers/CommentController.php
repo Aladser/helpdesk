@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Comment;
+use App\Models\Task;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,6 +19,12 @@ class CommentController extends Controller
         $data['author_role'] = $auth_user->role->name;
         $data['created_at'] = Carbon::now();
 
+        // обновление активности задачи
+        $task = Task::find($data['task_id']);
+        $task->updated_at = $data['created_at'];
+        $task->save();
+
+        // добавление комментария
         $comment = new Comment();
         $comment->task_id = $data['task_id'];
         $comment->author_id = $auth_user->id;
