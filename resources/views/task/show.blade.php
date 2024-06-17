@@ -18,12 +18,15 @@
 
     @section('js')
     <script src="/js/ServerRequest.js" defer></script>
-    <script src="/js/show.js" defer></script>
+    <script src="/js/request_handlers/UpdateTaskStatusHandler.js" defer></script>
+    <script src="/js/request_handlers/StoreCommentHandler.js" defer></script>
+    <script src="/js/pages/show.js" defer></script>
     @endsection
 
     <div class="py-12 mx-4">
         <div id='task' class="max-w-7xl mx-auto sm:px-6 lg:px-8 p-4 bg-white shadow-md mb-4">
             <div class='flex justify-between mb-2 font-semibold'>
+                <!--статус-->
                 @if($task->status->name == 'new')
                 <p id='task__status' class='mb-2 text-rose-600'>{{ $task->status->description }}</p>
                 @elseif($task->status->name == 'process')
@@ -38,6 +41,7 @@
             <h3 class="font-semibold text-lg mb-4">{{$task->header}}</h3>
             <p class='border-t border-b py-2 mb-3'><?php echo str_repeat('&nbsp;', 4); ?>{{$task->content}}</p>
 
+            @if($auth_user->role->name !== 'author')
             <!--кнопки Взять в работу или Выполнить-->
             <div id='task__btn-block' class='mb-2'>
                 @if($task->status->name == 'new')
@@ -46,6 +50,7 @@
                 <button id='btn-complete-task'class='border px-4 py-2 rounded bg-dark-theme color-light-theme'>Выполнить</button>
                 @endif
             </div>
+            @endif
             
             <p class='mb-1'>Постановщик: {{$task->author->full_name()}}</p>
             
@@ -56,7 +61,13 @@
 
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 p-4 bg-white shadow-md">
             <h3 class='font-semibold text-lg mb-2'>Комментарии</h3>
-            <div id='new-cmt-form-block' class='block-submit relative text-sm <?if($task->status->name=='new'):?>hidden<?endif?>'>
+
+            <!-- форма отправки комментария-->
+            @if($task->status->name=='new' && $auth_user->role->name != 'author')
+            <div id='new-cmt-form-block' class='block-submit relative text-sm hidden'>
+            @else
+            <div id='new-cmt-form-block' class='block-submit relative text-sm'>
+            @endif
                 <form id='new-cmt-form' methof='POST' action="{{route('comment.store')}}">
                     @csrf
                     <input id='task__id' name='task_id' type="hidden" value='{{$task->id}}'>
@@ -65,6 +76,7 @@
                 </form>
             </div>
 
+            <!-- комментарии -->
             <div id='cmt-list-block'>
                 @foreach($comments as $comment)
                 <div class='cmt-list-block__comment'>
