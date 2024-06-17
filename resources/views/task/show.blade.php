@@ -18,8 +18,8 @@
 
     @section('js')
     <script src="/js/ServerRequest.js" defer></script>
-    <script src="/js/UpdateTaskStatusHandler.js" defer></script>
-    <script src="/js/StoreCommentHandler.js" defer></script>
+    <script src="/js/request_handlers/UpdateTaskStatusHandler.js" defer></script>
+    <script src="/js/request_handlers/StoreCommentHandler.js" defer></script>
     <script src="/js/pages/show.js" defer></script>
     @endsection
 
