@@ -14,7 +14,8 @@ class CommentController extends Controller
     {
         $auth_user = Auth::user();
         $data = $request->all();
-        $data['executor_name'] = $auth_user->short_full_name();
+        $data['author_name'] = $auth_user->short_full_name();
+        $data['author_role'] = $auth_user->role->name;
         $data['created_at'] = Carbon::now();
 
         $comment = new Comment();
@@ -22,7 +23,7 @@ class CommentController extends Controller
         $comment->author_id = $auth_user->id;
         $comment->content = $data['message'];
         $comment->created_at = $data['created_at'];
-        $data['isStored'] = $comment->save();
+        $data['is_stored'] = $comment->save();
         $data['created_at'] = $data['created_at']->format('Y-m-d H:i');
         unset($data['_token']);
         unset($data['task_id']);

@@ -1,32 +1,32 @@
 const CSRF_TOKEN = document.querySelector('meta[name="csrf-token"]');
-const TASK_ID = document.querySelector("#task__id").value;
 
+const TASK_ID_NODE = document.querySelector("#task__id");
 const TASK_NODE = document.querySelector("#task");
 const TASK_STATUS_NODE = document.querySelector("#task__status");
 const TASK_EXECUTOR_NODE = document.querySelector("#task__executor");
+const TASK_BTN_BLOCK = document.querySelector("#task__btn-block");
+let take_task_btn = document.querySelector("#btn-take-task");
+let complete_task_btn = document.querySelector("#btn-complete-task");
 
 const NEW_CMT_FORM_BLOCK = document.querySelector("#new-cmt-form-block");
 const NEW_CMT_FORM = document.querySelector("#new-cmt-form");
 const NEW_CMT_FORM_MSG_FILED = document.querySelector(
     "#new-cmt-form__msg-field"
 );
-const CMT_LIST_BLOCK = document.querySelector("#cmt-list-block");
 
-const TASK_BTN_BLOCK = document.querySelector("#task__btn-block");
-let take_task_btn = document.querySelector("#btn-take-task");
-let complete_task_btn = document.querySelector("#btn-complete-task");
+const CMT_LIST_BLOCK = document.querySelector("#cmt-list-block");
 
 //-----взять в работу-----
 if (take_task_btn) {
     take_task_btn.addEventListener("click", () =>
-        sendUpdateTaskStatus(TASK_ID, "take-task")
+        sendUpdateTaskStatus(TASK_ID_NODE.value, "take-task")
     );
 } else {
     //-----выполнить работу-----
     if (complete_task_btn) {
-        complete_task_btn.addEventListener("click", () =>
-            sendUpdateTaskStatus(TASK_ID, "complete-task")
-        );
+        complete_task_btn.addEventListener("click", function(e){
+            sendUpdateTaskStatus(TASK_ID_NODE.value, "complete-task");
+        });
     }
 }
 
@@ -105,7 +105,7 @@ function handleUpdateTaskStatus(response) {
                 "border px-4 py-2 rounded bg-dark-theme color-light-theme";
             complete_task_btn.textContent = "Выполнить";
             complete_task_btn.addEventListener("click", () =>
-                sendUpdateTaskStatus(TASK_ID, "complete-task")
+                sendUpdateTaskStatus(TASK_ID_NODE.value, "complete-task")
             );
             TASK_BTN_BLOCK.removeChild(take_task_btn);
             TASK_BTN_BLOCK.appendChild(complete_task_btn);
@@ -142,16 +142,19 @@ function handleStoreComment(response) {
         <div>cообщение</div>
     </div>
     */
-    let responseData = JSON.parse(response);
-    if (response) {
+
+    let response_data = JSON.parse(response);
+    if (response_data.is_stored) {
         let comment_node = document.createElement("div");
         comment_node.className = "cmt-list-block__comment";
+        let author_classname = 'cmt-list-block__author ';
+        author_classname += response_data.author_role == 'executor' ? 'color-lighter-theme' : 'text-amber-500';
         comment_node.innerHTML = `
             <div>
-                <div class="cmt-list-block__author color-lighter-theme">${responseData.executor_name}</div>
-                <div class="cmt-list-block__time">${responseData.created_at}</div>
+                <div class="${author_classname}">${response_data.author_name}</div>
+                <div class="cmt-list-block__time">${response_data.created_at}</div>
             </div>
-            <div>${responseData.message}</div>
+            <div>${response_data.message}</div>
         `;
         CMT_LIST_BLOCK.prepend(comment_node);
         NEW_CMT_FORM.message.value = "";

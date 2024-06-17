@@ -38,6 +38,7 @@
             <h3 class="font-semibold text-lg mb-4">{{$task->header}}</h3>
             <p class='border-t border-b py-2 mb-3'><?php echo str_repeat('&nbsp;', 4); ?>{{$task->content}}</p>
 
+            @if($auth_user->role->name !== 'author')
             <!--кнопки Взять в работу или Выполнить-->
             <div id='task__btn-block' class='mb-2'>
                 @if($task->status->name == 'new')
@@ -46,6 +47,7 @@
                 <button id='btn-complete-task'class='border px-4 py-2 rounded bg-dark-theme color-light-theme'>Выполнить</button>
                 @endif
             </div>
+            @endif
             
             <p class='mb-1'>Постановщик: {{$task->author->full_name()}}</p>
             
@@ -58,7 +60,7 @@
             <h3 class='font-semibold text-lg mb-2'>Комментарии</h3>
 
             <!-- форма отправки комментария-->
-            @if($task->status->name=='new')
+            @if($task->status->name=='new' && $auth_user->role->name != 'author')
             <div id='new-cmt-form-block' class='block-submit relative text-sm hidden'>
             @else
             <div id='new-cmt-form-block' class='block-submit relative text-sm'>
