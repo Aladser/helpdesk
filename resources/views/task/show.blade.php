@@ -89,7 +89,7 @@
 
                         <div class='cmt-list-block__time'>{{$comment->created_at}}</div>
                     </div>
-                    <div>{{$comment->content}}</div>
+                    <div><?php echo $comment->content; ?></div>
                 </div>
                 @endforeach
             </div>
