@@ -11,8 +11,12 @@
     <link rel="stylesheet" href="{{ asset('css/index.css') }}">
     @endsection
 
-    <div class="py-12">
+    <div class="py-8">
         <div class="mx-auto w-full px-8">
+            @if($user_role == 'author')
+            <a href="{{route('task.create')}}" class='inline-block border px-4 py-2 rounded bg-dark-theme color-light-theme mb-2'>Создать заявку</a>
+            @endif
+
             <table class="task-table shadow-md">
                 <tr class='bg-dark-theme color-light-theme'>
                     <td class='text-center'>{{$table_headers[0]}}</td>

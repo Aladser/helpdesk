@@ -91,6 +91,7 @@ class TaskController extends Controller
 
     public function create()
     {
+        echo 'страница создания задачи';
     }
 
     public function store(Request $request)
