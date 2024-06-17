@@ -18,19 +18,19 @@ use Illuminate\Support\Facades\Auth;
 |           |                                 |                     |                                             | App\Http\Middleware\Authenticate                   |
 | PUT|PATCH | task/{task}                     | task.update         | App\Http\Controllers\TaskController@update  | web                                                |
 |           |                                 |                     |                                             | App\Http\Middleware\Authenticate                   |
-| DELETE    | task/{task}                     | task.destroy        | App\Http\Controllers\TaskController@destroy | web                                                |
-|           |                                 |                     |                                             | App\Http\Middleware\Authenticate                   |
-| GET|HEAD  | task/{task}/edit                | task.edit           | App\Http\Controllers\TaskController@edit    | web
 */
 
 class TaskController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $data = $request->all();
+        $task_filter = isset($data['filter']) ? $data['filter'] : 'all';
         $user_role = Auth::user()->role->name;
         $table_headers = ['ID', 'Тема', 'Постановщик', 'Создана', 'Исполнитель', 'Статус', 'Посл.активность'];
-        // задачи
         $user = Auth::user();
+
+        // задачи
         if ($user->role->name === 'executor') {
             $tasks = Task::orderBy('updated_at', 'desc')->get();
         } elseif ($user->role->name == 'author') {
@@ -46,7 +46,15 @@ class TaskController extends Controller
             }
         }
 
-        return view('task.index', ['tasks' => $tasks, 'table_headers' => $table_headers, 'user_role' => $user_role]);
+        return view(
+            'task.index',
+            [
+                'tasks' => $tasks,
+                'table_headers' => $table_headers,
+                'user_role' => $user_role,
+                'task_filter' => $task_filter,
+            ]
+        );
     }
 
     public function show($id)

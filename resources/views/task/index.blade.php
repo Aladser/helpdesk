@@ -11,19 +11,34 @@
     <link rel="stylesheet" href="{{ asset('css/index.css') }}">
     @endsection
 
+    @section('js')
+    <script src="/js/pages/index.js" defer></script>
+    @endsection
+
     <div class="py-8">
         <div class="mx-auto w-full px-8">
             @if($user_role == 'author')
-            <a href="{{route('task.create')}}" class='button-theme mb-2'>Создать заявку</a>
-            @else
-            <div>
-                <form action="{{route('task.index')}}" method='get'>
-                    <span><input type="radio" name="filter" value="Все">Все</span>
-                    <span><input type="radio" name="filter" value='Открытые'>Открытые</span>
-                    <span><input type="radio" name="filter" value="В процессе">В процессе</span>
-                    <span><input type="radio" name="filter" value="Закрытые">Закрытые</span>
-                </form>
-            </div>
+            <a href="{{route('task.create')}}" class='button-theme mb-6 ms-2'>Создать заявку</a>
+            @elseif($user_role == 'executor')
+            <!--фильтр задач-->
+            <form id='task-filter-form' action="{{route('task.index')}}" method='GET'><div class='mb-6 flex'>
+                <div class="flex items-center me-2 ms-2">
+                    <input <?if($task_filter=='all'):?>checked<?endif?> id="task-filter-form__all" type="radio" value="all" name="filter" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                    <label for="default-radio-1" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Все</label>
+                </div>
+                <div class="flex items-center me-2">
+                    <input <?if($task_filter=='opened'):?>checked<?endif?> id="task-filter-form__opened" type="radio" value="opened" name="filter" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                    <label for="default-radio-1" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Открытые</label>
+                </div>
+                <div class="flex items-center me-2">
+                    <input <?if($task_filter=='process'):?>checked<?endif?> id="task-filter-form__process" type="radio" value="process" name="filter" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                    <label for="default-radio-1" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">В работе</label>
+                </div>
+                <div class="flex items-center">
+                    <input <?if($task_filter=='closed'):?>checked<?endif?> id="task-filter-form__closed" type="radio" value="closed" name="filter" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                    <label for="default-radio-2" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Закрытые</label>
+                </div>
+            </div></form>
             @endif
 
             <table class="task-table shadow-md">
