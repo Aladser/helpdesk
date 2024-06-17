@@ -18,6 +18,7 @@
 
     @section('js')
     <script src="/js/ServerRequest.js" defer></script>
+    <script src="/js/UpdateTaskStatusHandler.js" defer></script>
     <script src="/js/pages/show.js" defer></script>
     @endsection
 
