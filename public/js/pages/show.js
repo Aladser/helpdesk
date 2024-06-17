@@ -24,13 +24,13 @@ if (take_task_btn) {
 } else {
     //-----выполнить работу-----
     if (complete_task_btn) {
-        complete_task_btn.addEventListener("click", function(e){
+        complete_task_btn.addEventListener("click", function (e) {
             sendUpdateTaskStatus(TASK_ID_NODE.value, "complete-task");
         });
     }
 }
 
-// сохранить комментарий------
+//---сохранить комментарий---
 NEW_CMT_FORM.addEventListener("submit", function (e) {
     sendStoreComment(e, new FormData(this));
 });
@@ -62,15 +62,11 @@ function sendUpdateTaskStatus(task_id, action) {
         "Content-Type": "application/json",
     };
 
-    let params = {};
-    params.action = action;
-    params.id = task_id;
-
     ServerRequest.execute({
         URL: `/task/${task_id}`,
         processFunc: (data) => handleUpdateTaskStatus(data),
         method: "put",
-        data: JSON.stringify(params),
+        data: JSON.stringify({ action: action }),
         headers: headers,
     });
 }
@@ -147,8 +143,11 @@ function handleStoreComment(response) {
     if (response_data.is_stored) {
         let comment_node = document.createElement("div");
         comment_node.className = "cmt-list-block__comment";
-        let author_classname = 'cmt-list-block__author ';
-        author_classname += response_data.author_role == 'executor' ? 'color-lighter-theme' : 'text-amber-500';
+        let author_classname = "cmt-list-block__author ";
+        author_classname +=
+            response_data.author_role == "executor"
+                ? "color-lighter-theme"
+                : "text-amber-500";
         comment_node.innerHTML = `
             <div>
                 <div class="${author_classname}">${response_data.author_name}</div>

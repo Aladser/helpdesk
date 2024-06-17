@@ -68,7 +68,7 @@ class TaskController extends Controller
     public function update(Request $request, $id)
     {
         $data = $request->all();
-        $task = Task::find($data['id']);
+        $task = Task::find($id);
         $executor = Auth::user();
 
         if ($data['action'] == 'take-task') {
