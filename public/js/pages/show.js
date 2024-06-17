@@ -1,10 +1,11 @@
-const TASK_ID_NODE = document.querySelector("#task__id");
-const TASK_EXECUTOR_NODE = document.querySelector("#task__executor");
-const new_cmt_form_block = document.querySelector("#new-cmt-form-block");
 const NEW_CMT_FORM = document.querySelector("#new-cmt-form");
 const NEW_CMT_FORM_MSG_FILED = document.querySelector("#new-cmt-form__msg-field");
 const CMT_LIST_BLOCK = document.querySelector("#cmt-list-block");
-let updateTaskStatusHandler = new UpdateTaskStatusHandler();
+
+let task_node = document.querySelector("#task");
+let new_comment_form_block = document.querySelector("#new-cmt-form-block");
+let csrf_toke_node = document.querySelector('meta[name="csrf-token"]');
+let updateTaskStatusHandler = new UpdateTaskStatusHandler(task_node, new_comment_form_block, csrf_toke_node);
 
 //---сохранить комментарий---
 NEW_CMT_FORM.addEventListener("submit", function (e) {

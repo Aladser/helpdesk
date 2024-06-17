@@ -25,6 +25,7 @@
     <div class="py-12 mx-4">
         <div id='task' class="max-w-7xl mx-auto sm:px-6 lg:px-8 p-4 bg-white shadow-md mb-4">
             <div class='flex justify-between mb-2 font-semibold'>
+                <!--статус-->
                 @if($task->status->name == 'new')
                 <p id='task__status' class='mb-2 text-rose-600'>{{ $task->status->description }}</p>
                 @elseif($task->status->name == 'process')

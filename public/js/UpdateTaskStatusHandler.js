@@ -1,13 +1,21 @@
+/**Клиентский обработчик обновления статуса задачи*/
 class UpdateTaskStatusHandler {
-    constructor() {
-        this.task_id_node = document.querySelector("#task__id");
-        this.csrf_toke_node = document.querySelector('meta[name="csrf-token"]');
-        this.new_cmt_form_block = document.querySelector("#new-cmt-form-block");
-        this.task_status_node = document.querySelector("#task__status");
-        this.task_node = document.querySelector("#task");
-        this.task_btn_block = document.querySelector("#task__btn-block");
-        this.take_task_btn = document.querySelector("#btn-take-task");
-        this.complete_task_btn = document.querySelector("#btn-complete-task");
+    /**
+     * @param {*} task_node узел задачи
+     * @param {*} new_comment_form_block  узел блока формы отправки комментария
+     * @param {*} csrf_token CSRF-токен
+     */
+    constructor(task_node, new_comment_form_block, csrf_token) {
+        this.task_node = task_node;
+        this.task_status_node = this.task_node.querySelector("#task__status");
+
+        this.task_btn_block = this.task_node.querySelector("#task__btn-block");
+        this.take_task_btn = this.task_node.querySelector("#btn-take-task");
+        this.complete_task_btn = this.task_node.querySelector("#btn-complete-task");
+
+        this.csrf_toke_node = csrf_token;
+        this.new_cmt_form_block =  new_comment_form_block;
+        this.task_id_node = this.new_cmt_form_block.querySelector("#task__id");
 
         //-----взять в работу-----
         if (this.take_task_btn) {
