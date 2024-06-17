@@ -1,4 +1,9 @@
+/**Клиентский обработчик отправки комментариев*/
 class StoreCommentHandler{
+    /**
+     * @param {*} new_comment_form форма отправки комментария
+     * @param {*} comment_list_block блок комментариев
+     */
     constructor(new_comment_form, comment_list_block) {
         this.new_comment_form = new_comment_form;
         this.comment_list_block = comment_list_block;
