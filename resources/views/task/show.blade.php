@@ -18,7 +18,7 @@
 
     @section('js')
     <script src="/js/ServerRequest.js" defer></script>
-    <script src="/js/show.js" defer></script>
+    <script src="/js/pages/show.js" defer></script>
     @endsection
 
     <div class="py-12 mx-4">
