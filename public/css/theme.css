@@ -34,6 +34,7 @@
     border-radius: 0.25rem;
     color: var(--color-light-theme);
     background-color: var(--color-lighter-theme);
+    transition-timing-function: cubic-bezier(0.4, 0, 1, 1);
 }
 .button-theme:hover {
     background-color: var(--color-theme);
