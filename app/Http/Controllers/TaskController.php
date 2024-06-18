@@ -22,48 +22,41 @@ use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
+    private $task_filters = ['new' => 1, 'process' => 2, 'completed' => 3];
+
     public function index(Request $request)
     {
         $data = $request->all();
-        $task_filter = isset($data['filter']) ? $data['filter'] : 'new';
-        $user_role = Auth::user()->role->name;
-        $table_headers = ['ID', 'Тема', 'Постановщик', 'Создана', 'Исполнитель', 'Статус', 'Посл.активность'];
+        $task_status = isset($data['type']) ? $data['type'] : 'new';
+        $task_belongs = isset($data['belongs']) ? $data['belongs'] : 'new';
+
         $user = Auth::user();
+        $table_headers = ['ID', 'Тема', 'Постановщик', 'Создана', 'Исполнитель', 'Статус', 'Посл.активность'];
 
         // задачи
-        if ($user->role->name === 'executor') {
-            switch ($task_filter) {
-                case 'all':
-                    $tasks = Task::orderBy('updated_at', 'desc')->get();
-                    break;
-                case 'new':
-                    $tasks = Task::where('status_id', 1)->orderBy('updated_at', 'desc')->get();
-                    break;
-                case 'process':
-                    $tasks = Task::where('status_id', 2)->orderBy('updated_at', 'desc')->get();
-                    break;
-                case 'completed':
-                    $tasks = Task::where('status_id', 3)->orderBy('updated_at', 'desc')->get();
-                    break;
-                default:
-                    return;
+        if ($task_status == 'all') {
+            if ($task_belongs == 'my' && $user->role->name == 'executor' && $task_status == 'all') {
+                // исполнитель: мои, все
+                $new_tasks = Task::where('status_id', 1);
+                $tasks = Task::where('executor_id', $user->id)->orderBy('updated_at', 'desc')->union($new_tasks)->orderBy('updated_at', 'desc')->get();
+            } elseif ($task_belongs == 'my' && $user->role->name == 'executor' && $task_status != 'new') {
+                // исполнитель: мои, неновые
+                $tasks = Task::where('executor_id', $user->id)->orderBy('updated_at', 'desc')->get();
+            } elseif ($user->role->name == 'author') {
+                // автор
+                $tasks = Task::where('author_id', $user->id)->orderBy('updated_at', 'desc')->get();
+            } else {
+                $tasks = Task::orderBy('updated_at', 'desc')->get();
             }
-        } elseif ($user->role->name == 'author') {
-            switch ($task_filter) {
-                case 'all':
-                    $tasks = Task::where('author_id', $user->id)->orderBy('updated_at', 'desc')->get();
-                    break;
-                case 'new':
-                    $tasks = Task::where('author_id', $user->id)->where('status_id', 1)->orderBy('updated_at', 'desc')->get();
-                    break;
-                case 'process':
-                    $tasks = Task::where('author_id', $user->id)->where('status_id', 2)->orderBy('updated_at', 'desc')->get();
-                    break;
-                case 'completed':
-                    $tasks = Task::where('author_id', $user->id)->where('status_id', 3)->orderBy('updated_at', 'desc')->get();
-                    break;
-                default:
-                    return;
+        } else {
+            if ($task_belongs == 'my' && $user->role->name == 'executor' && $task_status != 'new') {
+                // исполнитель: мои, неновые
+                $tasks = Task::where('status_id', $this->task_filters[$task_status])->where('executor_id', $user->id)->orderBy('updated_at', 'desc')->get();
+            } elseif ($user->role->name == 'author') {
+                // автор
+                $tasks = Task::where('status_id', $this->task_filters[$task_status])->where('author_id', $user->id)->orderBy('updated_at', 'desc')->get();
+            } else {
+                $tasks = Task::where('status_id', $this->task_filters[$task_status])->orderBy('updated_at', 'desc')->get();
             }
         }
 
@@ -81,8 +74,9 @@ class TaskController extends Controller
             [
                 'tasks' => $tasks,
                 'table_headers' => $table_headers,
-                'user_role' => $user_role,
-                'task_filter' => $task_filter,
+                'user_role' => $user->role->name,
+                'task_status' => $task_status,
+                'task_belongs' => $task_belongs,
             ]
         );
     }
