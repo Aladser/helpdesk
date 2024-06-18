@@ -37,8 +37,8 @@ class TaskController extends Controller
         if ($task_status == 'all') {
             if ($task_belongs == 'my' && $user->role->name == 'executor' && $task_status == 'all') {
                 // исполнитель: мои, все
-                $new_tasks = Task::where('status_id', 1)->orderBy('updated_at', 'desc');
-                $tasks = Task::where('executor_id', $user->id)->orderBy('updated_at', 'desc')->union($new_tasks)->get();
+                $new_tasks = Task::where('status_id', 1);
+                $tasks = Task::where('executor_id', $user->id)->orderBy('updated_at', 'desc')->union($new_tasks)->orderBy('updated_at', 'desc')->get();
             } elseif ($task_belongs == 'my' && $user->role->name == 'executor' && $task_status != 'new') {
                 // исполнитель: мои, неновые
                 $tasks = Task::where('executor_id', $user->id)->orderBy('updated_at', 'desc')->get();
