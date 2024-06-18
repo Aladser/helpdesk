@@ -28,7 +28,7 @@
                     <p class='w-full text-center mb-1 text-xl font-semibold'>Заголовок</p>
                     <input type="text" name='header' maxlength="100" required class='w-full mb-3'>
                     <p class='w-full text-center mb-1 text-xl font-semibold'>Содержание</p>
-                    <textarea rows=10 name="content" required class='resize-none w-full mb-3'></textarea>
+                    <textarea rows=10 name="content" class='resize-none w-full mb-3'></textarea>
                     <input type="submit" class='button-theme block w-1/3 mx-auto'>
                 </form>
             </div>
