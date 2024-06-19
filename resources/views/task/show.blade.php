@@ -42,13 +42,14 @@
             <p class='border-t border-b py-2 mb-3'><?php echo str_repeat('&nbsp;', 4); ?>{{$task->content}}</p>
 
             @if($auth_user->role->name !== 'author')
-            <!--кнопки Взять в работу или Выполнить-->
+            <!--Кнопки-->
             <div id='task__btn-block' class='mb-2'>
                 @if($task->status->name == 'new')
-                <button id='btn-take-task'class='button-theme'>Взять в работу</button>
+                <button id='btn-reassign-task'class='button-theme w-1/6'>Назначить</button>
+                <button id='btn-take-task'class='button-theme w-1/6'>Взять в работу</button>
                 @elseif($task->status->name == 'process' && $task->executor->id == $auth_user->id)
-                <button id='btn-complete-task'class='button-theme w-1/6 mb-2 me-1'>Выполнить</button>
                 <button id='btn-reassign-task'class='button-theme w-1/6'>Переназначить</button>
+                <button id='btn-complete-task'class='button-theme w-1/6 mb-2 me-1'>Выполнить</button>
                 <!--форма отправки отчета о выполнении задачи-->
                 <form id="report-form-complete-task" class='hidden'>
                     <div class="w-1/2">

@@ -96,6 +96,7 @@ class UpdateTaskStatusHandler {
                 // взять задачу в работу
 
                 this.new_cmt_form_block_node.classList.remove("hidden");
+                this.reassign_task_btn.textContent = 'Переназначить';
                 // исполнитель
                 let executor_node = document.createElement("p");
                 executor_node.id = "task__executor";
@@ -116,13 +117,6 @@ class UpdateTaskStatusHandler {
                 this.complete_task_btn.onclick = () => this.completeTask();
                 this.task_btn_block.removeChild(this.take_task_btn);
                 this.task_btn_block.appendChild(this.complete_task_btn);
-
-                // кнопка Переназначить
-                this.reassign_task_btn = document.createElement('button');
-                this.reassign_task_btn.id = 'btn-reassign-task';
-                this.reassign_task_btn.className = 'button-theme w-1/6';
-                this.reassign_task_btn.textContent = 'Переназначить';
-                this.task_btn_block.appendChild(this.reassign_task_btn);
 
                 // форма отправки отчета
                 this.report_form = document.createElement('form');
