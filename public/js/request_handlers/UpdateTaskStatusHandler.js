@@ -18,6 +18,7 @@ class UpdateTaskStatusHandler {
         this.task_btn_block = this.task_node.querySelector("#task__btn-block");
         this.take_task_btn = this.task_node.querySelector("#btn-take-task");
         this.complete_task_btn = this.task_node.querySelector("#btn-complete-task");
+        this.reassign_task_btn = this.task_node.querySelector("#btn-reassign-task");
 
         this.new_cmt_form_block_node = new_comment_form_block_node;
         this.task_id_node = this.new_cmt_form_block_node.querySelector("#task__id");
@@ -47,6 +48,7 @@ class UpdateTaskStatusHandler {
 
     /**завершить задачу*/
     completeTask() {
+        this.reassign_task_btn.classList.add('hidden');
         this.complete_task_btn.classList.add('hidden');
         this.report_form.classList.remove('hidden');
     }
@@ -63,6 +65,7 @@ class UpdateTaskStatusHandler {
 
     /**отмена отправки отчета о выполненнии задачи*/
     cancelCompleteTaskReport() {
+        this.reassign_task_btn.classList.remove('hidden');
         this.complete_task_btn.classList.remove('hidden');
         this.report_form.classList.add('hidden');
         this.report_form.content.value = '';
@@ -108,12 +111,18 @@ class UpdateTaskStatusHandler {
                 // кнопка Выполнить вместо Взять в работу
                 this.complete_task_btn = document.createElement("button");
                 this.complete_task_btn.id = "btn-complete-task";
-                this.complete_task_btn.className =
-                    "border px-4 py-2 rounded bg-dark-theme color-light-theme";
+                this.complete_task_btn.className = "button-theme w-1/6 mb-2 me-2";
                 this.complete_task_btn.textContent = "Выполнить";
                 this.complete_task_btn.onclick = () => this.completeTask();
                 this.task_btn_block.removeChild(this.take_task_btn);
                 this.task_btn_block.appendChild(this.complete_task_btn);
+
+                // кнопка Переназначить
+                this.reassign_task_btn = document.createElement('button');
+                this.reassign_task_btn.id = 'btn-reassign-task';
+                this.reassign_task_btn.className = 'button-theme w-1/6';
+                this.reassign_task_btn.textContent = 'Переназначить';
+                this.task_btn_block.appendChild(this.reassign_task_btn);
 
                 // форма отправки отчета
                 this.report_form = document.createElement('form');

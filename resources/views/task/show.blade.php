@@ -47,18 +47,17 @@
                 @if($task->status->name == 'new')
                 <button id='btn-take-task'class='button-theme'>Взять в работу</button>
                 @elseif($task->status->name == 'process' && $task->executor->id == $auth_user->id)
-                <div>
-                    <button id='btn-complete-task'class='button-theme mb-2'>Выполнить</button>
-                    <!--форма отправки отчета о выполнении задачи-->
-                    <form id="report-form-complete-task" class='hidden'>
-                        <div class="w-1/2">
-                            <h3 class="font-semibold">Отчет о работе:</h3>
-                            <textarea class="block-submit__textarea" rows="2" name="content" required=""></textarea>
-                            <input type="submit" class="button-theme w-1/5 me-1">
-                            <button type='button' id='report-form-complete-task__cancel_btn' class="button-theme w-1/5">Отмена</button>
-                        </div>
-                    </form>
-                </div>
+                <button id='btn-complete-task'class='button-theme w-1/6 mb-2 me-1'>Выполнить</button>
+                <button id='btn-reassign-task'class='button-theme w-1/6'>Переназначить</button>
+                <!--форма отправки отчета о выполнении задачи-->
+                <form id="report-form-complete-task" class='hidden'>
+                    <div class="w-1/2">
+                        <h3 class="font-semibold">Отчет о работе:</h3>
+                        <textarea class="block-submit__textarea" rows="2" name="content" required=""></textarea>
+                        <input type="submit" class="button-theme w-1/5 me-1">
+                        <button type='button' id='report-form-complete-task__cancel_btn' class="button-theme w-1/5">Отмена</button>
+                    </div>
+                </form>
                 @endif
             </div>
             @endif
