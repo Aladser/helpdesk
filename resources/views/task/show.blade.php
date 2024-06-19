@@ -46,11 +46,11 @@
             <div id='task__btn-block' class='mb-2'>
                 @if($task->status->name == 'new')
                 <button id='btn-take-task'class='button-theme w-1/6 mb-2'>Взять в работу</button>
-                <button id='btn-reassign-task'class='button-theme w-1/6 mb-2 me-2'>Назначить</button>
+                <button id='btn-reassign-task'class='button-theme w-1/6 mb-2 me-2 disabled:opacity-75'>Назначить</button>
                 <button id='btn-complete-task'class='button-theme w-1/6 mb-2 me-1 disabled:opacity-75 hidden'>Выполнить</button>
                 @elseif($task->status->name == 'process' && $task->executor->id == $auth_user->id)
                 <button id='btn-complete-task'class='button-theme w-1/6 mb-2 me-1 disabled:opacity-75'>Выполнить</button>
-                <button id='btn-reassign-task'class='button-theme w-1/6'>Переназначить</button>
+                <button id='btn-reassign-task'class='button-theme w-1/6 disabled:opacity-75'>Переназначить</button>
                 <!--форма отправки отчета о выполнении задачи-->
                 <div class="w-1/2 mb-2">
                     <form id="report-form-complete-task" class='hidden'>
@@ -65,7 +65,7 @@
                 <!--список инженеров для переназначения-->
                 <div id='reassign-user-list-block' class='flex hidden'>
                     <form class='w-1/4 me-2'>
-                        <select id='belongs-filter-form__select' name='belongs' class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                        <select id='reassign-user-form__select' name='reassign_to' class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
                             <option disabled selected>Кому назначить?</option>
                             @foreach($executors as $executor)
                             <option id="executor-{{$executor['id']}}">{{$executor['name']}}</option>

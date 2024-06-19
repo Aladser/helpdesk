@@ -1,32 +1,47 @@
-let new_comment_form = document.querySelector("#new-cmt-form");
-let new_comment_form_textarea = new_comment_form.querySelector(
-    "#new-comment-form__textarea"
-);
-let comment_list_block = document.querySelector("#cmt-list-block");
+/**node-узел задачи*/
 let task_node = document.querySelector("#task");
-let new_comment_form_block = document.querySelector("#new-cmt-form-block");
-let csrf_toke_node = document.querySelector('meta[name="csrf-token"]');
-
+// кнопки узла задачи
 let take_task_btn = task_node.querySelector("#btn-take-task");
 let complete_task_btn = task_node.querySelector("#btn-complete-task");
-let reassign_task_btn = document.querySelector("#btn-reassign-task");
-let reassign_user_list_block = document.querySelector(
-    "#reassign-user-list-block"
-);
-let reassign_task_btn_cancel = document.querySelector(
-    "#reassign-user-list-block__btn-cancel"
-);
+let appoint_task_btn = task_node.querySelector("#btn-reassign-task");
 
+let new_comment_form = document.querySelector("#new-cmt-form");
+let new_comment_form_textarea = new_comment_form.querySelector("#new-comment-form__textarea");
+let comment_list_block = document.querySelector("#cmt-list-block");
+let new_comment_form_block = document.querySelector("#new-cmt-form-block");
+/**блок назначения задачи инженеру*/
+let appoint_user_block = document.querySelector("#reassign-user-list-block");
+/**кнопка "Назначить задачу"*/
+let apply_appoint_user_btn = appoint_user_block.querySelector("#reassign-user-list-block__btn-appoint");
+/**select списка техспецов*/
+let appoint_user_select = appoint_user_block.querySelector("#reassign-user-form__select");
+/**кнопка скрытия формы "Назначить задачу"*/
+let hide_appoint_user_form_btn = document.querySelector("#reassign-user-list-block__btn-cancel");
+/**обработчик обновления статуса задачи*/
 let updateTaskStatusHandler = new UpdateTaskStatusHandler(
     task_node,
     new_comment_form_block,
     comment_list_block,
-    csrf_toke_node
+    document.querySelector('meta[name="csrf-token"]')
 );
+/**обработчик отправки комментария*/
 let storeCommentHandler = new StoreCommentHandler(
     new_comment_form,
     comment_list_block
 );
+/**массив [id: техспециалист]*/
+let techsupport_arr = new Map();
+Array.from(document.querySelectorAll('#reassign-user-form__select option')).forEach(spec => {
+    if(spec.id) {
+        // вырезает 'executor-{ID}'
+        techsupport_arr[spec.value] = spec.id.slice(9); 
+    }
+})
+//-------------------------------------------------------------------------------------------
+
+
+// выбран специалист для назначения задачи
+appoint_user_select.onchange = () => apply_appoint_user_btn.disabled = false;
 
 // сохранить комментарий
 new_comment_form.addEventListener("submit", function (e) {
@@ -56,10 +71,9 @@ new_comment_form_textarea.addEventListener("keydown", function (e) {
 
 
 // Назначить ответственного
-reassign_task_btn.onclick = () => {
-    reassign_task_btn.disabled = true;
-    reassign_task_btn.classList.add('disabled:opacity-75');
-    reassign_user_list_block.classList.remove("hidden");
+appoint_task_btn.onclick = () => {
+    appoint_task_btn.disabled = true;
+    appoint_user_block.classList.remove("hidden");
     if(take_task_btn) {
         take_task_btn.classList.add('hidden');
     }
@@ -67,11 +81,10 @@ reassign_task_btn.onclick = () => {
         complete_task_btn.classList.add('hidden');
     }
 };
-// отменить Назначить ответственного
-reassign_task_btn_cancel.onclick = () => {
-    reassign_task_btn.disabled = false;
-    reassign_task_btn.classList.remove('disabled:opacity-75');
-    reassign_user_list_block.classList.add("hidden");
+// отменить показ формы "Назначить ответственного"
+hide_appoint_user_form_btn.onclick = () => {
+    appoint_task_btn.disabled = false;;
+    appoint_user_block.classList.add("hidden");
     if(take_task_btn) {
         take_task_btn.classList.remove('hidden');
     } else {
