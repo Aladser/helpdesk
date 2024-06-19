@@ -13,6 +13,7 @@ class CommentSeeder extends Seeder
     public function run()
     {
         $current_datetime = Carbon::now();
+        $current_datetime->subDay();
         $task_id = 2;
 
         for ($i = 0; $i < 3; ++$i) {

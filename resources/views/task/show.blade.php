@@ -98,7 +98,7 @@
                     @csrf
                     <input id='task__id' name='task_id' type="hidden" value='{{$task->id}}'>
                     <textarea rows=3  id='new-comment-form__textarea' class='block-submit__textarea' placeholder='Введите сообщение здесь ...' name='message' required></textarea>
-                    <input type='submit' class='block-submit__btn bg-dark-theme color-light-theme'>
+                    <input type='submit' class='block-submit__btn button-theme'>
                 </form>
             </div>
 
