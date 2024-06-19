@@ -60,13 +60,19 @@
                     </div>
                 </form>
                 @endif
-                <!---->
-                <form id='reassign-user-list' class='w-1/4'><div>
-                    <select id='belongs-filter-form__select' name='belongs' class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                        <option value="all">Все задачи</option>
-                        <option value="my" selected>Мои задачи</option>
-                    </select>
-                </div></form>
+                <!--список инженеров для переназначения-->
+                <div id='reassign-user-list-block' class='flex hidden'>
+                    <form class='w-1/4 me-2'>
+                        <select id='belongs-filter-form__select' name='belongs' class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                            <option disabled selected>Кому назначить?</option>
+                            @foreach($executors as $executor)
+                            <option id="executor-{{$executor['id']}}">{{$executor['name']}}</option>
+                            @endforeach
+                        </select>
+                    </form>
+                    <button id='reassign-user-list-block__btn-appoint'class='button-theme w-1/6 me-2 disabled:opacity-75' disabled>Назначить</button>
+                    <button id='reassign-user-list-block__btn-cancel'class='button-theme w-1/6'>Отмена</button>
+               </div>
             </div>
             @endif
             
