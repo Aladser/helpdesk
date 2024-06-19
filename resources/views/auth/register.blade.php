@@ -43,7 +43,7 @@
                     Зарегистрированы?
                 </a>
 
-                <x-button class="ml-4">Зарегистрироваться</x-button>
+                <x-button class="ml-4 button-theme">Зарегистрироваться</x-button>
             </div>
         </form>
     </x-auth-card>

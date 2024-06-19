@@ -44,8 +44,9 @@
                 </label>
             </div>
 
-            <div class="flex items-center justify-center mt-4">
-                <x-button class="button-theme w-1/2">{{ __('Войти') }}</x-button>
+            <div class="flex items-center justify-end mt-4">
+                <a class="underline text-sm text-gray-600 hover:text-gray-900 me-3" href="{{ route('register') }}">Зарегистрироваться</a>
+                <x-button class="button-theme w-1/3">{{ __('Войти') }}</x-button>
             </div>
         </form>
     </x-auth-card>
