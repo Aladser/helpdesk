@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Comment;
 use App\Models\Task;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -70,29 +71,39 @@ class TaskController extends Controller
             }
         }
 
-        return view(
-            'task.index',
-            [
-                'tasks' => $tasks,
-                'table_headers' => $table_headers,
-                'user_role' => $user->role->name,
-                'task_status' => $task_status,
-                'task_belongs' => $task_belongs,
-            ]
-        );
+        $request_data = [
+            'tasks' => $tasks,
+            'table_headers' => $table_headers,
+            'user_role' => $user->role->name,
+            'task_status' => $task_status,
+            'task_belongs' => $task_belongs,
+        ];
+
+        return view('task.index', $request_data);
     }
 
     public function show($id)
     {
+        $user = Auth::user();
         $comments = Comment::where('task_id', $id)->orderBy('created_at', 'desc')->get();
         foreach ($comments as $comment) {
             $comment->created_at = mb_substr($comment->created_at, 0, 16);
         }
 
-        return view(
-            'task.show',
-            ['auth_user' => Auth::user(), 'task' => Task::find($id), 'comments' => $comments]
-        );
+        $request_data = ['auth_user' => Auth::user(), 'task' => Task::find($id), 'comments' => $comments];
+        // исполнители
+        if ($user->role->name !== 'author') {
+            $executor_arr = [];
+            $executor_list = User::where('role_id', 2)->get();
+            foreach ($executor_list as $executor) {
+                if ($executor->id != $user->id) {
+                    $executor_arr[] = ['id' => $executor->id, 'name' => $executor->short_full_name()];
+                }
+            }
+            $request_data['executors'] = $executor_arr;
+        }
+
+        return view('task.show', $request_data);
     }
 
     // работает только с CSRF-токеном, PUT-запрос можно отправить только из JS

@@ -46,12 +46,12 @@
             <div id='task__btn-block' class='mb-2'>
                 @if($task->status->name == 'new')
                 <button id='btn-reassign-task'class='button-theme w-1/6'>Назначить</button>
-                <button id='btn-take-task'class='button-theme w-1/6'>Взять в работу</button>
+                <button id='btn-take-task'class='button-theme w-1/6 mb-2'>Взять в работу</button>
                 @elseif($task->status->name == 'process' && $task->executor->id == $auth_user->id)
                 <button id='btn-reassign-task'class='button-theme w-1/6'>Переназначить</button>
                 <button id='btn-complete-task'class='button-theme w-1/6 mb-2 me-1'>Выполнить</button>
                 <!--форма отправки отчета о выполнении задачи-->
-                <form id="report-form-complete-task" class='hidden'>
+                <form id="report-form-complete-task" class='hidden mb-2'>
                     <div class="w-1/2">
                         <h3 class="font-semibold">Отчет о работе:</h3>
                         <textarea class="block-submit__textarea" rows="2" name="content" required=""></textarea>
@@ -60,6 +60,13 @@
                     </div>
                 </form>
                 @endif
+                <!---->
+                <form id='reassign-user-list' class='w-1/4'><div>
+                    <select id='belongs-filter-form__select' name='belongs' class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        <option value="all">Все задачи</option>
+                        <option value="my" selected>Мои задачи</option>
+                    </select>
+                </div></form>
             </div>
             @endif
             
