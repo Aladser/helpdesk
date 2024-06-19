@@ -74,8 +74,7 @@ reassign_task_btn_cancel.onclick = () => {
     reassign_user_list_block.classList.add("hidden");
     if(take_task_btn) {
         take_task_btn.classList.remove('hidden');
-    }
-    if(complete_task_btn){
+    } else {
         complete_task_btn.classList.remove('hidden');
     }
 };
