@@ -1,11 +1,11 @@
 let new_comment_form = document.querySelector("#new-cmt-form");
-let new_cmt_from_msg_field = document.querySelector("#new-cmt-form__msg-field");
+let new_comment_form_textarea = new_comment_form.querySelector("#new-comment-form__textarea");
 let comment_list_block = document.querySelector("#cmt-list-block");
 
 let task_node = document.querySelector("#task");
 let new_comment_form_block = document.querySelector("#new-cmt-form-block");
 let csrf_toke_node = document.querySelector('meta[name="csrf-token"]');
-let updateTaskStatusHandler = new UpdateTaskStatusHandler(task_node, new_comment_form_block, csrf_toke_node);
+let updateTaskStatusHandler = new UpdateTaskStatusHandler(task_node, new_comment_form_block, comment_list_block, csrf_toke_node);
 let storeCommentHandler = new StoreCommentHandler(new_comment_form, comment_list_block);
 
 //---сохранить комментарий---
@@ -14,7 +14,7 @@ new_comment_form.addEventListener("submit", function (e) {
 });
 // отпускание клавиши Shift или Enter
 let isShiftPressed = false;
-new_cmt_from_msg_field.addEventListener("keyup", function (e) {
+new_comment_form_textarea.addEventListener("keyup", function (e) {
     if (e.key == "Enter" && !isShiftPressed) {
         let formData = new FormData();
         formData.append("_token", new_comment_form._token.value);
@@ -26,7 +26,7 @@ new_cmt_from_msg_field.addEventListener("keyup", function (e) {
     }
 });
 // Нажатие Shift
-new_cmt_from_msg_field.addEventListener("keydown", function (e) {
+new_comment_form_textarea.addEventListener("keydown", function (e) {
     if (e.key == "Shift") {
         isShiftPressed = true;
     }

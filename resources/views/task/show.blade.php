@@ -47,7 +47,18 @@
                 @if($task->status->name == 'new')
                 <button id='btn-take-task'class='button-theme'>Взять в работу</button>
                 @elseif($task->status->name == 'process' && $task->executor->id == $auth_user->id)
-                <button id='btn-complete-task'class='button-theme'>Выполнить</button>
+                <div>
+                    <button id='btn-complete-task'class='button-theme mb-2'>Выполнить</button>
+                    <!--форма отправки отчета о выполнении задачи-->
+                    <form id="report-form-complete-task" class='hidden'>
+                        <div class="w-1/2">
+                            <h3 class="font-semibold">Отчет о работе:</h3>
+                            <textarea class="block-submit__textarea" rows="2" name="content" required=""></textarea>
+                            <input type="submit" class="button-theme w-1/5 me-1">
+                            <button type='button' id='report-form-complete-task__cancel_btn' class="button-theme w-1/5">Отмена</button>
+                        </div>
+                    </form>
+                </div>
                 @endif
             </div>
             @endif
@@ -71,7 +82,7 @@
                 <form id='new-cmt-form' methof='POST' action="{{route('comment.store')}}">
                     @csrf
                     <input id='task__id' name='task_id' type="hidden" value='{{$task->id}}'>
-                    <textarea rows=3  id='new-cmt-form__msg-field' class='block-submit__textarea' placeholder='Введите сообщение здесь ...' name='message' required></textarea>
+                    <textarea rows=3  id='new-comment-form__textarea' class='block-submit__textarea' placeholder='Введите сообщение здесь ...' name='message' required></textarea>
                     <input type='submit' class='block-submit__btn bg-dark-theme color-light-theme'>
                 </form>
             </div>

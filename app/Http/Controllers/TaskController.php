@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Comment;
 use App\Models\Task;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -94,10 +95,11 @@ class TaskController extends Controller
         );
     }
 
+    // работает только с CSRF-токеном, PUT-запрос можно отправить только из JS
     public function update(Request $request, $id)
     {
-        // работает только с CSRF-токеном, PUT-запрос можно отправить только из JS
         $data = $request->all();
+
         $task = Task::find($id);
         $executor = Auth::user();
 
@@ -108,15 +110,35 @@ class TaskController extends Controller
         } elseif ($data['action'] == 'complete-task') {
             $task->status_id = 3;
             $isUpdated = $task->save();
+
+            if ($isUpdated) {
+                // сохранение отчета в комментариях
+                $comment = new Comment();
+                $comment->task_id = $id;
+                $comment->author_id = $executor->id;
+                $comment->content = "
+                    <p class='text-gray-400'>Задача выполнена</p>
+                    <p class='ps-1'>{$data['content']}</p>
+                ";
+                $comment->save();
+            }
         } else {
             return ['is_updated' => -1];
         }
 
-        return json_encode([
+        // ответ сервера
+        $response_data = [
             'is_updated' => (int) $isUpdated,
             'action' => $data['action'],
             'executor' => $executor->full_name(),
-        ]);
+        ];
+        if ($data['action'] == 'complete-task' && $isUpdated) {
+            $response_data['task_completed_report'] = $comment->content;
+            $response_data['task_completed_date'] = Carbon::now()->format('Y:m:d H:i');
+            $response_data['executor_short_full_name'] = $executor->short_full_name();
+        }
+
+        return json_encode($response_data);
     }
 
     public function create()
