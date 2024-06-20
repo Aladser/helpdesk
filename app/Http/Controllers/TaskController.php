@@ -28,35 +28,34 @@ class TaskController extends Controller
 
     public function index(Request $request)
     {
+        $auth_user = Auth::user();
         $data = $request->all();
         $task_status = isset($data['type']) ? $data['type'] : 'new';
         $task_belongs = isset($data['belongs']) ? $data['belongs'] : 'new';
-
-        $user = Auth::user();
         $table_headers = ['ID', 'Тема', 'Постановщик', 'Создана', 'Исполнитель', 'Статус', 'Посл.активность'];
 
         // задачи
         if ($task_status == 'all') {
-            if ($task_belongs == 'my' && $user->role->name == 'executor' && $task_status == 'all') {
+            if ($task_belongs == 'my' && $auth_user->role->name == 'executor' && $task_status == 'all') {
                 // исполнитель: мои, все
                 $new_tasks = Task::where('status_id', 1);
-                $tasks = Task::where('executor_id', $user->id)->orderBy('updated_at', 'desc')->union($new_tasks)->orderBy('updated_at', 'desc')->get();
-            } elseif ($task_belongs == 'my' && $user->role->name == 'executor' && $task_status != 'new') {
+                $tasks = Task::where('executor_id', $auth_user->id)->orderBy('updated_at', 'desc')->union($new_tasks)->orderBy('updated_at', 'desc')->get();
+            } elseif ($task_belongs == 'my' && $auth_user->role->name == 'executor' && $task_status != 'new') {
                 // исполнитель: мои, неновые
-                $tasks = Task::where('executor_id', $user->id)->orderBy('updated_at', 'desc')->get();
-            } elseif ($user->role->name == 'author') {
+                $tasks = Task::where('executor_id', $auth_user->id)->orderBy('updated_at', 'desc')->get();
+            } elseif ($auth_user->role->name == 'author') {
                 // автор
-                $tasks = Task::where('author_id', $user->id)->orderBy('updated_at', 'desc')->get();
+                $tasks = Task::where('author_id', $auth_user->id)->orderBy('updated_at', 'desc')->get();
             } else {
                 $tasks = Task::orderBy('updated_at', 'desc')->get();
             }
         } else {
-            if ($task_belongs == 'my' && $user->role->name == 'executor' && $task_status != 'new') {
+            if ($task_belongs == 'my' && $auth_user->role->name == 'executor' && $task_status != 'new') {
                 // исполнитель: мои, неновые
-                $tasks = Task::where('status_id', $this->task_filters[$task_status])->where('executor_id', $user->id)->orderBy('updated_at', 'desc')->get();
-            } elseif ($user->role->name == 'author') {
+                $tasks = Task::where('status_id', $this->task_filters[$task_status])->where('executor_id', $auth_user->id)->orderBy('updated_at', 'desc')->get();
+            } elseif ($auth_user->role->name == 'author') {
                 // автор
-                $tasks = Task::where('status_id', $this->task_filters[$task_status])->where('author_id', $user->id)->orderBy('updated_at', 'desc')->get();
+                $tasks = Task::where('status_id', $this->task_filters[$task_status])->where('author_id', $auth_user->id)->orderBy('updated_at', 'desc')->get();
             } else {
                 $tasks = Task::where('status_id', $this->task_filters[$task_status])->orderBy('updated_at', 'desc')->get();
             }
@@ -74,7 +73,7 @@ class TaskController extends Controller
         $request_data = [
             'tasks' => $tasks,
             'table_headers' => $table_headers,
-            'user_role' => $user->role->name,
+            'user_role' => $auth_user->role->name,
             'task_status' => $task_status,
             'task_belongs' => $task_belongs,
         ];
@@ -84,19 +83,19 @@ class TaskController extends Controller
 
     public function show($id)
     {
-        $user = Auth::user();
+        $auth_user = Auth::auth_user();
         $comments = Comment::where('task_id', $id)->orderBy('created_at', 'desc')->get();
         foreach ($comments as $comment) {
             $comment->created_at = mb_substr($comment->created_at, 0, 16);
         }
 
-        $request_data = ['auth_user' => Auth::user(), 'task' => Task::find($id), 'comments' => $comments];
+        $request_data = ['auth_user' => Auth::auth_user(), 'task' => Task::find($id), 'comments' => $comments];
         // исполнители
-        if ($user->role->name !== 'author') {
+        if ($auth_user->role->name !== 'author') {
             $executor_arr = [];
             $executor_list = User::where('role_id', 2)->get();
             foreach ($executor_list as $executor) {
-                if ($executor->id != $user->id) {
+                if ($executor->id != $auth_user->id) {
                     $executor_arr[] = ['id' => $executor->id, 'name' => $executor->short_full_name()];
                 }
             }
@@ -112,7 +111,7 @@ class TaskController extends Controller
         $data = $request->all();
 
         $task = Task::find($id);
-        $executor = Auth::user();
+        $executor = Auth::auth_user();
 
         if ($data['action'] == 'take-task') {
             $task->status_id = 2;
@@ -154,7 +153,7 @@ class TaskController extends Controller
 
     public function create()
     {
-        return view('task.create', ['auth_user' => Auth::user()]);
+        return view('task.create', ['auth_user' => Auth::auth_user()]);
     }
 
     public function store(Request $request)
@@ -162,7 +161,7 @@ class TaskController extends Controller
         $data = $request->all();
         $task = new Task();
         $task->status_id = 1;
-        $task->author_id = Auth::user()->id;
+        $task->author_id = Auth::auth_user()->id;
         $task->header = $data['header'];
         $task->content = $data['content'];
         $task->save();
