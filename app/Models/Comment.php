@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Comment extends Model
 {
     public $timestamps = false;
-    private static $publicDateFormat = 'd-m-Y H:m';
 
     public function author()
     {
@@ -23,6 +22,6 @@ class Comment extends Model
     // форматированная дата создания
     public function getCreatedAtAttribute($value)
     {
-        return Carbon::parse($value)->format(self::$publicDateFormat);
+        return Carbon::parse($value)->format('d-m-Y H:m');
     }
 }

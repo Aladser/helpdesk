@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Task extends Model
 {
     public $timestamps = true;
-    private static $publicDateFormat = 'd-m-Y H:m';
 
     public function status()
     {
@@ -33,12 +32,12 @@ class Task extends Model
     // форматированная дата создания
     public function getCreatedAtAttribute($value)
     {
-        return Carbon::parse($value)->format(self::$publicDateFormat);
+        return Carbon::parse($value)->format('d-m-Y H:m');
     }
 
     // форматированная дата обновления
     public function getUpdatedAtAttribute($value)
     {
-        return Carbon::parse($value)->format(self::$publicDateFormat);
+        return Carbon::parse($value)->format('d-m-Y H:m');
     }
 }
