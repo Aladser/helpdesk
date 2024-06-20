@@ -68,7 +68,7 @@
                         <select id='reassign-user-form__select' name='reassign_to' class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
                             <option disabled selected>Кому назначить?</option>
                             @foreach($executors as $executor)
-                            <option id="executor-{{$executor['id']}}">{{$executor['name']}}</option>
+                            <option id="executor-{{$executor->id}}">{{$executor->short_full_name}}</option>
                             @endforeach
                         </select>
                     </form>
