@@ -25,7 +25,7 @@
                 <!--фильтр задач-->
                 <form id='task-filter-form' action="{{route('task.index')}}" method='GET'><div class='mb-6 flex'>
                     <div class="flex items-center me-2 ms-2t">
-                        <!--все-->
+                        <!--все: проверка checked-->
                         @if($task_status=='all')
                         <input checked id="task-filter-form__all" type="radio" value="all" name="filter" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                         @else
@@ -34,7 +34,7 @@
                         <label for="default-radio-1" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Все</label>
                     </div>
                     <div class="flex items-center me-2">
-                        <!--новые-->
+                        <!--новые: проверка checked-->
                         @if($task_status=='new')
                         <input checked id="task-filter-form__new" type="radio" value="new" name="filter" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                         @else
@@ -43,7 +43,7 @@
                         <label for="default-radio-1" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Открытые</label>
                     </div>
                     <div class="flex items-center me-2">
-                        <!--в работе-->
+                        <!--в работе: проверка checked-->
                         @if($task_status=='process')
                         <input checked id="task-filter-form__process" type="radio" value="process" name="filter" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                         @else
@@ -52,7 +52,7 @@
                         <label for="default-radio-1" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">В работе</label>
                     </div>
                     <div class="flex items-center">
-                        <!--завершены-->
+                        <!--завершены: проверка checked-->
                         @if($task_status=='completed')
                         <input checked id="task-filter-form__completed" type="radio" value="completed" name="filter" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                         @else
@@ -62,11 +62,12 @@
                     </div>
                 </div></form>
 
-                <!-- фильтр принадлежности -->
+                <!--фильтр принадлежности задач-->
                 @if($user_role != 'author')
                 <div class='w-1/5 mb-6'>
                     <form id='belongs-filter-form'>
-                        <select id='belongs-filter-form__select' name='belongs' class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        <select id='belongs-filter-form__select' name='belongs' class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                            <!--проверка checked-->    
                             @if($task_belongs=='all')
                                 <option value="all" selected>Все задачи</option>
                                 <option value="my">Мои задачи</option>
