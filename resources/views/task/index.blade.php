@@ -101,13 +101,13 @@
                     <td> <a href="{{route('task.show', $task->id)}}" class='underline w-1/3 block h-full w-full'>{{$task->header}}</a> </td>
                     
                     @if($user_role !== 'author')
-                    <td class='text-center'> {{$task->author->short_full_name()}}  </td>
+                    <td class='text-center'> {{$task->author->short_full_name}}  </td>
                     @endif
 
                     <td class='text-center'> {{$task->get_datetime('created_at')}} </td>
                     
                     @if ($task->executor)
-                    <td class='text-center'> {{$task->executor->short_full_name()}}</td>
+                    <td class='text-center'> {{$task->executor->short_full_name}}</td>
                     @else
                     <td class='text-center'></td>
                     @endif

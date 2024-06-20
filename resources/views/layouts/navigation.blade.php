@@ -18,7 +18,7 @@
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
                         <button class="flex items-center text-sm font-medium focus:outline-none transition duration-150 ease-in-out color-theme ">
-                            <div class='color-light-theme'>{{ Auth::user()->short_full_name() }}</div>
+                            <div class='color-light-theme'>{{ Auth::user()->short_full_name }}</div>
 
                             <div class="ml-1 color-light-theme">
                                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">

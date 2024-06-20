@@ -29,6 +29,7 @@ class TaskController extends Controller
     public function index(Request $request)
     {
         $auth_user = Auth::user();
+
         $data = $request->all();
         $task_status = isset($data['type']) ? $data['type'] : 'new';
         $task_belongs = isset($data['belongs']) ? $data['belongs'] : 'new';
@@ -83,20 +84,20 @@ class TaskController extends Controller
 
     public function show($id)
     {
-        $auth_user = Auth::auth_user();
+        $auth_user = Auth::user();
         $comments = Comment::where('task_id', $id)->orderBy('created_at', 'desc')->get();
         foreach ($comments as $comment) {
             $comment->created_at = mb_substr($comment->created_at, 0, 16);
         }
 
-        $request_data = ['auth_user' => Auth::auth_user(), 'task' => Task::find($id), 'comments' => $comments];
+        $request_data = ['auth_user' => $auth_user, 'task' => Task::find($id), 'comments' => $comments];
         // исполнители
         if ($auth_user->role->name !== 'author') {
             $executor_arr = [];
             $executor_list = User::where('role_id', 2)->get();
             foreach ($executor_list as $executor) {
                 if ($executor->id != $auth_user->id) {
-                    $executor_arr[] = ['id' => $executor->id, 'name' => $executor->short_full_name()];
+                    $executor_arr[] = ['id' => $executor->id, 'name' => $executor->short_full_name];
                 }
             }
             $request_data['executors'] = $executor_arr;

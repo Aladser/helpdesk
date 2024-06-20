@@ -42,12 +42,14 @@ class User extends Authenticatable
         return $this->hasMany(Comment::class, 'author_id', 'id');
     }
 
-    public function full_name()
+    // полное имя
+    public function GetFullNameAttribute()
     {
         return "{$this->surname} {$this->name} {$this->patronym}";
     }
 
-    public function short_full_name()
+    // сокращенное полное имя
+    public function GetShortFullNameAttribute()
     {
         $name = mb_substr($this->name, 0, 1).'.';
         $patronym = mb_substr($this->patronym, 0, 1).'.';

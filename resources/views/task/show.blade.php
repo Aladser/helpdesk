@@ -78,10 +78,9 @@
             </div>
             @endif
             
-            <p class='mb-1'>Постановщик: {{$task->author->full_name()}}</p>
-            
+            <p class='mb-1'>Постановщик: {{$task->author->full_name}}</p>
             @if($task->executor)
-            <p id='task__executor' class='mb-2'>Исполнитель: {{$task->executor->full_name()}}</p>
+            <p id='task__executor' class='mb-2'>Исполнитель: {{$task->executor->full_name}}</p>
             @endif
         </div>
 
@@ -108,9 +107,9 @@
                 <div class='cmt-list-block__comment'>
                     <div>
                         @if($comment->author->role->name == 'executor')
-                        <div class='cmt-list-block__author color-lighter-theme'>{{$comment->author->short_full_name()}}</div>
+                        <div class='cmt-list-block__author color-lighter-theme'>{{$comment->author->short_full_name}}</div>
                         @else
-                        <div class='cmt-list-block__author text-amber-500'>{{$comment->author->short_full_name()}}</div>
+                        <div class='cmt-list-block__author text-amber-500'>{{$comment->author->short_full_name}}</div>
                         @endif
 
                         <div class='cmt-list-block__time'>{{$comment->created_at}}</div>
