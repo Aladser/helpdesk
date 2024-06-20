@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class UserRole extends Model
 {
-    // без времени создания
     public $timestamps = false;
 
     // пользователи

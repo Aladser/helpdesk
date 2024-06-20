@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class Comment extends Model
@@ -16,5 +17,11 @@ class Comment extends Model
     public function task()
     {
         return $this->belongsTo(Task::class, 'task_id', 'id');
+    }
+
+    // форматированная дата создания
+    public function getCreatedAtAttribute($value)
+    {
+        return Carbon::parse($value)->format('d-m-Y H:m');
     }
 }

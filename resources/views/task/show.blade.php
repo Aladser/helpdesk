@@ -35,7 +35,7 @@
                 <p id='task__status' class='mb-2 text-green-500'>{{ $task->status->description }}</p>
                 @endif
                 
-                <p class='text-slate-400 italic' title='время создания'>{{$task->get_datetime('created_at')}}</p>
+                <p class='text-slate-400 italic' title='время создания'>{{$task->created_at}}</p>
             </div>
             
             <h3 class="font-semibold text-lg mb-4">{{$task->header}}</h3>
@@ -46,11 +46,11 @@
             <div id='task__btn-block' class='mb-2'>
                 @if($task->status->name == 'new')
                 <button id='btn-take-task'class='button-theme w-1/6 mb-2'>Взять в работу</button>
-                <button id='btn-reassign-task'class='button-theme w-1/6 mb-2 me-2'>Назначить</button>
+                <button id='btn-reassign-task'class='button-theme w-1/6 mb-2 me-2 disabled:opacity-75'>Назначить</button>
                 <button id='btn-complete-task'class='button-theme w-1/6 mb-2 me-1 disabled:opacity-75 hidden'>Выполнить</button>
                 @elseif($task->status->name == 'process' && $task->executor->id == $auth_user->id)
                 <button id='btn-complete-task'class='button-theme w-1/6 mb-2 me-1 disabled:opacity-75'>Выполнить</button>
-                <button id='btn-reassign-task'class='button-theme w-1/6'>Переназначить</button>
+                <button id='btn-reassign-task'class='button-theme w-1/6 disabled:opacity-75'>Переназначить</button>
                 <!--форма отправки отчета о выполнении задачи-->
                 <div class="w-1/2 mb-2">
                     <form id="report-form-complete-task" class='hidden'>
@@ -65,10 +65,10 @@
                 <!--список инженеров для переназначения-->
                 <div id='reassign-user-list-block' class='flex hidden'>
                     <form class='w-1/4 me-2'>
-                        <select id='belongs-filter-form__select' name='belongs' class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                        <select id='reassign-user-form__select' name='reassign_to' class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
                             <option disabled selected>Кому назначить?</option>
                             @foreach($executors as $executor)
-                            <option id="executor-{{$executor['id']}}">{{$executor['name']}}</option>
+                            <option id="executor-{{$executor->id}}">{{$executor->short_full_name}}</option>
                             @endforeach
                         </select>
                     </form>
@@ -78,10 +78,9 @@
             </div>
             @endif
             
-            <p class='mb-1'>Постановщик: {{$task->author->full_name()}}</p>
-            
+            <p class='mb-1'>Постановщик: {{$task->author->full_name}}</p>
             @if($task->executor)
-            <p id='task__executor' class='mb-2'>Исполнитель: {{$task->executor->full_name()}}</p>
+            <p id='task__executor' class='mb-2'>Исполнитель: {{$task->executor->full_name}}</p>
             @endif
         </div>
 
@@ -98,7 +97,7 @@
                     @csrf
                     <input id='task__id' name='task_id' type="hidden" value='{{$task->id}}'>
                     <textarea rows=3  id='new-comment-form__textarea' class='block-submit__textarea' placeholder='Введите сообщение здесь ...' name='message' required></textarea>
-                    <input type='submit' class='block-submit__btn bg-dark-theme color-light-theme'>
+                    <input type='submit' class='block-submit__btn button-theme'>
                 </form>
             </div>
 
@@ -108,9 +107,9 @@
                 <div class='cmt-list-block__comment'>
                     <div>
                         @if($comment->author->role->name == 'executor')
-                        <div class='cmt-list-block__author color-lighter-theme'>{{$comment->author->short_full_name()}}</div>
+                        <div class='cmt-list-block__author color-lighter-theme'>{{$comment->author->short_full_name}}</div>
                         @else
-                        <div class='cmt-list-block__author text-amber-500'>{{$comment->author->short_full_name()}}</div>
+                        <div class='cmt-list-block__author text-amber-500'>{{$comment->author->short_full_name}}</div>
                         @endif
 
                         <div class='cmt-list-block__time'>{{$comment->created_at}}</div>
