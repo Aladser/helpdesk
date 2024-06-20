@@ -104,7 +104,7 @@
                     <td class='text-center'> {{$task->author->short_full_name}}  </td>
                     @endif
 
-                    <td class='text-center'> {{$task->get_datetime('created_at')}} </td>
+                    <td class='text-center'> {{$task->created_at}} </td>
                     
                     @if ($task->executor)
                     <td class='text-center'> {{$task->executor->short_full_name}}</td>
@@ -120,7 +120,7 @@
                     <td class='text-center font-semibold text-green-500'>{{$task->status->description}}</td>
                     @endif
 
-                    <td class='text-center'> {{$task->get_datetime('updated_at')}} </td>
+                    <td class='text-center'> {{$task->updated_at}} </td>
                 </tr>
                 @endforeach
             </table>

@@ -85,12 +85,13 @@ class TaskController extends Controller
     public function show($id)
     {
         $auth_user = Auth::user();
+        $task = Task::find($id);
         $comments = Comment::where('task_id', $id)->orderBy('created_at', 'desc')->get();
         foreach ($comments as $comment) {
             $comment->created_at = mb_substr($comment->created_at, 0, 16);
         }
 
-        $request_data = ['auth_user' => $auth_user, 'task' => Task::find($id), 'comments' => $comments];
+        $request_data = ['auth_user' => $auth_user, 'task' => $task, 'comments' => $comments];
         // исполнители
         if ($auth_user->role->name !== 'author') {
             $executor_arr = [];

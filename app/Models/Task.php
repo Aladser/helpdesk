@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class Task extends Model
 {
     public $timestamps = true;
+    private static $publicDateFormat = 'd-m-Y H:m';
 
     public function status()
     {
@@ -28,14 +30,15 @@ class Task extends Model
         return $this->hasMany(Comment::class, 'task_id', 'id');
     }
 
-    public function get_datetime(string $type): string
+    // форматированная дата создания
+    public function getCreatedAtAttribute($value)
     {
-        if ($type == 'created_at') {
-            return $this->created_at->format('d-m-Y H:i');
-        } elseif ($type == 'updated_at') {
-            return $this->updated_at->format('d-m-Y H:i');
-        } else {
-            return '';
-        }
+        return Carbon::parse($value)->format(self::$publicDateFormat);
+    }
+
+    // форматированная дата обновления
+    public function getUpdatedAtAttribute($value)
+    {
+        return Carbon::parse($value)->format(self::$publicDateFormat);
     }
 }
