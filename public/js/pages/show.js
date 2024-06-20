@@ -11,7 +11,7 @@ let comment_list_block = document.querySelector("#cmt-list-block");
 let new_comment_form_block = document.querySelector("#new-cmt-form-block");
 /**блок назначения задачи инженеру*/
 let appoint_user_block = document.querySelector("#reassign-user-list-block");
-/**кнопка "Назначить задачу"*/
+/**кнопка "Подтвердить назначить задачи"*/
 let apply_appoint_user_btn = appoint_user_block.querySelector("#reassign-user-list-block__btn-appoint");
 /**select списка техспецов*/
 let appoint_user_select = appoint_user_block.querySelector("#reassign-user-form__select");
@@ -90,4 +90,16 @@ hide_appoint_user_form_btn.onclick = () => {
     } else {
         complete_task_btn.classList.remove('hidden');
     }
+};
+
+apply_appoint_user_btn.onclick = () => {
+    let user_id = techsupport_arr[appoint_user_select.value];
+    hide_appoint_user_form_btn.click();
+    // заготовка запроса
+    ServerRequest.execute({
+        URL: "/comment",
+        processFunc: (data) => this.handle(data),
+        method: "post",
+        data: formData,
+    });
 };
