@@ -55,7 +55,7 @@
                 <div class="w-1/2 mb-2">
                     <form id="report-form-complete-task" class='hidden'>
                             <h3 class="font-semibold">Отчет о работе:</h3>
-                            <textarea class="block-submit__textarea" rows="2" name="content" required=""></textarea>
+                            <textarea class="block-submit__textarea" rows="2" name="content"></textarea>
                             <input type="submit" class="button-theme w-1/5 me-1">
                             <button type='button' id='report-form-complete-task__cancel_btn' class="button-theme w-1/5">Отмена</button>
                     </form>
@@ -114,7 +114,7 @@
 
                         <div class='cmt-list-block__time'>{{$comment->created_at}}</div>
                     </div>
-                    <div><?php echo $comment->content; ?></div>
+                    <div>{{$comment->content}}</div>
                 </div>
                 @endforeach
             </div>

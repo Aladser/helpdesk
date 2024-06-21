@@ -95,11 +95,5 @@ hide_appoint_user_form_btn.onclick = () => {
 apply_appoint_user_btn.onclick = () => {
     let user_id = techsupport_arr[appoint_user_select.value];
     hide_appoint_user_form_btn.click();
-    // заготовка запроса
-    ServerRequest.execute({
-        URL: "/comment",
-        processFunc: (data) => this.handle(data),
-        method: "post",
-        data: formData,
-    });
+    updateTaskStatusHandler.send('take-task', null, user_id);
 };

@@ -92,7 +92,20 @@ class TaskController extends Controller
         $data = $request->all();
 
         $task = Task::find($id);
-        $executor = Auth::user();
+
+        $executor = null;
+        // создание ошибки
+        $data['assigned_person'] = 200;
+        if (is_null($data['assigned_person'])) {
+            $executor = Auth::user();
+        } else {
+            $resassign_user = User::find($data['assigned_person']);
+            if ($resassign_user) {
+                $executor = $resassign_user;
+            } else {
+                abort(500);
+            }
+        }
 
         if ($data['action'] == 'take-task') {
             $task->status_id = 2;

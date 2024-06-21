@@ -17,14 +17,11 @@ class UpdateTaskStatusHandler {
 
         this.task_btn_block = this.task_node.querySelector("#task__btn-block");
         this.take_task_btn = this.task_node.querySelector("#btn-take-task");
-        this.complete_task_btn =
-            this.task_node.querySelector("#btn-complete-task");
-        this.reassign_task_btn =
-            this.task_node.querySelector("#btn-reassign-task");
+        this.complete_task_btn = this.task_node.querySelector("#btn-complete-task");
+        this.reassign_task_btn = this.task_node.querySelector("#btn-reassign-task");
 
         this.new_cmt_form_block_node = new_comment_form_block_node;
-        this.task_id_node =
-            this.new_cmt_form_block_node.querySelector("#task__id");
+
         this.comment_list_node = comment_list_node;
         this.csrf_toke_node = csrf_token;
         this.report_form = this.task_node.querySelector(
@@ -43,7 +40,7 @@ class UpdateTaskStatusHandler {
         //взять в работу
         if (this.take_task_btn) {
             this.take_task_btn.addEventListener("click", () =>
-                this.send(this.task_id_node.value, "take-task")
+                this.send("take-task")
             );
         } else {
             //выполнить работу
@@ -55,49 +52,31 @@ class UpdateTaskStatusHandler {
         }
     }
 
-    /**завершить задачу*/
-    showCompleteTaskForm() {
-        this.reassign_task_btn.classList.add("hidden");
-        this.report_form.classList.remove("hidden");
-        this.complete_task_btn.disabled = true;
-    }
-
-    /**отмена отправки отчета о выполненнии задачи*/
-    cancelShowCompleteTaskForm() {
-        this.reassign_task_btn.classList.remove("hidden");
-        this.report_form.classList.add("hidden");
-        this.report_form.content.value = "";
-        this.complete_task_btn.disabled = false;
-    }
-
-    /**отправить отчет о завершении задачи*/
-    sendCompleteTaskReport(e) {
-        e.preventDefault();
-        this.send(
-            this.task_id_node.value,
-            "complete-task",
-            this.report_form.content.value
-        );
-    }
-
-    /**Обновить статус задачи*/
-    send(task_id, action, content = null) {
+    /** Обновить статус задачи
+     * @param {*} action тип: [take-task, complete-task]
+     * @param {*} content данные запроса
+     * @param {*} assigned_person переназначить на специалиста
+     */
+    send(action, content = null, assigned_person = null) {
         let headers = {
             "X-CSRF-TOKEN": this.csrf_toke_node.getAttribute("content"),
             "Content-Type": "application/json",
         };
+        let task_id = document.querySelector("#task__id").value;
 
         ServerRequest.execute({
             URL: `/task/${task_id}`,
             processFunc: (data) => this.handle(data),
             method: "put",
-            data: JSON.stringify({ action: action, content: content }),
+            data: JSON.stringify({ action: action, content: content, assigned_person: assigned_person}),
             headers: headers,
         });
     }
 
     //**обработать ответ сервера на Обновить статус задачи*/
     handle(response) {
+        console.log(response);
+        return;
         let responseData = JSON.parse(response);
 
         if (responseData.is_updated === 1) {
@@ -168,5 +147,29 @@ class UpdateTaskStatusHandler {
                 this.task_btn_block.remove();
             }
         }
+    }
+
+    /**завершить задачу*/
+    showCompleteTaskForm() {
+        this.reassign_task_btn.classList.add("hidden");
+        this.report_form.classList.remove("hidden");
+        this.complete_task_btn.disabled = true;
+    }
+
+    /**отмена отправки отчета о выполненнии задачи*/
+    cancelShowCompleteTaskForm() {
+        this.reassign_task_btn.classList.remove("hidden");
+        this.report_form.classList.add("hidden");
+        this.report_form.content.value = "";
+        this.complete_task_btn.disabled = false;
+    }
+
+    /**отправить отчет о завершении задачи*/
+    sendCompleteTaskReport(e) {
+        e.preventDefault();
+        this.send(
+            "complete-task",
+            this.report_form.content.value
+        );
     }
 }
