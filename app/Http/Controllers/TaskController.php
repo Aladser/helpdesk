@@ -126,7 +126,7 @@ class TaskController extends Controller
 
         // ответ сервера
         $response_data = [
-            'is_updated' => (int) $isUpdated,
+            'is_updated' => $isUpdated,
             'is_assigned' => $is_assigned,
             'action' => $data['action'],
             'executor' => $executor->full_name,

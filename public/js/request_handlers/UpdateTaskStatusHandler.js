@@ -80,20 +80,19 @@ class UpdateTaskStatusHandler {
 
     //**обработать ответ сервера на Обновить статус задачи*/
     handle(response) {
-        console.log(response);
-        let responseData = JSON.parse(response);
+        let response_data = JSON.parse(response);
+        console.log(response_data);
 
-        if (responseData.is_updated === 1) {
-            if (responseData["action"] == "take-task") {
+        if (response_data.is_updated) {
+            if (response_data.action == "take-task") {
                 //---взять задачу в работу---
 
                 this.new_cmt_form_block_node.classList.remove("hidden");
-                this.reassign_task_btn.textContent = "Переназначить";
                 // исполнитель
                 let executor_node = document.createElement("p");
                 executor_node.id = "task__executor";
                 executor_node.className = "mb-2";
-                executor_node.textContent = `Исполнитель: ${responseData.executor}`;
+                executor_node.textContent = `Исполнитель: ${response_data.executor}`;
                 this.task_node.append(executor_node);
 
                 // статус
@@ -101,9 +100,19 @@ class UpdateTaskStatusHandler {
                 this.task_status_node.classList.remove("text-rose-600");
                 this.task_status_node.classList.add("text-amber-500");
 
-                // кнопка Выполнить вместо Взять в работу
-                this.task_btn_block.removeChild(this.take_task_btn);
-                this.complete_task_btn.classList.remove("hidden");
+                // кнопки Выполнить, Назначить
+                if(response_data.is_assigned) {
+                    this.complete_task_btn.remove();
+                    this.reassign_task_btn.remove();
+                } else {
+                    this.complete_task_btn.classList.remove("hidden");
+                    this.reassign_task_btn.textContent = "Переназначить";
+                }
+
+                // удаление кнопки Взять в работу
+                if(this.take_task_btn) {
+                    this.take_task_btn.remove();
+                }
 
                 // форма отправки отчета
                 this.report_form = document.createElement("form");
@@ -117,13 +126,10 @@ class UpdateTaskStatusHandler {
                         <button type='button' id='report-form-complete-task__cancel_btn' class="button-theme w-1/5">Отмена</button>
                     </div>
                 `;
-                this.report_form.onsubmit = (e) =>
-                    this.sendCompleteTaskReport(e);
-                this.report_form.querySelector(
-                    "#report-form-complete-task__cancel_btn"
-                ).onclick = () => this.cancelShowCompleteTaskForm();
+                this.report_form.onsubmit = (e) =>this.sendCompleteTaskReport(e);
+                this.report_form.querySelector("#report-form-complete-task__cancel_btn").onclick = () => this.cancelShowCompleteTaskForm();
                 this.task_btn_block.append(this.report_form);
-            } else if (responseData["action"] == "complete-task") {
+            } else if (response_data["action"] == "complete-task") {
                 //---выполнить задачу---
 
                 // статус
@@ -136,10 +142,10 @@ class UpdateTaskStatusHandler {
                 comment.className = "cmt-list-block__comment";
                 comment.innerHTML = `
                     <div>
-                        <div class='cmt-list-block__author color-lighter-theme'>${responseData.executor_short_full_name}</div>
-                        <div class='cmt-list-block__time'>${responseData.task_completed_date}</div>
+                        <div class='cmt-list-block__author color-lighter-theme'>${response_data.executor_short_full_name}</div>
+                        <div class='cmt-list-block__time'>${response_data.task_completed_date}</div>
                     </div>
-                    <div>${responseData.task_completed_report}</div>
+                    <div>${response_data.task_completed_report}</div>
                 `;
                 this.comment_list_node.prepend(comment);
 
