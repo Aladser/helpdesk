@@ -45,9 +45,9 @@
             <!--Кнопки-->
             <div id='task__btn-block' class='mb-2'>
                 @if($task->status->name == 'new')
+                <button id='btn-complete-task'class='button-theme w-1/6 mb-2 me-1 disabled:opacity-75 hidden'>Выполнить</button>
                 <button id='btn-take-task'class='button-theme w-1/6 mb-2'>Взять в работу</button>
                 <button id='btn-reassign-task'class='button-theme w-1/6 mb-2 me-2 disabled:opacity-75'>Назначить</button>
-                <button id='btn-complete-task'class='button-theme w-1/6 mb-2 me-1 disabled:opacity-75 hidden'>Выполнить</button>
                 @elseif($task->status->name == 'process' && $task->executor->id == $auth_user->id)
                 <button id='btn-complete-task'class='button-theme w-1/6 mb-2 me-1 disabled:opacity-75'>Выполнить</button>
                 <button id='btn-reassign-task'class='button-theme w-1/6 disabled:opacity-75'>Переназначить</button>
@@ -114,7 +114,8 @@
 
                         <div class='cmt-list-block__time'>{{$comment->created_at}}</div>
                     </div>
-                    <div>{{$comment->content}}</div>
+                    <!--для показа тегов в сообщении-->
+                    <div><?php echo $comment->content; ?></div>
                 </div>
                 @endforeach
             </div>
