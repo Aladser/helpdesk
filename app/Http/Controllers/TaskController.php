@@ -121,7 +121,7 @@ class TaskController extends Controller
                 $comment->task_id = $id;
                 $comment->author_id = $executor->id;
                 $comment->is_report = true;
-                $comment->content = $data['content'];
+                $comment->content = $data['content'] ?? '';
                 $comment->save();
             }
         } else {
