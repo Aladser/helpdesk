@@ -71,16 +71,19 @@ new_comment_form_textarea.addEventListener("keydown", function (e) {
 
 
 // Назначить ответственного
-appoint_task_btn.onclick = () => {
-    appoint_task_btn.disabled = true;
-    appoint_user_block.classList.remove("hidden");
-    if(take_task_btn) {
-        take_task_btn.classList.add('hidden');
-    }
-    if(complete_task_btn){
-        complete_task_btn.classList.add('hidden');
-    }
-};
+if (appoint_task_btn) {
+    appoint_task_btn.onclick = () => {
+        appoint_task_btn.disabled = true;
+        appoint_user_block.classList.remove("hidden");
+        if(take_task_btn) {
+            take_task_btn.classList.add('hidden');
+        }
+        if(complete_task_btn){
+            complete_task_btn.classList.add('hidden');
+        }
+    };
+}
+
 // отменить показ формы "Назначить ответственного"
 hide_appoint_user_form_btn.onclick = () => {
     appoint_task_btn.disabled = false;;

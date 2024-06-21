@@ -89,22 +89,16 @@ class TaskController extends Controller
     // работает только с CSRF-токеном, PUT-запрос можно отправить только из JS
     public function update(Request $request, $id)
     {
+        $task = Task::find($id);
         $data = $request->all();
 
-        $task = Task::find($id);
-
-        $executor = null;
-        // создание ошибки
-        $data['assigned_person'] = 200;
+        // проверка на наличие назначения заявки другим пользователем
         if (is_null($data['assigned_person'])) {
             $executor = Auth::user();
+            $is_assigned = false;
         } else {
-            $resassign_user = User::find($data['assigned_person']);
-            if ($resassign_user) {
-                $executor = $resassign_user;
-            } else {
-                abort(500);
-            }
+            $executor = User::find($data['assigned_person']);
+            $is_assigned = true;
         }
 
         if ($data['action'] == 'take-task') {
@@ -133,6 +127,7 @@ class TaskController extends Controller
         // ответ сервера
         $response_data = [
             'is_updated' => (int) $isUpdated,
+            'is_assigned' => $is_assigned,
             'action' => $data['action'],
             'executor' => $executor->full_name,
         ];
