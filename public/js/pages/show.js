@@ -11,7 +11,7 @@ let comment_list_block = document.querySelector("#cmt-list-block");
 let new_comment_form_block = document.querySelector("#new-cmt-form-block");
 /**блок назначения задачи инженеру*/
 let appoint_user_block = document.querySelector("#reassign-user-list-block");
-/**кнопка "Назначить задачу"*/
+/**кнопка "Подтвердить назначить задачи"*/
 let apply_appoint_user_btn = appoint_user_block.querySelector("#reassign-user-list-block__btn-appoint");
 /**select списка техспецов*/
 let appoint_user_select = appoint_user_block.querySelector("#reassign-user-form__select");
@@ -71,16 +71,19 @@ new_comment_form_textarea.addEventListener("keydown", function (e) {
 
 
 // Назначить ответственного
-appoint_task_btn.onclick = () => {
-    appoint_task_btn.disabled = true;
-    appoint_user_block.classList.remove("hidden");
-    if(take_task_btn) {
-        take_task_btn.classList.add('hidden');
-    }
-    if(complete_task_btn){
-        complete_task_btn.classList.add('hidden');
-    }
-};
+if (appoint_task_btn) {
+    appoint_task_btn.onclick = () => {
+        appoint_task_btn.disabled = true;
+        appoint_user_block.classList.remove("hidden");
+        if(take_task_btn) {
+            take_task_btn.classList.add('hidden');
+        }
+        if(complete_task_btn){
+            complete_task_btn.classList.add('hidden');
+        }
+    };
+}
+
 // отменить показ формы "Назначить ответственного"
 hide_appoint_user_form_btn.onclick = () => {
     appoint_task_btn.disabled = false;;
@@ -90,4 +93,10 @@ hide_appoint_user_form_btn.onclick = () => {
     } else {
         complete_task_btn.classList.remove('hidden');
     }
+};
+
+apply_appoint_user_btn.onclick = () => {
+    let user_id = techsupport_arr[appoint_user_select.value];
+    hide_appoint_user_form_btn.click();
+    updateTaskStatusHandler.send('take-task', null, user_id);
 };

@@ -89,28 +89,39 @@ class TaskController extends Controller
     // работает только с CSRF-токеном, PUT-запрос можно отправить только из JS
     public function update(Request $request, $id)
     {
+        $task = Task::find($id);
         $data = $request->all();
 
-        $task = Task::find($id);
-        $executor = Auth::user();
+        // проверка на наличие назначения заявки другим пользователем
+        if (is_null($data['assigned_person'])) {
+            $executor = Auth::user();
+            $is_assigned = false;
+        } else {
+            $executor = User::find($data['assigned_person']);
+            $is_assigned = true;
+        }
 
         if ($data['action'] == 'take-task') {
+            // взять в работу
+
             $task->status_id = 2;
             $task->executor_id = $executor->id;
             $isUpdated = $task->save();
         } elseif ($data['action'] == 'complete-task') {
+            // выполнить задачу
+
+            $is_report = false;
             $task->status_id = 3;
             $isUpdated = $task->save();
 
             if ($isUpdated) {
                 // сохранение отчета в комментариях
+                $is_report = true;
                 $comment = new Comment();
                 $comment->task_id = $id;
                 $comment->author_id = $executor->id;
-                $comment->content = "
-                    <p class='text-gray-400'>Задача выполнена</p>
-                    <p class='ps-1'>{$data['content']}</p>
-                ";
+                $comment->is_report = true;
+                $comment->content = $data['content'];
                 $comment->save();
             }
         } else {
@@ -119,13 +130,15 @@ class TaskController extends Controller
 
         // ответ сервера
         $response_data = [
-            'is_updated' => (int) $isUpdated,
+            'is_updated' => $isUpdated,
+            'is_assigned' => $is_assigned,
             'action' => $data['action'],
             'executor' => $executor->full_name,
         ];
         if ($data['action'] == 'complete-task' && $isUpdated) {
             $response_data['task_completed_report'] = $comment->content;
             $response_data['task_completed_date'] = Carbon::now()->format('d-m-Y H:i');
+            $response_data['task_completed_is_report'] = $is_report;
             $response_data['executor_short_full_name'] = $executor->short_full_name;
         }
 
