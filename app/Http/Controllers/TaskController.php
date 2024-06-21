@@ -96,6 +96,7 @@ class TaskController extends Controller
     public function show($id)
     {
         $auth_user = Auth::user();
+
         $comments = Comment::where('task_id', $id)->orderBy('created_at', 'desc')->get();
         $comments_arr = [];
         foreach ($comments as $comment) {
@@ -109,7 +110,7 @@ class TaskController extends Controller
         }
         $request_data = ['auth_user' => $auth_user, 'task' => Task::find($id), 'comments' => $comments_arr];
 
-        // список исполнителей для переадресации для исполнителя
+        // список исполнителей переадресации для исполнителя
         if ($auth_user->role->name !== 'author') {
             $request_data['executors'] = User::where('role_id', 2)->where('id', '<>', $auth_user->id)->select('id', 'name', 'surname', 'patronym')->get();
         }
