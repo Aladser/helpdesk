@@ -125,7 +125,7 @@ class TaskController extends Controller
                 $comment->save();
             }
         } else {
-            return ['is_updated' => -1];
+            return ['is_updated' => false];
         }
 
         // ответ сервера
