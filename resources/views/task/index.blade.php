@@ -35,7 +35,7 @@
                     </div>
                     <div class="flex items-center me-2">
                         <!--новые: проверка checked-->
-                        @if($task_status=='new')
+                        @if($task_status=='new' && !$is_tasks_process)
                         <input checked id="task-filter-form__new" type="radio" value="new" name="filter" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                         @else
                         <input id="task-filter-form__new" type="radio" value="new" name="filter" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
@@ -44,7 +44,7 @@
                     </div>
                     <div class="flex items-center me-2">
                         <!--в работе: проверка checked-->
-                        @if($task_status=='process')
+                        @if($task_status=='process' || $is_tasks_process)
                         <input checked id="task-filter-form__process" type="radio" value="process" name="filter" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                         @else
                         <input id="task-filter-form__process" type="radio" value="process" name="filter" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
@@ -113,9 +113,9 @@
                     <td class='text-center'></td>
                     @endif
                     
-                    @if($task->status->name == 'new')
+                    @if($task->status->name == 'new' & !$is_tasks_process)
                     <td class='text-center font-semibold text-rose-600'>{{$task->status->description}}</td>
-                    @elseif($task->status->name == 'process')
+                    @elseif($task->status->name == 'process' || $is_tasks_process)
                     <td class='text-center font-semibold text-amber-500'>{{$task->status->description}}</td>
                     @elseif($task->status->name == 'completed')
                     <td class='text-center font-semibold text-green-500'>{{$task->status->description}}</td>

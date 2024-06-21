@@ -31,32 +31,43 @@ class TaskController extends Controller
         $auth_user = Auth::user();
 
         $data = $request->all();
+
+        // проверка наличия рабочих задач исполнителя, если открывается страница без фильтров
+        $is_tasks_process = false;
+        if (!isset($data['type']) && !isset($data['belongs']) && $auth_user->role->name == 'executor') {
+            $is_tasks_process = Task::where('status_id', 2)->where('executor_id', $auth_user->id)->count() > 0;
+        }
+
         $task_status = $data['type'] ?? 'new';
         $task_belongs = $data['belongs'] ?? 'my';
 
         // задачи
         if ($task_status == 'all') {
             if ($task_belongs == 'my' && $auth_user->role->name == 'executor' && $task_status == 'all') {
-                // исполнитель: новые + мои
+                // исполнитель: все+новые + мои
                 $new_tasks = Task::where('status_id', 1);
                 $task_arr = Task::where('executor_id', $auth_user->id)->union($new_tasks)->orderBy('updated_at', 'desc')->get();
             } elseif ($task_belongs == 'my' && $auth_user->role->name == 'executor' && $task_status != 'new') {
-                // исполнитель: мои
+                // исполнитель: все+мои
                 $task_arr = Task::where('executor_id', $auth_user->id)->orderBy('updated_at', 'desc')->get();
             } elseif ($auth_user->role->name == 'author') {
-                // автор
+                // автор: все
                 $task_arr = Task::where('author_id', $auth_user->id)->orderBy('updated_at', 'desc')->get();
             } else {
+                // все
                 $task_arr = Task::orderBy('updated_at', 'desc')->get();
             }
         } else {
-            if ($task_belongs == 'my' && $auth_user->role->name == 'executor' && $task_status != 'new') {
-                // исполнитель: мои
+            if ($is_tasks_process) {
+                $task_arr = Task::where('status_id', $this->task_filters['process'])->where('executor_id', $auth_user->id)->orderBy('updated_at', 'desc')->get();
+            } elseif ($task_belongs == 'my' && $auth_user->role->name == 'executor' && $task_status != 'new') {
+                // исполнитель: !все+мои
                 $task_arr = Task::where('status_id', $this->task_filters[$task_status])->where('executor_id', $auth_user->id)->orderBy('updated_at', 'desc')->get();
             } elseif ($auth_user->role->name == 'author') {
-                // автор
+                // автор: !все+
                 $task_arr = Task::where('status_id', $this->task_filters[$task_status])->where('author_id', $auth_user->id)->orderBy('updated_at', 'desc')->get();
             } else {
+                // !все
                 $task_arr = Task::where('status_id', $this->task_filters[$task_status])->orderBy('updated_at', 'desc')->get();
             }
         }
@@ -67,6 +78,7 @@ class TaskController extends Controller
             'user_role' => $auth_user->role->name,
             'task_status' => $task_status,
             'task_belongs' => $task_belongs,
+            'is_tasks_process' => $is_tasks_process,
         ];
 
         return view('task.index', $request_data);
@@ -121,11 +133,11 @@ class TaskController extends Controller
                 $comment->task_id = $id;
                 $comment->author_id = $executor->id;
                 $comment->is_report = true;
-                $comment->content = $data['content'];
+                $comment->content = $data['content'] ?? '';
                 $comment->save();
             }
         } else {
-            return ['is_updated' => -1];
+            return ['is_updated' => false];
         }
 
         // ответ сервера
