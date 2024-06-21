@@ -50,17 +50,17 @@
                 <button id='btn-reassign-task'class='button-theme w-1/6 mb-2 me-2 disabled:opacity-75'>Назначить</button>
                 @elseif($task->status->name == 'process' && $task->executor->id == $auth_user->id)
                 <button id='btn-complete-task'class='button-theme w-1/6 mb-2 me-1 disabled:opacity-75'>Выполнить</button>
-                <button id='btn-reassign-task'class='button-theme w-1/6 disabled:opacity-75'>Переназначить</button>
-                <!--форма отправки отчета о выполнении задачи-->
-                <div class="w-1/2 mb-2">
-                    <form id="report-form-complete-task" class='hidden'>
-                            <h3 class="font-semibold">Отчет о работе:</h3>
-                            <textarea class="block-submit__textarea" rows="2" name="content"></textarea>
-                            <input type="submit" class="button-theme w-1/5 me-1">
-                            <button type='button' id='report-form-complete-task__cancel_btn' class="button-theme w-1/5">Отмена</button>
-                    </form>
-                </div>
+                <button id='btn-reassign-task'class='button-theme w-1/6 disabled:opacity-75 mb-2'>Переназначить</button>
                 @endif
+
+                <!--форма отправки отчета о выполнении задачи-->
+                <form id="report-task-form" class="w-1/2 mb-2 hidden">
+                    <h3 class="font-semibold">Отчет о работе:</h3>
+                    <textarea class="block-submit__textarea" rows="2" name="content"></textarea>
+                    <input type="submit" class="button-theme w-1/5 me-1">
+                    <button type='button' id='report-form-complete-task__cancel_btn' class="button-theme w-1/5">Отмена</button>
+                    @csrf
+                </form>
                 
                 <!--список инженеров для переназначения-->
                 <div id='reassign-user-list-block' class='flex hidden'>
@@ -104,7 +104,7 @@
             <!-- комментарии -->
             <div id='cmt-list-block'>
                 @foreach($comments as $comment)
-                <div class='cmt-list-block__comment'>
+                <p class='cmt-list-block__comment'>
                     <div>
                         @if($comment->author->role->name == 'executor')
                         <div class='cmt-list-block__author color-lighter-theme'>{{$comment->author->short_full_name}}</div>
@@ -112,11 +112,18 @@
                         <div class='cmt-list-block__author text-amber-500'>{{$comment->author->short_full_name}}</div>
                         @endif
 
-                        <div class='cmt-list-block__time'>{{$comment->created_at}}</div>
+                        <div class='cmt-list-block__time'>
+                            {{$comment->created_at}}
+                        </div>
                     </div>
                     <!--для показа тегов в сообщении-->
-                    <div><?php echo $comment->content; ?></div>
-                </div>
+                    <div>
+                        @if($comment->is_report)
+                        <div class='text-green-500 font-semibold'>Задача выполнена</div>
+                        @endif
+                        {{$comment->content}}
+                    </div>
+                </p>
                 @endforeach
             </div>
         </div>

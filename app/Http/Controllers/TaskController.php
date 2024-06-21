@@ -102,22 +102,26 @@ class TaskController extends Controller
         }
 
         if ($data['action'] == 'take-task') {
+            // взять в работу
+
             $task->status_id = 2;
             $task->executor_id = $executor->id;
             $isUpdated = $task->save();
         } elseif ($data['action'] == 'complete-task') {
+            // выполнить задачу
+
+            $is_report = false;
             $task->status_id = 3;
             $isUpdated = $task->save();
 
             if ($isUpdated) {
                 // сохранение отчета в комментариях
+                $is_report = true;
                 $comment = new Comment();
                 $comment->task_id = $id;
                 $comment->author_id = $executor->id;
-                $comment->content = "
-                    <p class='text-gray-400'>Задача выполнена</p>
-                    <p class='ps-1'>{$data['content']}</p>
-                ";
+                $comment->is_report = true;
+                $comment->content = $data['content'];
                 $comment->save();
             }
         } else {
@@ -134,6 +138,7 @@ class TaskController extends Controller
         if ($data['action'] == 'complete-task' && $isUpdated) {
             $response_data['task_completed_report'] = $comment->content;
             $response_data['task_completed_date'] = Carbon::now()->format('d-m-Y H:i');
+            $response_data['task_completed_is_report'] = $is_report;
             $response_data['executor_short_full_name'] = $executor->short_full_name;
         }
 

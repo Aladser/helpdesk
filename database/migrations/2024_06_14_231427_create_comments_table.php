@@ -13,6 +13,7 @@ class CreateCommentsTable extends Migration
             $table->bigInteger('task_id')->unsigned();
             $table->bigInteger('author_id')->unsigned();
             $table->text('content');
+            $table->boolean('is_report')->default(false);
             $table->dateTime('created_at')->useCurrent();
 
             $table->foreign('task_id')->references('id')->on('tasks')->cascadeOnDelete();
