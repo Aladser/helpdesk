@@ -42,16 +42,3 @@ class StoreCommentHandler{
         }
     }
 }
-/*
-<div>
-    @if($comment['role'] == 'executor')
-    <div class='cmt-list-block__author color-lighter-theme'>{{$comment['author_name']}}</div>
-    @else
-    <div class='cmt-list-block__author text-amber-500'>{{$comment['author_name']}}</div>
-    @endif
-
-    <div class='cmt-list-block__time'>
-        {{$comment['created_at']}}
-    </div>
-</div>
-*/

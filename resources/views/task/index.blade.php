@@ -68,7 +68,7 @@
                     <form id='belongs-filter-form'>
                         <select id='belongs-filter-form__select' name='belongs' class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
                             <!--проверка checked-->    
-                            @if($task_belongs=='all')
+                            @if($tasks_belongs=='all')
                                 <option value="all" selected>Все задачи</option>
                                 <option value="my">Мои задачи</option>
                             @else
