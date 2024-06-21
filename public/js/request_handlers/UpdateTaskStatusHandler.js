@@ -87,13 +87,17 @@ class UpdateTaskStatusHandler {
             if (response_data.action == "take-task") {
                 //---взять задачу в работу---
 
-                this.new_cmt_form_block_node.classList.remove("hidden");
                 // исполнитель
-                let executor_node = document.createElement("p");
-                executor_node.id = "task__executor";
-                executor_node.className = "mb-2";
-                executor_node.textContent = `Исполнитель: ${response_data.executor}`;
-                this.task_node.append(executor_node);
+                let executor_node = document.querySelector('#task__executor');
+                if(!executor_node) {
+                    executor_node = document.createElement("p");
+                    executor_node.id = "task__executor";
+                    executor_node.className = "mb-2";
+                    executor_node.textContent = `Исполнитель: ${response_data.executor}`;
+                    this.task_node.append(executor_node);
+                } else {
+                    executor_node.textContent = `Исполнитель: ${response_data.executor}`;
+                }
 
                 // статус
                 this.task_status_node.textContent = "В работе";
@@ -129,6 +133,8 @@ class UpdateTaskStatusHandler {
                 this.report_form.onsubmit = (e) =>this.sendCompleteTaskReport(e);
                 this.report_form.querySelector("#report-form-complete-task__cancel_btn").onclick = () => this.cancelShowCompleteTaskForm();
                 this.task_btn_block.append(this.report_form);
+
+                this.new_cmt_form_block_node.classList.remove("hidden");
             } else if (response_data["action"] == "complete-task") {
                 //---выполнить задачу---
 
