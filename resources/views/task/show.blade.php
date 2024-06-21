@@ -104,26 +104,26 @@
             <!-- комментарии -->
             <div id='cmt-list-block'>
                 @foreach($comments as $comment)
-                <p class='cmt-list-block__comment'>
+                <div class='cmt-list-block__comment'>
                     <div>
-                        @if($comment->author->role->name == 'executor')
-                        <div class='cmt-list-block__author color-lighter-theme'>{{$comment->author->short_full_name}}</div>
+                        @if($comment['role'] == 'executor')
+                        <div class='cmt-list-block__author color-lighter-theme'>{{$comment['author_name']}}</div>
                         @else
-                        <div class='cmt-list-block__author text-amber-500'>{{$comment->author->short_full_name}}</div>
+                        <div class='cmt-list-block__author text-amber-500'>{{$comment['author_name']}}</div>
                         @endif
 
                         <div class='cmt-list-block__time'>
-                            {{$comment->created_at}}
+                            {{$comment['created_at']}}
                         </div>
                     </div>
                     <!--для показа тегов в сообщении-->
                     <div>
-                        @if($comment->is_report)
+                        @if($comment['is_report'])
                         <div class='text-green-500 font-semibold'>Задача выполнена</div>
                         @endif
-                        {{$comment->content}}
+                        <?php echo $comment['content']; ?>
                     </div>
-                </p>
+                </div>
                 @endforeach
             </div>
         </div>

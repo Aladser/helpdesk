@@ -29,13 +29,17 @@ class TaskController extends Controller
     public function index(Request $request)
     {
         $auth_user = Auth::user();
-
         $data = $request->all();
 
         // проверка наличия рабочих задач исполнителя, если открывается страница без фильтров
         $is_tasks_process = false;
-        if (!isset($data['type']) && !isset($data['belongs']) && $auth_user->role->name == 'executor') {
-            $is_tasks_process = Task::where('status_id', 2)->where('executor_id', $auth_user->id)->count() > 0;
+        if (!isset($data['type']) && !isset($data['belongs'])) {
+            $task_arr = Task::where('status_id', $this->task_filters['process']);
+            if ($auth_user->role->name != 'author') {
+                $is_tasks_process = $task_arr->where('executor_id', $auth_user->id)->count() > 0;
+            } else {
+                $is_tasks_process = $task_arr->where('author_id', $auth_user->id)->count() > 0;
+            }
         }
 
         $task_status = $data['type'] ?? 'new';
@@ -59,7 +63,12 @@ class TaskController extends Controller
             }
         } else {
             if ($is_tasks_process) {
-                $task_arr = Task::where('status_id', $this->task_filters['process'])->where('executor_id', $auth_user->id)->orderBy('updated_at', 'desc')->get();
+                $task_arr = Task::where('status_id', $this->task_filters['process']);
+                if ($auth_user->role->name != 'author') {
+                    $task_arr = $task_arr->where('executor_id', $auth_user->id)->orderBy('updated_at', 'desc')->get();
+                } else {
+                    $task_arr = $task_arr->where('author_id', $auth_user->id)->orderBy('updated_at', 'desc')->get();
+                }
             } elseif ($task_belongs == 'my' && $auth_user->role->name == 'executor' && $task_status != 'new') {
                 // исполнитель: !все+мои
                 $task_arr = Task::where('status_id', $this->task_filters[$task_status])->where('executor_id', $auth_user->id)->orderBy('updated_at', 'desc')->get();
@@ -88,7 +97,17 @@ class TaskController extends Controller
     {
         $auth_user = Auth::user();
         $comments = Comment::where('task_id', $id)->orderBy('created_at', 'desc')->get();
-        $request_data = ['auth_user' => $auth_user, 'task' => Task::find($id), 'comments' => $comments];
+        $comments_arr = [];
+        foreach ($comments as $comment) {
+            $comments_arr[] = [
+                'role' => $comment->author->role->name,
+                'author_name' => $comment->author->short_full_name,
+                'created_at' => $comment->created_at,
+                'is_report' => $comment->is_report,
+                'content' => str_replace(PHP_EOL, '<br>', $comment->content),
+            ];
+        }
+        $request_data = ['auth_user' => $auth_user, 'task' => Task::find($id), 'comments' => $comments_arr];
 
         // список исполнителей для переадресации для исполнителя
         if ($auth_user->role->name !== 'author') {
