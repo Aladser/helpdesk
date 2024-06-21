@@ -16,15 +16,8 @@ class UpdateTaskStatusHandler {
         this.task_status_node = this.task_node.querySelector("#task__status");
 
         this.task_btn_block = this.task_node.querySelector("#task__btn-block");
-        this.take_task_btn = this.task_node.querySelector("#btn-take-task");
-
-        // кнопка Выполнить работу
-        this.complete_task_btn = this.task_node.querySelector("#btn-complete-task");
-        if(this.complete_task_btn) {
-            this.complete_task_btn.onclick = () => this.showCompleteTaskForm();
-        }
-        
-        this.reassign_task_btn = this.task_node.querySelector("#btn-reassign-task");
+        this.reassign_task_btn =
+            this.task_node.querySelector("#btn-reassign-task");
 
         this.new_cmt_form_block_node = new_comment_form_block_node;
 
@@ -43,13 +36,21 @@ class UpdateTaskStatusHandler {
             ).onclick = () => this.cancelShowCompleteTaskForm();
         }
 
-        //взять в работу
+        //кнопка Взять в работу
+        this.take_task_btn = this.task_node.querySelector("#btn-take-task");
         if (this.take_task_btn) {
-            this.take_task_btn.addEventListener("click", () =>
-                this.send("take-task")
-            );
+            this.take_task_btn.onclick = () => this.send("take-task");
         }
 
+        //кнопка Выполнить работу
+        this.complete_task_btn = this.task_node.querySelector("#btn-complete-task");
+        if (this.complete_task_btn) {
+            this.complete_task_btn.onclick = () => {
+                this.reassign_task_btn.classList.add("hidden");
+                this.report_form.classList.remove("hidden");
+                this.complete_task_btn.disabled = true;
+            };
+        }
     }
 
     /** Обновить статус задачи
@@ -68,7 +69,11 @@ class UpdateTaskStatusHandler {
             URL: `/task/${task_id}`,
             processFunc: (data) => this.handle(data),
             method: "put",
-            data: JSON.stringify({ action: action, content: content, assigned_person: assigned_person}),
+            data: JSON.stringify({
+                action: action,
+                content: content,
+                assigned_person: assigned_person,
+            }),
             headers: headers,
         });
     }
@@ -98,7 +103,7 @@ class UpdateTaskStatusHandler {
 
                 // кнопка Выполнить вместо Взять в работу
                 this.task_btn_block.removeChild(this.take_task_btn);
-                this.complete_task_btn.classList.remove('hidden');
+                this.complete_task_btn.classList.remove("hidden");
 
                 // форма отправки отчета
                 this.report_form = document.createElement("form");
@@ -112,10 +117,12 @@ class UpdateTaskStatusHandler {
                         <button type='button' id='report-form-complete-task__cancel_btn' class="button-theme w-1/5">Отмена</button>
                     </div>
                 `;
-                this.report_form.onsubmit = (e) =>this.sendCompleteTaskReport(e);
-                this.report_form.querySelector("#report-form-complete-task__cancel_btn").onclick = () => this.cancelShowCompleteTaskForm();
+                this.report_form.onsubmit = (e) =>
+                    this.sendCompleteTaskReport(e);
+                this.report_form.querySelector(
+                    "#report-form-complete-task__cancel_btn"
+                ).onclick = () => this.cancelShowCompleteTaskForm();
                 this.task_btn_block.append(this.report_form);
-
             } else if (responseData["action"] == "complete-task") {
                 //---выполнить задачу---
 
@@ -141,13 +148,6 @@ class UpdateTaskStatusHandler {
         }
     }
 
-    /**показ формы "Отчет о выпоненной задаче"*/
-    showCompleteTaskForm() {
-        this.reassign_task_btn.classList.add("hidden");
-        this.report_form.classList.remove("hidden");
-        this.complete_task_btn.disabled = true;
-    }
-
     /**отмена "показ формы Отчет о выпоненной задаче"*/
     cancelShowCompleteTaskForm() {
         this.reassign_task_btn.classList.remove("hidden");
@@ -159,9 +159,6 @@ class UpdateTaskStatusHandler {
     /**отправить отчет о завершении задачи*/
     sendCompleteTaskReport(e) {
         e.preventDefault();
-        this.send(
-            "complete-task",
-            this.report_form.content.value
-        );
+        this.send("complete-task", this.report_form.content.value);
     }
 }
