@@ -12,7 +12,7 @@ class DatabaseSeeder extends Seeder
         $userRoleSeeder = new UserRoleSeeder();
         $userStatusSeeder = new UserStatusSeeder();
         $userSeeder = new UserSeeder();
-        $statusSeeder = new StatusSeeder();
+        $task_statusSeeder = new TaskStatusSeeder();
         $taskSeeder = new TaskSeeder();
         $commentSeeder = new CommentSeeder();
 
@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
         $userStatusSeeder->run();
         $userSeeder->run();
 
-        $statusSeeder->run();
+        $task_statusSeeder->run();
         $taskSeeder->run();
         $commentSeeder->run();
     }

@@ -19,7 +19,7 @@ class CreateTasksTable extends Migration
 
             $table->foreign('author_id')->references('id')->on('users')->cascadeOnDelete();
             $table->foreign('executor_id')->references('id')->on('users')->cascadeOnDelete();
-            $table->foreign('status_id')->references('id')->on('statuses')->cascadeOnDelete();
+            $table->foreign('status_id')->references('id')->on('task_statuses')->cascadeOnDelete();
         });
     }
 
