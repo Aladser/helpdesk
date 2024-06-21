@@ -81,7 +81,6 @@ class UpdateTaskStatusHandler {
     //**обработать ответ сервера на Обновить статус задачи*/
     handle(response) {
         let response_data = JSON.parse(response);
-        console.log(response_data);
 
         if (response_data.is_updated) {
             if (response_data.action == "take-task") {
