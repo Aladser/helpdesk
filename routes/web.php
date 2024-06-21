@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 // Cписок роутов: php artisan route:list
+// Сброс роутов: php artisan route:cache
 
 // индексная страница
 Route::get('/', [TaskController::class, 'index'])->middleware(['auth'])->name('index');
@@ -20,3 +21,5 @@ Route::get('/profile', function () {
 require __DIR__.'/auth.php';
 // сохранение комментариев
 Route::post('/comment', [CommentController::class, 'store'])->name('comment.store');
+// статистика
+Route::get('/statistic', [TaskController::class, 'stat'])->middleware(['auth'])->name('statistic');

@@ -8,10 +8,10 @@ use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
 {
-    private $surnames = ['Помидоркин', 'Рыбкин', 'Змеев', 'Аксёнова', 'Хохлова', 'Селезнёва'];
-    private $names = ['Нисон', 'Мечеслав', 'Анатолий', 'Юнона', 'Ася', 'Нева'];
+    private $surnames = ['Помидоркин', 'Птичкин', 'Змеев', 'Аксёнова', 'Хохлова', 'Селезнёва'];
+    private $names = ['Николай', 'Михаил', 'Анатолий', 'Юлия', 'Алена', 'Настя'];
     private $patronyms = ['Борисович', 'Антонович', 'Макарович', 'Пётровна', 'Витальевна', 'Даниловна'];
-    private $logins = ['pomidorkin', 'ribkyn', 'zmeev', 'aksenova', 'hohlova', 'selezneva'];
+    private $logins = ['pomidorkin', 'ptichkin', 'zmeev', 'aksenova', 'hohlova', 'selezneva'];
 
     public function run()
     {

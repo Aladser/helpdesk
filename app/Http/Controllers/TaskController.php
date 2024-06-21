@@ -8,6 +8,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 /*
 | GET|HEAD  | task                            | task.index          | App\Http\Controllers\TaskController@index   | web                                                |
@@ -193,5 +194,12 @@ class TaskController extends Controller
         $task->save();
 
         return redirect()->route('task.show', $task->id);
+    }
+
+    public function stat(Request $request)
+    {
+        $tasks_arr = Task::all();
+        $executors_arr = DB::table('users')->join('user_roles', 'users.role_id', '=', 'user_roles.id')->where('user_roles.name', 'executor')->get();
+        dd($executors_arr);
     }
 }

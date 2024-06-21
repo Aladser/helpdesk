@@ -9,7 +9,11 @@
                 </div>
                 <!-- Главная -->
                 <a href="{{ route('index') }}">
-                    <div class="h-full main-link shrink-0 flex items-center me-4 px-2">Главная</div>
+                    <div class="h-full main-link shrink-0 flex items-center px-2 w-32 flex justify-center">Главная</div>
+                </a>
+                <!-- Статистика -->
+                <a href="/statistic">
+                    <div class="h-full main-link shrink-0 flex items-center px-2 w-32 flex justify-center">Статистика</div>
                 </a>
             </div>
 

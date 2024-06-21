@@ -10,13 +10,16 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $userRoleSeeder = new UserRoleSeeder();
+        $userStatusSeeder = new UserStatusSeeder();
         $userSeeder = new UserSeeder();
         $statusSeeder = new StatusSeeder();
         $taskSeeder = new TaskSeeder();
         $commentSeeder = new CommentSeeder();
 
         $userRoleSeeder->run();
+        $userStatusSeeder->run();
         $userSeeder->run();
+
         $statusSeeder->run();
         $taskSeeder->run();
         $commentSeeder->run();
