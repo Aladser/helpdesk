@@ -126,7 +126,7 @@ class UpdateTaskStatusHandler {
                         <div class='cmt-list-block__time'>${response_data.task_completed_date}</div>
                     </div>
                     <div>
-                        <div class='text-green-500'>Задача выполнена</div>
+                        <div class='text-green-500 font-semibold'>Задача выполнена</div>
                         ${response_data.task_completed_report}
                     </div>
                 `;

@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Comment;
 use App\Models\Task;
+use App\Models\TaskStatus;
 use App\Models\User;
+use App\Models\UserRole;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -43,15 +45,15 @@ class TaskController extends Controller
         }
 
         $task_status = $data['type'] ?? 'new';
-        $task_belongs = $data['belongs'] ?? 'my';
+        $tasks_belongs = $data['belongs'] ?? 'my';
 
         // задачи
         if ($task_status == 'all') {
-            if ($task_belongs == 'my' && $auth_user->role->name == 'executor' && $task_status == 'all') {
+            if ($tasks_belongs == 'my' && $auth_user->role->name == 'executor' && $task_status == 'all') {
                 // исполнитель: все+новые + мои
                 $new_tasks = Task::where('status_id', 1);
                 $task_arr = Task::where('executor_id', $auth_user->id)->union($new_tasks)->orderBy('updated_at', 'desc')->get();
-            } elseif ($task_belongs == 'my' && $auth_user->role->name == 'executor' && $task_status != 'new') {
+            } elseif ($tasks_belongs == 'my' && $auth_user->role->name == 'executor' && $task_status != 'new') {
                 // исполнитель: все+мои
                 $task_arr = Task::where('executor_id', $auth_user->id)->orderBy('updated_at', 'desc')->get();
             } elseif ($auth_user->role->name == 'author') {
@@ -69,7 +71,7 @@ class TaskController extends Controller
                 } else {
                     $task_arr = $task_arr->where('author_id', $auth_user->id)->orderBy('updated_at', 'desc')->get();
                 }
-            } elseif ($task_belongs == 'my' && $auth_user->role->name == 'executor' && $task_status != 'new') {
+            } elseif ($tasks_belongs == 'my' && $auth_user->role->name == 'executor' && $task_status != 'new') {
                 // исполнитель: !все+мои
                 $task_arr = Task::where('status_id', $this->task_filters[$task_status])->where('executor_id', $auth_user->id)->orderBy('updated_at', 'desc')->get();
             } elseif ($auth_user->role->name == 'author') {
@@ -86,7 +88,7 @@ class TaskController extends Controller
             'table_headers' => ['ID', 'Тема', 'Постановщик', 'Создана', 'Исполнитель', 'Статус', 'Посл.активность'],
             'user_role' => $auth_user->role->name,
             'task_status' => $task_status,
-            'task_belongs' => $task_belongs,
+            'tasks_belongs' => $tasks_belongs,
             'is_tasks_process' => $is_tasks_process,
         ];
 
@@ -96,6 +98,7 @@ class TaskController extends Controller
     public function show($id)
     {
         $auth_user = Auth::user();
+
         $comments = Comment::where('task_id', $id)->orderBy('created_at', 'desc')->get();
         $comments_arr = [];
         foreach ($comments as $comment) {
@@ -109,7 +112,7 @@ class TaskController extends Controller
         }
         $request_data = ['auth_user' => $auth_user, 'task' => Task::find($id), 'comments' => $comments_arr];
 
-        // список исполнителей для переадресации для исполнителя
+        // список исполнителей переадресации для исполнителя
         if ($auth_user->role->name !== 'author') {
             $request_data['executors'] = User::where('role_id', 2)->where('id', '<>', $auth_user->id)->select('id', 'name', 'surname', 'patronym')->get();
         }
@@ -192,5 +195,51 @@ class TaskController extends Controller
         $task->save();
 
         return redirect()->route('task.show', $task->id);
+    }
+
+    public function stat(Request $request)
+    {
+        $tasks_arr = Task::all();
+
+        $executor_role_id = UserRole::where('name', 'executor')->select('id')->first()['id'];
+        $executors_arr = User::where('role_id', $executor_role_id)->get();
+
+        // список id статусов задач
+        $status_id_arr = [
+            'new' => TaskStatus::where('name', 'new')->select('id')->first()['id'],
+            'process' => TaskStatus::where('name', 'process')->select('id')->first()['id'],
+            'completed' => TaskStatus::where('name', 'completed')->select('id')->first()['id'],
+        ];
+        $new_tasks_count = Task::where('status_id', $status_id_arr['new'])->count();
+        $total_process_tasks_count = Task::where('status_id', $status_id_arr['process'])->count();
+        $total_completed_tasks_count = Task::where('status_id', $status_id_arr['completed'])->count();
+
+        // статистика исполнителей
+        $executors_stat_arr = [];
+        foreach ($executors_arr as $executor) {
+            $process_tasks_count = Task::where('executor_id', $executor->id)->where('status_id', $status_id_arr['process'])->count();
+            $process_tasks_count_percent = round(($process_tasks_count / $total_process_tasks_count) * 100);
+            $completed_tasks_count = Task::where('executor_id', $executor->id)->where('status_id', $status_id_arr['completed'])->count();
+            $completed_tasks_count_percent = round(($completed_tasks_count / $total_completed_tasks_count) * 100);
+
+            $executors_stat_arr[$executor->id] = [
+                'name' => $executor->short_full_name,
+                'process_count' => $process_tasks_count,
+                'process_count_percent' => $process_tasks_count_percent,
+                'completed_count' => $completed_tasks_count,
+                'completed_count_percent' => $completed_tasks_count_percent,
+            ];
+        }
+
+        return view(
+            'stat',
+            [
+                'table_headers' => ['Пользователь', 'Число заявок в работе', 'Число завершенных заявок'],
+                'new_tasks_count' => $new_tasks_count,
+                'process_tasks_count' => $total_process_tasks_count,
+                'completed_tasks_count' => $total_completed_tasks_count,
+                'executors_stat_arr' => $executors_stat_arr,
+            ]
+        );
     }
 }

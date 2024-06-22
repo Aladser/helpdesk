@@ -27,6 +27,11 @@ class User extends Authenticatable
         return $this->belongsTo(UserRole::class, 'role_id', 'id');
     }
 
+    public function status()
+    {
+        return $this->belongsTo(UserStatus::class, 'status_id', 'id');
+    }
+
     public function authors()
     {
         return $this->hasMany(Task::class, 'author_id', 'id');
