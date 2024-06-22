@@ -217,10 +217,20 @@ class TaskController extends Controller
         // статистика исполнителей
         $executors_stat_arr = [];
         foreach ($executors_arr as $executor) {
+            // число задач в процессе
             $process_tasks_count = Task::where('executor_id', $executor->id)->where('status_id', $status_id_arr['process'])->count();
-            $process_tasks_count_percent = round(($process_tasks_count / $total_process_tasks_count) * 100);
+            if ($total_process_tasks_count != 0) {
+                $process_tasks_count_percent = round(($process_tasks_count / $total_process_tasks_count) * 100);
+            } else {
+                $process_tasks_count_percent = 0;
+            }
+            // число выполненных задач
             $completed_tasks_count = Task::where('executor_id', $executor->id)->where('status_id', $status_id_arr['completed'])->count();
-            $completed_tasks_count_percent = round(($completed_tasks_count / $total_completed_tasks_count) * 100);
+            if ($total_completed_tasks_count != 0) {
+                $completed_tasks_count_percent = round(($completed_tasks_count / $total_completed_tasks_count) * 100);
+            } else {
+                $completed_tasks_count_percent = 0;
+            }
 
             $executors_stat_arr[$executor->id] = [
                 'name' => $executor->short_full_name,
