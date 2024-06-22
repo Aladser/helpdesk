@@ -6,6 +6,8 @@
     "license": "MIT",
     "require": {
         "php": "^7.3|^8.0",
+        "cboden/ratchet": "^0.4.4",
+        "ratchet/pawl": "^0.4.1",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
         "laravel/framework": "^8.75",
@@ -25,6 +27,7 @@
     "autoload": {
         "psr-4": {
             "App\\": "app/",
+            "Aladser\\": "aladser/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
         }
