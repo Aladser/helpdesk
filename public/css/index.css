@@ -28,3 +28,10 @@
 .task-table__row:hover {
     background-color:rgb(240,240,240);
 }
+
+/*ссылка на страницу задачи*/
+.task-table__link {
+    display: block;
+    text-decoration: underline dashed;
+    text-underline-offset: 0.25rem;
+}
