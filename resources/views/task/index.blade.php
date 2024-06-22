@@ -99,7 +99,7 @@
                 @foreach ($tasks as $task)
                 <tr class='task-table__row' id="task-{{$task->id}}">
                     <td class='text-center'> {{$task->id}} </td>
-                    <td> <a href="{{route('task.show', $task->id)}}" class='underline w-1/3 block h-full w-full'>{{$task->header}}</a> </td>
+                    <td> <a class='task-table__link' href="{{route('task.show', $task->id)}}" class='underline w-1/3 block h-full w-full'>{{$task->header}}</a> </td>
                     
                     @if($user_role !== 'author')
                     <td class='text-center'> {{$task->author->short_full_name}}  </td>

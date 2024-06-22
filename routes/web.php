@@ -22,8 +22,12 @@ require __DIR__.'/auth.php';
 // сохранение комментариев
 Route::post('/comment', [CommentController::class, 'store'])->name('comment.store');
 // статистика
-Route::get('/statistic', [TaskController::class, 'stat'])->middleware(['auth'])->name('statistic');
+Route::get('/statistic', [TaskController::class, 'stat'])->middleware(['auth', 'admin'])->name('statistic');
 // настройки
 Route::get('/settings', function () {
     return view('settings');
-})->middleware(['auth'])->name('settings');
+})->middleware(['auth', 'admin'])->name('settings');
+// 403
+Route::get('/403', function () {
+    return view('403');
+})->name('403');
