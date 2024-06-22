@@ -14,8 +14,8 @@ class IsActiveWebsocket
         $os = explode(' ', php_uname())[0];
         if ($os !== 'Windows') {
             $websocket = new ScriptLinuxProcess(
-                'offer-service',
-                dirname(__DIR__, 2).'/offer-service.php',
+                'helpdesk',
+                dirname(__DIR__, 2).'/launch_websocket.php',
                 dirname(__DIR__, 3).'/storage/logs/websocket.log',
                 dirname(__DIR__, 3).'/storage/logs/pids.log'
             );
