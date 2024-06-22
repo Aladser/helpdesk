@@ -4,11 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Comment;
 use App\Models\Task;
+use App\Models\TaskStatus;
 use App\Models\User;
+use App\Models\UserRole;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 /*
 | GET|HEAD  | task                            | task.index          | App\Http\Controllers\TaskController@index   | web                                                |
@@ -199,7 +200,44 @@ class TaskController extends Controller
     public function stat(Request $request)
     {
         $tasks_arr = Task::all();
-        $executors_arr = DB::table('users')->join('user_roles', 'users.role_id', '=', 'user_roles.id')->where('user_roles.name', 'executor')->get();
-        dd($executors_arr);
+
+        $executor_role_id = UserRole::where('name', 'executor')->select('id')->first()['id'];
+        $executors_arr = User::where('role_id', $executor_role_id)->get();
+
+        // список id статусов задач
+        $status_id_arr = [
+            'new' => TaskStatus::where('name', 'new')->select('id')->first()['id'],
+            'process' => TaskStatus::where('name', 'process')->select('id')->first()['id'],
+            'completed' => TaskStatus::where('name', 'completed')->select('id')->first()['id'],
+        ];
+        $new_tasks_count = Task::where('status_id', $status_id_arr['new'])->count();
+        $total_process_tasks_count = Task::where('status_id', $status_id_arr['process'])->count();
+        $total_completed_tasks_count = Task::where('status_id', $status_id_arr['completed'])->count();
+
+        // статистика исполнителей
+        $executors_stat_arr = [];
+        foreach ($executors_arr as $executor) {
+            $process_tasks_count = Task::where('executor_id', $executor->id)->where('status_id', $status_id_arr['process'])->count();
+            $process_tasks_count_percent = round(($process_tasks_count / $total_process_tasks_count) * 100);
+            $completed_tasks_count = Task::where('executor_id', $executor->id)->where('status_id', $status_id_arr['completed'])->count();
+            $completed_tasks_count_percent = round(($completed_tasks_count / $total_completed_tasks_count) * 100);
+
+            $executors_stat_arr[$executor->id] = [
+                'name' => $executor->short_full_name,
+                'process_count' => "$process_tasks_count ($process_tasks_count_percent%)",
+                'completed_count' => "$completed_tasks_count ($completed_tasks_count_percent%)",
+            ];
+        }
+
+        return view(
+            'stat',
+            [
+                'table_headers' => ['Пользователь', 'Число заявок в работе', 'Число завершенных заявок'],
+                'new_tasks_count' => $new_tasks_count,
+                'process_tasks_count' => $total_process_tasks_count,
+                'completed_tasks_count' => $total_completed_tasks_count,
+                'executors_stat_arr' => $executors_stat_arr,
+            ]
+        );
     }
 }
