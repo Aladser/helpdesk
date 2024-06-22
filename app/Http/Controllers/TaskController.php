@@ -224,8 +224,10 @@ class TaskController extends Controller
 
             $executors_stat_arr[$executor->id] = [
                 'name' => $executor->short_full_name,
-                'process_count' => "$process_tasks_count ($process_tasks_count_percent%)",
-                'completed_count' => "$completed_tasks_count ($completed_tasks_count_percent%)",
+                'process_count' => $process_tasks_count,
+                'process_count_percent' => $process_tasks_count_percent,
+                'completed_count' => $completed_tasks_count,
+                'completed_count_percent' => $completed_tasks_count_percent,
             ];
         }
 

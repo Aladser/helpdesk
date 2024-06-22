@@ -12,9 +12,14 @@
                     <div class="h-full main-link shrink-0 flex items-center px-2 w-32 flex justify-center">Главная</div>
                 </a>
                 <!-- Статистика -->
-                <a href="/statistic">
+                 @if(Auth::user()->role->name !== 'author')
+                <a href="{{route('statistic')}}">
                     <div class="h-full main-link shrink-0 flex items-center px-2 w-32 flex justify-center">Статистика</div>
                 </a>
+                <a href="{{route('settings')}}">
+                    <div class="h-full main-link shrink-0 flex items-center px-2 w-32 flex justify-center">Настройки</div>
+                </a>
+                @endif
             </div>
 
             <!-- Settings Dropdown -->

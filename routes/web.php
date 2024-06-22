@@ -23,3 +23,7 @@ require __DIR__.'/auth.php';
 Route::post('/comment', [CommentController::class, 'store'])->name('comment.store');
 // статистика
 Route::get('/statistic', [TaskController::class, 'stat'])->middleware(['auth'])->name('statistic');
+// настройки
+Route::get('/settings', function () {
+    return view('settings');
+})->middleware(['auth'])->name('settings');
