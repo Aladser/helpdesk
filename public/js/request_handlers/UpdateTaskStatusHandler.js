@@ -23,9 +23,13 @@ class UpdateTaskStatusHandler {
 
         //**форма отправки отчета о выполнении задачи*/
         this.report_task_form = this.task_node.querySelector("#report-task-form");
-        this.report_task_form.onsubmit = (e) => this.sendCompleteTaskReport(e);
-        //отмена отправки ответа
-        this.report_task_form.querySelector("#report-form-complete-task__cancel_btn").onclick = () => this.cancelShowCompleteTaskForm();
+        if(this.report_task_form) {
+            this.report_task_form.onsubmit = (e) => this.sendCompleteTaskReport(e);
+                //отмена отправки ответа
+            this.report_task_form.querySelector("#report-form-complete-task__cancel_btn").onclick = () => this.cancelShowCompleteTaskForm();
+        }
+
+
 
         //кнопка Взять в работу
         this.take_task_btn = this.task_node.querySelector("#btn-take-task");

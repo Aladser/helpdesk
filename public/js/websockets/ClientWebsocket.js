@@ -35,6 +35,6 @@ class ClientWebsocket {
     }
 
     onOpen(e) {
-        console.log(`Соединение с вебсокетом ${this.websocket_addr} установлено.`);
+        console.log(`Соединение ${this.user_login} с вебсокетом ${this.websocket_addr} установлено.`);
     }
 }
