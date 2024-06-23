@@ -1,11 +1,10 @@
 <x-app-layout>
-    <!-- подключение секций в layout-->
-    @section('meta')
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    @section('title')
+    <x-title>создание задачи</x-title>
     @endsection
 
-    @section('title')
-    <title>{{env('APP_NAME')}} - создание задачи</title>
+    @section('meta')
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     @endsection
 
     @section('header')

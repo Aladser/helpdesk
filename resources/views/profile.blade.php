@@ -1,6 +1,6 @@
 <x-app-layout>
     @section('title')
-    <title>{{env('APP_NAME')}} - профиль</title>
+    <x-title>профиль</x-title>
     @endsection
 
     @section('header')

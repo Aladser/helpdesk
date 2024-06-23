@@ -1,11 +1,11 @@
 <x-app-layout>
+    @section('title')
+    <x-title>задача № {{$task->id}}</x-title>
+    @endsection
+
     @section('meta')
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name='login' content="{{ $auth_user->login }}">
-    @endsection
-
-    @section('title')
-    <title>{{env('APP_NAME')}} - задача № {{$task->id}}</title>
     @endsection
 
     @section('header')

@@ -1,10 +1,10 @@
 <x-app-layout>
     @section('title')
-    <title>{{env('APP_NAME')}} - статистика</title>
+    <x-title>ошибка доступа</x-title>
     @endsection
 
     @section('header')
-    <x-header>Статистика</x-header>
+    <x-header>Ошибка доступа</x-header>
     @endsection
 
     @section('css')
