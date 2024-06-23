@@ -20,29 +20,34 @@ class ServerWebsocket implements MessageComponentInterface
     {
         // добавление клиента
         $this->clients->attach($conn);
-        echo "cоединение установлено\n";
+        
+        // запрос имени пользователя 
+        $message = json_encode(['type'=>'onconnection', 'resourceId' => $conn->resourceId]);
+        $conn->send($message);
+
+        $date = date('d-m-Y h:i');
+        echo "$date: {$conn->resourceId} - cоединение установлено\n";
     }
 
     public function onClose(ConnectionInterface $conn)
     {
         // удаление клиента
         $this->clients->detach($conn);
-        echo "cоединение закрыто\n";
+        
+        $date = date('d-m-Y h:i');
+        echo "$date: {$conn->resourceId} - cоединение закрыто\n";
     }
 
-    public function onMessage(ConnectionInterface $from, $msg)
+    public function onMessage(ConnectionInterface $from, $message)
     {
-        foreach ($this->clients as $client) {
-            if ($from !== $client) {
-                $client->send($msg);
-            }
-        }
-        echo "Получено сообщение: $msg\n";
+        echo "$message\n";
+        $request_data = json_decode($message);
     }
 
     public function onError(ConnectionInterface $conn, \Exception $e)
     {
         $conn->close();
-        echo "Ошибка: {$e->getMessage()}\n";
+        $date = date('d-m-Y h:i');
+        echo "$date: ошибка - {$e->getMessage()}\n";
     }
 }
