@@ -11,12 +11,23 @@ class IndexClientWebsocket extends ClientWebsocket {
     }
 
     onOpen(e) {
-        console.log(`Соединение ${this.user_login} с вебсокетом ${this.websocket_addr} установлено.`);
+        console.log(
+            `Соединение ${this.user_login} с вебсокетом ${this.websocket_addr} установлено.`
+        );
     }
 
     // получение сообщений
     onMessage(e) {
-        let data = JSON.parse(e.data);
-        console.log(data);
+        try {
+            let server_data = JSON.parse(e.data);
+            switch (server_data.type) {
+                case "onconnection":
+                    server_data.user_login = this.user_login;
+                    this.sendData(server_data);
+            }
+        } catch (e) {
+            console.log(e);
+            alert("ошибка парсинга сообщения вебсокета");
+        }
     }
 }
