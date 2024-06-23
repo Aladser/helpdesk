@@ -4,10 +4,10 @@ namespace App\View\Components;
 
 use Illuminate\View\Component;
 
-class header extends Component
+class title extends Component
 {
     public function render()
     {
-        return view('components.header');
+        return view('components.title');
     }
 }

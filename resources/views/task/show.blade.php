@@ -1,26 +1,26 @@
 <x-app-layout>
-    <!-- подключение секций в layout-->
-    @section('meta')
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    @endsection
-
     @section('title')
-    <title>{{env('APP_NAME')}} - задача № {{$task->id}}</title>
+    <x-title>задача № {{$task->id}}</x-title>
     @endsection
 
     @section('header')
     <x-header>Задача № {{$task->id}}</x-header>
     @endsection
     
+    @section('meta')
+    <x-meta name='login'>{{ Auth::user()->login }}</x-meta>
+    <x-meta name='csrf-token'>{{csrf_token()}}</x-meta>
+    @endsection
+    
     @section('css')
-    <link rel="stylesheet" href="{{ asset('css/show.css') }}">
+    <x-css-link>css/show.css</x-css-link>
     @endsection
 
     @section('js')
-    <script src="/js/ServerRequest.js" defer></script>
-    <script src="/js/request_handlers/UpdateTaskStatusHandler.js" defer></script>
-    <script src="/js/request_handlers/StoreCommentHandler.js" defer></script>
-    <script src="/js/pages/show.js" defer></script>
+    <x-js-script>/js/ServerRequest.js</x-js-script>
+    <x-js-script>/js/request_handlers/UpdateTaskStatusHandler.js</x-js-script>
+    <x-js-script>/js/request_handlers/StoreCommentHandler.js</x-js-script>
+    <x-js-script>/js/pages/show.js</x-js-script>
     @endsection
 
     <div class="py-8 mx-4">

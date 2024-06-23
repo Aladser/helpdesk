@@ -15,6 +15,7 @@ $server = IoServer::factory(
             new ServerWebsocket()
         )
     ),
-    env('WEBSOCKET_PORT')
+    intval(env('WEBSOCKET_PORT'))
 );
+
 $server->run();

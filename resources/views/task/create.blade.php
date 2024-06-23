@@ -1,23 +1,14 @@
 <x-app-layout>
-    <!-- подключение секций в layout-->
-    @section('meta')
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    @endsection
-
     @section('title')
-    <title>{{env('APP_NAME')}} - создание задачи</title>
+    <x-title>создание задачи</x-title>
     @endsection
 
     @section('header')
     <x-header>Создание задачи</x-header>
     @endsection
     
-    @section('css')
-    <link rel="stylesheet" href="{{ asset('css/create.css') }}">
-    @endsection
-
-    @section('js')
-    <script src="/js/pages/create.js" defer></script>
+    @section('meta')
+    <x-meta name='csrf-token'>{{csrf_token()}}</x-meta>
     @endsection
 
     <div class="py-8 mx-4">

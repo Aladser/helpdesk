@@ -1,14 +1,18 @@
 <x-app-layout>
     @section('title')
-    <title>{{env('APP_NAME')}} - статистика</title>
+    <x-title>статистика</x-title>
     @endsection
 
     @section('header')
     <x-header>Статистика</x-header>
     @endsection
 
+    @section('meta')
+    <x-meta name='login'>{{ Auth::user()->login }}</x-meta>
+    @endsection
+    
     @section('css')
-    <link rel="stylesheet" href="{{ asset('css/stat.css') }}">
+    <x-css-link>css/stat.css</x-css-link>
     @endsection
 
     <div class="py-8 mx-4">

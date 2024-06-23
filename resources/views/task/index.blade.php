@@ -1,18 +1,23 @@
 <x-app-layout>
+    <?php // подключение секций в blade-шаблон?>
     @section('title')
-    <title>{{env('APP_NAME')}} - задачи</title>
+    <x-title>{{env('APP_NAME')}}</x-title>
     @endsection
 
     @section('header')
     <x-header>Задачи</x-header>
     @endsection
     
+    @section('meta')
+    <x-meta name='login'>{{ Auth::user()->login }}</x-meta>
+    @endsection
+    
     @section('css')
-    <link rel="stylesheet" href="{{ asset('css/index.css') }}">
+    <x-css-link>css/index.css</x-css-link>
     @endsection
 
     @section('js')
-    <script src="/js/pages/index.js" defer></script>
+    <x-js-script>/js/pages/index.js</x-js-script>
     @endsection
 
     <div class="py-8">
