@@ -10,6 +10,7 @@
     
     @section('meta')
     <x-meta name='login'>{{ Auth::user()->login }}</x-meta>
+    <x-meta name='websocket'>{{env('WEBSOCKET_ADDR')}}</x-meta>
     @endsection
     
     @section('css')
@@ -17,6 +18,8 @@
     @endsection
 
     @section('js')
+    <x-js-script>/js/websockets/ClientWebsocket.js</x-js-script>
+    <x-js-script>/js/websockets/IndexClientWebsocket.js</x-js-script>
     <x-js-script>/js/pages/index.js</x-js-script>
     @endsection
 

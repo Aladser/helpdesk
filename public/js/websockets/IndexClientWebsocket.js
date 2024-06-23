@@ -7,9 +7,4 @@ class IndexClientWebsocket extends ClientWebsocket {
         alert(msg);
         console.log(msg);
     }
-    
-    // отправка сообщений
-    sendData(data) {
-        this.websocket.send(JSON.stringify(data));
-    }
 }
