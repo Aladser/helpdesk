@@ -1,14 +1,10 @@
 /** базовый класс клиентского вебсокета */
 class ClientWebsocket {
-    constructor() {
+    constructor(appUrl, websocket_addr, username_node = null) {
         // имя текущего пользователя
-        let userElement = document.querySelector('meta[name="username"]');
-        if (userElement) {
-            this.username = userElement.content;
-        }
-        // адрес вебсокета
-        let appUrl = document.querySelector('meta[name="websocket"]').content;
+        this.username = username_node;
         // клиентский вебсокет
+        this.websocket_addr = websocket_addr;
         this.websocket = new WebSocket(appUrl);
         this.websocket.onerror = (e) => this.onError(e);
         this.websocket.onmessage = (e) => this.onMessage(e);
@@ -17,18 +13,17 @@ class ClientWebsocket {
 
     // получение ошибок вебсокета
     onError(e) {
-        alert(
-            `WebSocket connection ${
-                document.querySelector('meta[name="websocket"]').content
-            } failed`
-        );
+        let msg = `Ошибка соединения вебсокета ${websocket_addr}`;
+        alert(msg);
+        console.log(msg);
     }
 
     // получение сообщений
     onMessage(e) {
-        let data = JSON.parse(e.data);
-        //console.log(data);
-        alert("метод onMessage вебсокета ClientWebsocket не реализован");
+        //let data = JSON.parse(e.data);
+        let msg = "Метод onMessage вебсокета не реализован";
+        alert(msg);
+        console.log(msg);
     }
 
     // отправка сообщений
@@ -37,10 +32,6 @@ class ClientWebsocket {
     }
 
     onOpen(e) {
-        console.log(
-            `Соединение с вебсокетом ${
-                document.querySelector('meta[name="websocket"]').content
-            } установлено.`
-        );
+        console.log(`Соединение с вебсокетом ${websocket_addr} установлено.`);
     }
 }

@@ -1,4 +1,9 @@
 <x-app-layout>
+    <?php // подключение секций в blade-шаблон?>
+    @section('meta')
+    <meta name='login' content="{{ Auth::user()->login }}">
+    @endsection
+
     @section('title')
     <title>{{env('APP_NAME')}} - задачи</title>
     @endsection

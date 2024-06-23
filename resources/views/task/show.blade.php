@@ -1,7 +1,7 @@
 <x-app-layout>
-    <!-- подключение секций в layout-->
     @section('meta')
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name='login' content="{{ $auth_user->login }}">
     @endsection
 
     @section('title')

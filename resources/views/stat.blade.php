@@ -1,4 +1,8 @@
 <x-app-layout>
+    @section('meta')
+    <meta name='login' content="{{ Auth::user()->login }}">
+    @endsection
+
     @section('title')
     <title>{{env('APP_NAME')}} - статистика</title>
     @endsection
