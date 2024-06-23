@@ -1,7 +1,7 @@
 <x-app-layout>
     <?php //-----подключение секций в blade-шаблон-----?>
     @section('title')
-    <x-title>{{env('APP_NAME')}}</x-title>
+    <x-title></x-title>
     @endsection
 
     @section('header')
