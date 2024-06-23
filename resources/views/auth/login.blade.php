@@ -1,8 +1,8 @@
-<x-guest-layout>
-    @section('title')
-    <title>{{env('APP_NAME')}} - вход в систему</title>
-    @endsection
+@section('title')
+<x-title>вход в систему</x-title>
+@endsection
 
+<x-guest-layout>
     <x-auth-card>
         <x-slot name="logo">
             <img class='mx-auto' src="/images/favicon-64.png" alt="Лого">
@@ -40,13 +40,13 @@
             <div class="block mt-4">
                 <label for="remember_me" class="inline-flex items-center">
                     <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" name="remember">
-                    <span class="ml-2 text-sm text-gray-600">{{ __('Запомнить меня') }}</span>
+                    <span class="ml-2 text-sm text-gray-600">Запомнить меня</span>
                 </label>
             </div>
 
             <div class="flex items-center justify-end mt-4">
                 <a class="underline text-sm text-gray-600 hover:text-gray-900 me-3" href="{{ route('register') }}">Зарегистрироваться</a>
-                <x-button class="button-theme w-1/3">{{ __('Войти') }}</x-button>
+                <x-button class="button-theme w-1/3">Войти</x-button>
             </div>
         </form>
     </x-auth-card>

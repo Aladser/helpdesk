@@ -12,6 +12,9 @@
 .bg-dark-theme {
     background-color: var(--color-lighter-theme);
 }
+.bg-darkest-theme {
+    background-color: var(--color-theme);
+}
 
 .color-theme {
     color: var(--color-theme);
@@ -41,6 +44,9 @@
 }
 .button-theme:active {
     box-shadow: 0 0.1rem 0.5rem var(--color-lighter-theme);
+}
+.button-theme:disabled {
+    opacity: 0.75;
 }
 
 .main-link:hover {
