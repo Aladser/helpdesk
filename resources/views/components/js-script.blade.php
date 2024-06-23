@@ -1,1 +1,1 @@
-<script src="{{$slot}}" defer></script>
+<script src="/js/{{$slot}}" defer></script>

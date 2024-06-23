@@ -8,8 +8,9 @@
     @endsection
     
     @section('meta')
-    <x-meta name='login'>{{ Auth::user()->login }}</x-meta>
     <x-meta name='csrf-token'>{{csrf_token()}}</x-meta>
+    <x-meta name='login'>{{ Auth::user()->login }}</x-meta>
+    <x-meta name='websocket'>ws://{{env('WEBSOCKET_IP')}}:{{env('WEBSOCKET_PORT')}}</x-meta>
     @endsection
     
     @section('css')
@@ -17,10 +18,10 @@
     @endsection
 
     @section('js')
-    <x-js-script>/js/ServerRequest.js</x-js-script>
-    <x-js-script>/js/request_handlers/UpdateTaskStatusHandler.js</x-js-script>
-    <x-js-script>/js/request_handlers/StoreCommentHandler.js</x-js-script>
-    <x-js-script>/js/pages/show.js</x-js-script>
+    <x-js-script>ServerRequest.js</x-js-script>
+    <x-js-script>request_handlers/UpdateTaskStatusHandler.js</x-js-script>
+    <x-js-script>request_handlers/StoreCommentHandler.js</x-js-script>
+    <x-js-script>pages/show.js</x-js-script>
     @endsection
 
     <div class="py-8 mx-4">

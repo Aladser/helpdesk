@@ -9,14 +9,18 @@ let new_comment_form = document.querySelector("#new-cmt-form");
 let new_comment_form_textarea = new_comment_form.querySelector("#new-comment-form__textarea");
 let comment_list_block = document.querySelector("#cmt-list-block");
 let new_comment_form_block = document.querySelector("#new-cmt-form-block");
+
 /**блок назначения задачи инженеру*/
 let appoint_user_block = document.querySelector("#reassign-user-list-block");
 /**кнопка "Подтвердить назначить задачи"*/
-let apply_appoint_user_btn = appoint_user_block.querySelector("#reassign-user-list-block__btn-appoint");
+let apply_appoint_user_btn = false;
 /**select списка техспецов*/
-let appoint_user_select = appoint_user_block.querySelector("#reassign-user-form__select");
-/**кнопка скрытия формы "Назначить задачу"*/
-let hide_appoint_user_form_btn = document.querySelector("#reassign-user-list-block__btn-cancel");
+let appoint_user_select = false;
+if( appoint_user_block) {
+    appoint_user_select = appoint_user_block.querySelector("#reassign-user-form__select");
+    apply_appoint_user_btn = appoint_user_block.querySelector("#reassign-user-list-block__btn-appoint");
+}
+
 /**обработчик обновления статуса задачи*/
 let updateTaskStatusHandler = new UpdateTaskStatusHandler(
     task_node,
@@ -84,16 +88,20 @@ if (appoint_task_btn) {
     };
 }
 
+/**кнопка скрытия формы "Назначить задачу"*/
+let hide_appoint_user_form_btn = document.querySelector("#reassign-user-list-block__btn-cancel");
 // отменить показ формы "Назначить ответственного"
-hide_appoint_user_form_btn.onclick = () => {
-    appoint_task_btn.disabled = false;;
-    appoint_user_block.classList.add("hidden");
-    if(take_task_btn) {
-        take_task_btn.classList.remove('hidden');
-    } else {
-        complete_task_btn.classList.remove('hidden');
-    }
-};
+if(hide_appoint_user_form_btn) {
+    hide_appoint_user_form_btn.onclick = () => {
+        appoint_task_btn.disabled = false;;
+        appoint_user_block.classList.add("hidden");
+        if(take_task_btn) {
+            take_task_btn.classList.remove('hidden');
+        } else {
+            complete_task_btn.classList.remove('hidden');
+        }
+    };
+}
 
 apply_appoint_user_btn.onclick = () => {
     let user_id = techsupport_arr[appoint_user_select.value];

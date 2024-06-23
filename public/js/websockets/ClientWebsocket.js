@@ -1,11 +1,11 @@
 /** базовый класс клиентского вебсокета */
 class ClientWebsocket {
-    constructor(appUrl, websocket_addr, username_node = null) {
+    constructor(websocket_url, user_login = null) {
         // имя текущего пользователя
-        this.username = username_node;
+        this.user_login = user_login;
         // клиентский вебсокет
-        this.websocket_addr = websocket_addr;
-        this.websocket = new WebSocket(appUrl);
+        this.websocket_addr = websocket_url;
+        this.websocket = new WebSocket(websocket_url);
         this.websocket.onerror = (e) => this.onError(e);
         this.websocket.onmessage = (e) => this.onMessage(e);
         this.websocket.onopen = (e) => this.onOpen(e);
@@ -13,7 +13,7 @@ class ClientWebsocket {
 
     // получение ошибок вебсокета
     onError(e) {
-        let msg = `Ошибка соединения вебсокета ${websocket_addr}`;
+        let msg = `Ошибка соединения вебсокета ${this.websocket_addr}`;
         alert(msg);
         console.log(msg);
     }
@@ -29,9 +29,12 @@ class ClientWebsocket {
     // отправка сообщений
     sendData(data) {
         this.websocket.send(JSON.stringify(data));
+        let msg = "Метод sendData вебсокета не реализован";
+        alert(msg);
+        console.log(msg);
     }
 
     onOpen(e) {
-        console.log(`Соединение с вебсокетом ${websocket_addr} установлено.`);
+        console.log(`Соединение ${this.user_login} с вебсокетом ${this.websocket_addr} установлено.`);
     }
 }

@@ -13,6 +13,10 @@ let filter_switchers = new Map([
     ["process", document.querySelector("#task-filter-form__process")],
     ["completed", document.querySelector("#task-filter-form__completed")],
 ]);
+/**адрес вебсокета*/
+const WEBSOCKET_ADDRESS = document.querySelector("meta[name='websocket']").content;
+const USER_LOGIN = document.querySelector("meta[name='login']").content;
+const websocket = new IndexClientWebsocket(WEBSOCKET_ADDRESS, USER_LOGIN);
 
 filter_switchers.forEach(switcher => switcher.onclick = get_tasks_index);
 if(belongs_filter_form) {

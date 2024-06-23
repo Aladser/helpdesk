@@ -1,5 +1,5 @@
 <x-app-layout>
-    <?php // подключение секций в blade-шаблон?>
+    <?php //-----подключение секций в blade-шаблон-----?>
     @section('title')
     <x-title>{{env('APP_NAME')}}</x-title>
     @endsection
@@ -10,6 +10,7 @@
     
     @section('meta')
     <x-meta name='login'>{{ Auth::user()->login }}</x-meta>
+    <x-meta name='websocket'>ws://{{env('WEBSOCKET_IP')}}:{{env('WEBSOCKET_PORT')}}</x-meta>
     @endsection
     
     @section('css')
@@ -17,7 +18,9 @@
     @endsection
 
     @section('js')
-    <x-js-script>/js/pages/index.js</x-js-script>
+    <x-js-script>websockets/ClientWebsocket.js</x-js-script>
+    <x-js-script>websockets/IndexClientWebsocket.js</x-js-script>
+    <x-js-script>pages/index.js</x-js-script>
     @endsection
 
     <div class="py-8">
