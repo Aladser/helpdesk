@@ -5,20 +5,34 @@
             <div class="flex">
                 <!-- Лого -->
                 <div class="shrink-0 flex items-center me-4">
-                    <x-application-logo class="block h-10 w-auto fill-current text-gray-600" />
+                    <img class='mx-auto' src="/images/favicon-32.png" alt="Лого">
                 </div>
                 <!-- Главная -->
-                <a href="{{ route('index') }}">
+                @if(route('index') == url()->current())
                     <div class="h-full main-link shrink-0 flex items-center px-2 w-32 flex justify-center">Главная</div>
-                </a>
-                <!-- Статистика -->
-                 @if(Auth::user()->role->name !== 'author')
-                <a href="{{route('statistic')}}">
-                    <div class="h-full main-link shrink-0 flex items-center px-2 w-32 flex justify-center">Статистика</div>
-                </a>
-                <a href="{{route('settings')}}">
-                    <div class="h-full main-link shrink-0 flex items-center px-2 w-32 flex justify-center">Настройки</div>
-                </a>
+                @else
+                    <a href="{{ route('index') }}">
+                        <div class="h-full main-link shrink-0 flex items-center px-2 w-32 flex justify-center">Главная</div>
+                    </a>
+                @endif
+                
+                @if(Auth::user()->role->name !== 'author')
+                    <!-- Статистика -->
+                    @if(route('statistic') == url()->current())
+                        <div class="h-full main-link shrink-0 flex items-center px-2 w-32 flex justify-center bg-darkest-theme" disabled>Статистика</div>
+                    @else
+                        <a href="{{route('statistic')}}">
+                            <div class="h-full main-link shrink-0 flex items-center px-2 w-32 flex justify-center">Статистика</div>
+                        </a>
+                    @endif
+                    <!-- Настройки -->
+                    @if(route('settings') == url()->current())
+                        <div class="h-full main-link shrink-0 flex items-center px-2 w-32 flex justify-center bg-darkest-theme">Настройки</div>
+                    @else
+                        <a href="{{route('settings')}}">
+                            <div class="h-full main-link shrink-0 flex items-center px-2 w-32 flex justify-center">Настройки</div>
+                        </a>
+                    @endif
                 @endif
             </div>
 

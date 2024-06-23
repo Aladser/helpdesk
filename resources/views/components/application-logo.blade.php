@@ -1,1 +1,0 @@
-<img class='mx-auto' src="/images/favicon-32.png" alt="Лого">

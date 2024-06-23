@@ -12,6 +12,9 @@
 .bg-dark-theme {
     background-color: var(--color-lighter-theme);
 }
+.bg-darkest-theme {
+    background-color: var(--color-theme);
+}
 
 .color-theme {
     color: var(--color-theme);
