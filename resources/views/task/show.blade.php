@@ -13,14 +13,14 @@
     @endsection
     
     @section('css')
-    <link rel="stylesheet" href="{{ asset('css/show.css') }}">
+    <x-css-link>css/show.css</x-css-link>
     @endsection
 
     @section('js')
-    <script src="/js/ServerRequest.js" defer></script>
-    <script src="/js/request_handlers/UpdateTaskStatusHandler.js" defer></script>
-    <script src="/js/request_handlers/StoreCommentHandler.js" defer></script>
-    <script src="/js/pages/show.js" defer></script>
+    <x-js-script>/js/ServerRequest.js</x-js-script>
+    <x-js-script>/js/request_handlers/UpdateTaskStatusHandler.js</x-js-script>
+    <x-js-script>/js/request_handlers/StoreCommentHandler.js</x-js-script>
+    <x-js-script>/js/pages/show.js</x-js-script>
     @endsection
 
     <div class="py-8 mx-4">

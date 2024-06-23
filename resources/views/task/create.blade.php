@@ -10,14 +10,6 @@
     @section('meta')
     <x-meta name='csrf-token'>{{csrf_token()}}</x-meta>
     @endsection
-    
-    @section('css')
-    <link rel="stylesheet" href="{{ asset('css/create.css') }}">
-    @endsection
-
-    @section('js')
-    <script src="/js/pages/create.js" defer></script>
-    @endsection
 
     <div class="py-8 mx-4">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 p-4 bg-white shadow-md">

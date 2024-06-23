@@ -13,11 +13,11 @@
     @endsection
     
     @section('css')
-    <link rel="stylesheet" href="{{ asset('css/index.css') }}">
+    <x-css-link>css/index.css</x-css-link>
     @endsection
 
     @section('js')
-    <script src="/js/pages/index.js" defer></script>
+    <x-js-script>/js/pages/index.js</x-js-script>
     @endsection
 
     <div class="py-8">

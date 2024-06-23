@@ -12,7 +12,7 @@
     @endsection
     
     @section('css')
-    <link rel="stylesheet" href="{{ asset('css/stat.css') }}">
+    <x-css-link>css/stat.css</x-css-link>
     @endsection
 
     <div class="py-8 mx-4">
