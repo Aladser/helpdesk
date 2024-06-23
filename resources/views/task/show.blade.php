@@ -45,12 +45,12 @@
             <!--Кнопки-->
             <div id='task__btn-block' class='mb-2'>
                 @if($task->status->name == 'new')
-                <button id='btn-complete-task'class='button-theme w-1/6 mb-2 me-1 disabled:opacity-75 hidden'>Выполнить</button>
+                <button id='btn-complete-task'class='button-theme w-1/6 mb-2 me-1 hidden'>Выполнить</button>
                 <button id='btn-take-task'class='button-theme w-1/6 mb-2'>Взять в работу</button>
-                <button id='btn-reassign-task'class='button-theme w-1/6 mb-2 me-2 disabled:opacity-75'>Назначить</button>
+                <button id='btn-reassign-task'class='button-theme w-1/6 mb-2 me-2 '>Назначить</button>
                 @elseif($task->status->name == 'process' && $task->executor->id == $auth_user->id)
-                <button id='btn-complete-task'class='button-theme w-1/6 mb-2 me-1 disabled:opacity-75'>Выполнить</button>
-                <button id='btn-reassign-task'class='button-theme w-1/6 disabled:opacity-75 mb-2'>Переназначить</button>
+                <button id='btn-complete-task'class='button-theme w-1/6 mb-2 me-1 '>Выполнить</button>
+                <button id='btn-reassign-task'class='button-theme w-1/6 mb-2'>Переназначить</button>
                 @endif
 
                 <!--форма отправки отчета о выполнении задачи-->
@@ -72,7 +72,7 @@
                             @endforeach
                         </select>
                     </form>
-                    <button id='reassign-user-list-block__btn-appoint'class='button-theme w-1/6 me-2 disabled:opacity-75' disabled>Назначить</button>
+                    <button id='reassign-user-list-block__btn-appoint'class='button-theme w-1/6 me-2' disabled>Назначить</button>
                     <button id='reassign-user-list-block__btn-cancel'class='button-theme w-1/6'>Отмена</button>
                </div>
             </div>

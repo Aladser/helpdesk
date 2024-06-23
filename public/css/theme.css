@@ -42,6 +42,9 @@
 .button-theme:active {
     box-shadow: 0 0.1rem 0.5rem var(--color-lighter-theme);
 }
+.button-theme:disabled {
+    opacity: 0.75;
+}
 
 .main-link:hover {
     background-color: var(--color-theme);
