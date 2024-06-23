@@ -3,13 +3,13 @@
     @section('title')
     <x-title>{{env('APP_NAME')}}</x-title>
     @endsection
-    
-    @section('meta')
-    <meta name='login' content="{{ Auth::user()->login }}">
-    @endsection
 
     @section('header')
     <x-header>Задачи</x-header>
+    @endsection
+    
+    @section('meta')
+    <x-meta name='login'>{{ Auth::user()->login }}</x-meta>
     @endsection
     
     @section('css')

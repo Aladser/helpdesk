@@ -3,13 +3,13 @@
     <x-title>задача № {{$task->id}}</x-title>
     @endsection
 
-    @section('meta')
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <meta name='login' content="{{ $auth_user->login }}">
-    @endsection
-
     @section('header')
     <x-header>Задача № {{$task->id}}</x-header>
+    @endsection
+    
+    @section('meta')
+    <x-meta name='login'>{{ Auth::user()->login }}</x-meta>
+    <x-meta name='csrf-token'>{{csrf_token()}}</x-meta>
     @endsection
     
     @section('css')

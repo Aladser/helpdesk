@@ -3,12 +3,12 @@
     <x-title>создание задачи</x-title>
     @endsection
 
-    @section('meta')
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    @endsection
-
     @section('header')
     <x-header>Создание задачи</x-header>
+    @endsection
+    
+    @section('meta')
+    <x-meta name='csrf-token'>{{csrf_token()}}</x-meta>
     @endsection
     
     @section('css')
