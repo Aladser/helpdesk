@@ -36,37 +36,41 @@ class ServerWebsocket implements MessageComponentInterface
 
     public function onMessage(ConnectionInterface $from, $message)
     {
-        $request_data = json_decode($message);
+        try {
+            $request_data = json_decode($message);
 
-        switch ($request_data->type) {
-            case 'onconnection':
-                $this->joined_users_id_arr[$request_data->user_login] = $request_data->resourceId;
-                if ($request_data->user_role == 'executor') {
-                    $this->joined_executors_conn_arr[$request_data->user_login] = $from;
-                    $this->log($from->resourceId, "подключен исполнитель {$request_data->user_login}");
-                } elseif ($request_data->user_role == 'author') {
-                    $this->joined_authors_conn_arr[$request_data->user_login] = $from;
-                    $this->log($from->resourceId, "подключен постановщик {$request_data->user_login}");
-                } else {
-                    return;
-                }
-                break;
-            case 'task-new':
-                $this->log($from->resourceId, "новая задача \"$message\"");
-                break;
-            case 'take-task':
-                $this->log($from->resourceId, "задача взята в работу $message");
-                break;
-            case 'complete-task':
-                $this->log($from->resourceId, "завершена задача $message");
-                break;
-            default:
-                var_dump($request_data);
-        }
-        if (in_array($request_data->type, ['task-new', 'take-task', 'complete-task'])) {
-            foreach ($this->joined_executors_conn_arr as $executor) {
-                $executor->send($message);
+            switch ($request_data->type) {
+                case 'onconnection':
+                    $this->joined_users_id_arr[$request_data->user_login] = $request_data->resourceId;
+                    if ($request_data->user_role == 'executor') {
+                        $this->joined_executors_conn_arr[$request_data->user_login] = $from;
+                        $this->log($from->resourceId, "подключен исполнитель {$request_data->user_login}");
+                    } elseif ($request_data->user_role == 'author') {
+                        $this->joined_authors_conn_arr[$request_data->user_login] = $from;
+                        $this->log($from->resourceId, "подключен постановщик {$request_data->user_login}");
+                    } else {
+                        return;
+                    }
+                    break;
+                case 'task-new':
+                    $this->log($from->resourceId, "новая задача \"$message\"");
+                    break;
+                case 'take-task':
+                    $this->log($from->resourceId, "задача взята в работу $message");
+                    break;
+                case 'complete-task':
+                    $this->log($from->resourceId, "завершена задача $message");
+                    break;
+                default:
+                    var_dump($request_data);
             }
+            if (in_array($request_data->type, ['task-new', 'take-task', 'complete-task'])) {
+                foreach ($this->joined_executors_conn_arr as $executor) {
+                    $executor->send($message);
+                }
+            }
+        } catch (\Exception $e) {
+            var_dump($e);
         }
     }
 

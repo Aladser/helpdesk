@@ -28,6 +28,12 @@ use Illuminate\Support\Facades\Auth;
 class TaskController extends Controller
 {
     private array $task_filters = ['new' => 1, 'process' => 2, 'completed' => 3];
+    private string $websocket_addr;
+
+    public function __construct()
+    {
+        $this->websocket_addr = WebsocketService::getWebsockerAddr();
+    }
 
     public function index(Request $request)
     {
@@ -92,6 +98,7 @@ class TaskController extends Controller
             'task_status' => $task_status,
             'tasks_belongs' => $tasks_belongs,
             'is_tasks_process' => $is_tasks_process,
+            'websocket_addr' => $this->websocket_addr,
         ];
 
         return view('task.index', $request_data);
@@ -112,7 +119,12 @@ class TaskController extends Controller
                 'content' => str_replace(PHP_EOL, '<br>', $comment->content),
             ];
         }
-        $request_data = ['auth_user' => $auth_user, 'task' => Task::find($id), 'comments' => $comments_arr];
+        $request_data = [
+            'auth_user' => $auth_user,
+            'task' => Task::find($id),
+            'comments' => $comments_arr,
+            'websocket_addr' => $this->websocket_addr,
+        ];
 
         // список исполнителей переадресации для исполнителя
         if ($auth_user->role->name !== 'author') {
