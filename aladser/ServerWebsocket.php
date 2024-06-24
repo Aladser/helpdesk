@@ -40,7 +40,7 @@ class ServerWebsocket implements MessageComponentInterface
 
         switch ($request_data->type) {
             case 'onconnection':
-                // добавление пользователя в список подключений
+                // новое подключение
                 $this->joined_users_id_arr[$request_data->user_login] = $request_data->resourceId;
                 if ($request_data->user_role == 'executor') {
                     $this->joined_executors_conn_arr[$request_data->user_login] = $from;
@@ -52,8 +52,14 @@ class ServerWebsocket implements MessageComponentInterface
                     return;
                 }
                 break;
+            case 'new-task':
+                // новая задача
+                foreach ($this->joined_executors_conn_arr as $executor) {
+                    $executor->send($message);
+                }
+                break;
             default:
-                echo "$message\n";
+                var_dump($request_data);
         }
     }
 

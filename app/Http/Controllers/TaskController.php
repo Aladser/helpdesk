@@ -76,7 +76,7 @@ class TaskController extends Controller
                 // исполнитель: !все+мои
                 $task_arr = Task::where('status_id', $this->task_filters[$task_status])->where('executor_id', $auth_user->id)->orderBy('updated_at', 'desc')->get();
             } elseif ($auth_user->role->name == 'author') {
-                // автор: !все+
+                // автор: все авторские
                 $task_arr = Task::where('status_id', $this->task_filters[$task_status])->where('author_id', $auth_user->id)->orderBy('updated_at', 'desc')->get();
             } else {
                 // !все
@@ -85,6 +85,7 @@ class TaskController extends Controller
         }
 
         $request_data = [
+            'type' => 'new-task',
             'tasks' => $task_arr,
             'table_headers' => ['ID', 'Тема', 'Постановщик', 'Создана', 'Исполнитель', 'Статус', 'Посл.активность'],
             'user_role' => $auth_user->role->name,
@@ -198,12 +199,12 @@ class TaskController extends Controller
         // отправка информации в вебсокет
         if ($is_stored) {
             WebsocketService::send([
+                'type' => 'new-task',
                 'id' => $task->id,
                 'header' => $data['header'],
                 'author_name' => Auth::user()->short_full_name,
                 'created_at' => $task->created_at,
                 'updated_at' => $task->updated_at,
-                'status' => 'new',
             ]);
         }
 
