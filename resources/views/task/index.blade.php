@@ -1,5 +1,5 @@
 <x-app-layout>
-    <?php //-----подключение секций в blade-шаблон-----?>
+    <?php // -----подключение секций в blade-шаблон-----?>
     @section('title')
     <x-title></x-title>
     @endsection
@@ -10,7 +10,7 @@
     
     @section('meta')
     <x-meta name='login'>{{ Auth::user()->login }}</x-meta>
-    <x-meta name='websocket'>ws://{{env('WEBSOCKET_IP')}}:{{env('WEBSOCKET_PORT')}}</x-meta>
+    <x-meta name='websocket'>{{env('WEBSOCKET_ADDR')}}</x-meta>
     @endsection
     
     @section('css')

@@ -27,6 +27,9 @@ class IndexClientWebsocket extends ClientWebsocket {
                     server_data.user_login = this.user_login;
                     server_data.user_role = this.user_role;
                     this.sendData(server_data);
+                    break;
+                default:
+                    console.log(server_data);
             }
         } catch (e) {
             console.log(e);
