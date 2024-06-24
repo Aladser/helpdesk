@@ -42,6 +42,8 @@ class ServerWebsocket implements MessageComponentInterface
                     'role' => $request_data->user_role,
                 ];
                 break;
+            default:
+                var_dump($request_data);
         }
 
         $this->log($from->resourceId, $message);

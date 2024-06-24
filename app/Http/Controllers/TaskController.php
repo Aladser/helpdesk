@@ -192,7 +192,19 @@ class TaskController extends Controller
         $task->author_id = Auth::user()->id;
         $task->header = $data['header'];
         $task->content = $data['content'];
-        $task->save();
+        $is_stored = $task->save();
+
+        // отправка информации в вебсокет
+        if ($is_stored) {
+            ServerWebsocket::send([
+                'id' => $task->id,
+                'header' => $data['header'],
+                'author_name' => Auth::user()->short_full_name,
+                'created_at' => $task->created_at,
+                'updated_at' => $task->updated_at,
+                'status' => 'new',
+            ]);
+        }
 
         return redirect()->route('task.show', $task->id);
     }
