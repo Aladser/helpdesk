@@ -9,45 +9,53 @@ use Ratchet\MessageComponentInterface;
 class ServerWebsocket implements MessageComponentInterface
 {
     // хранение всех подключенных пользователей
-    private \SplObjectStorage $clients;
-
-    public function __construct()
-    {
-        $this->clients = new \SplObjectStorage();
-    }
+    private $join_users_arr = [];
+    private $join_users_conn_arr = [];
 
     public function onOpen(ConnectionInterface $conn)
     {
-        // добавление клиента
-        $this->clients->attach($conn);
-        
-        // запрос имени пользователя 
-        $message = json_encode(['type'=>'onconnection', 'resourceId' => $conn->resourceId]);
+        // запрос имени пользователя
+        $message = json_encode(['type' => 'onconnection', 'resourceId' => $conn->resourceId]);
         $conn->send($message);
 
-        $date = date('d-m-Y h:i');
-        echo "$date: {$conn->resourceId} - cоединение установлено\n";
+        $this->log($conn->resourceId, 'cоединение установлено');
     }
 
     public function onClose(ConnectionInterface $conn)
     {
-        // удаление клиента
-        $this->clients->detach($conn);
-        
-        $date = date('d-m-Y h:i');
-        echo "$date: {$conn->resourceId} - cоединение закрыто\n";
+        $user_login = array_search($conn->resourceId, $this->join_users_arr);
+        unset($this->join_users_arr[$user_login]);
+        unset($this->join_users_conn_arr[$user_login]);
+
+        $this->log($conn->resourceId, 'cоединение закрыто');
     }
 
     public function onMessage(ConnectionInterface $from, $message)
     {
-        echo "$message\n";
         $request_data = json_decode($message);
+
+        switch ($request_data->type) {
+            case 'onconnection':
+                $this->join_users_arr[$request_data->user_login] = $request_data->resourceId;
+                $this->join_users_conn_arr[$request_data->user_login] = [
+                    'conn' => $from,
+                    'role' => $request_data->user_role,
+                ];
+                break;
+        }
+
+        $this->log($from->resourceId, $message);
     }
 
     public function onError(ConnectionInterface $conn, \Exception $e)
     {
         $conn->close();
+        $this->log($conn->resourceId, $e->getMessage());
+    }
+
+    private function log(int $id, string $text)
+    {
         $date = date('d-m-Y h:i');
-        echo "$date: ошибка - {$e->getMessage()}\n";
+        echo "$date: resourceId $id - $text\n";
     }
 }
