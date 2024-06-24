@@ -199,7 +199,7 @@ class TaskController extends Controller
         // отправка информации в вебсокет
         if ($is_stored) {
             WebsocketService::send([
-                'type' => 'new-task',
+                'type' => 'task-new',
                 'id' => $task->id,
                 'header' => $data['header'],
                 'author_name' => Auth::user()->short_full_name,

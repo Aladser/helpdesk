@@ -19,7 +19,12 @@ const WEBSOCKET_ADDRESS = document.querySelector("meta[name='websocket']").conte
 const USER_LOGIN = document.querySelector("meta[name='login']").content;
 const USER_ROLE = document.querySelector("meta[name='role']").content;
 const TABLE_NODE = document.querySelector('#task-table');
-const websocket = new IndexClientWebsocket(WEBSOCKET_ADDRESS, USER_LOGIN, USER_ROLE, TABLE_NODE);
+const TASK_FILTER_NODE = document.querySelector('#task-filter-form');
+const websocket = new IndexClientWebsocket(
+    WEBSOCKET_ADDRESS, 
+    USER_LOGIN, USER_ROLE, 
+    TABLE_NODE, TASK_FILTER_NODE
+);
 
 filter_switchers.forEach(switcher => switcher.onclick = get_tasks_page);
 if(belongs_filter_form) {

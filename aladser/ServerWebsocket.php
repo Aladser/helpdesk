@@ -52,11 +52,12 @@ class ServerWebsocket implements MessageComponentInterface
                     return;
                 }
                 break;
-            case 'new-task':
+            case 'task-new':
                 // новая задача
                 foreach ($this->joined_executors_conn_arr as $executor) {
                     $executor->send($message);
                 }
+                $this->log($from->resourceId, "новая задача \"$message\"");
                 break;
             default:
                 var_dump($request_data);
