@@ -90,20 +90,20 @@
                 @endif
             </div>
 
-            <table class="task-table shadow-md">
+            <table class="task-table shadow-md" id='task-table'>
                 <tr class='bg-dark-theme color-light-theme'>
-                    <td class='text-center'>{{$table_headers[0]}}</td>
-                    <td>{{$table_headers[1]}}</td>
+                    <th class='text-center py-2 border-e'>{{$table_headers[0]}}</th>
+                    <th class='py-2 border-e'>{{$table_headers[1]}}</th>
 
                     @if($user_role !== 'author')
-                    <td class='text-center'>{{$table_headers[2]}}</td>
+                    <th class='text-center py-2 border-e'>{{$table_headers[2]}}</th>
                     @endif
                     
                     @for ($i=3; $i<count($table_headers)-1; $i++)
-                    <td class='text-center'>{{$table_headers[$i]}}</td>
+                    <th class='text-center py-2 border-e'>{{$table_headers[$i]}}</th>
                     
                     @endfor
-                    <td class='text-center' title='Последняя активность'>{{$table_headers[6]}}</td>
+                    <th class='text-center' title='Последняя активность'>{{$table_headers[6]}}</th>
                 </tr>
                 @foreach ($tasks as $task)
                 <tr class='task-table__row' id="task-{{$task->id}}">

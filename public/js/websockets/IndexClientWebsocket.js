@@ -1,15 +1,12 @@
 /** Клиентский вебсокет индексной страницы*/
 class IndexClientWebsocket extends ClientWebsocket {
-    /**
-     * @param {*} websocket_url - адрес вебсокета
-     * @param {*} user_login - логин пользователя
-     */
-    constructor(websocket_url, user_login = null, user_role = null) {
+    constructor(websocket_url, user_login, user_role, tasks_table_node) {
         super(websocket_url);
-        // имя текущего пользователя
         this.user_login = user_login;
-        // роль текущего пользователя
         this.user_role = user_role;
+
+        this.tasks_table_node = tasks_table_node;
+        this.tasks_header_node = tasks_table_node.querySelector('tr');
     }
 
     onOpen(e) {
@@ -18,7 +15,6 @@ class IndexClientWebsocket extends ClientWebsocket {
         );
     }
 
-    // получение сообщений
     onMessage(e) {
         try {
             let server_data = JSON.parse(e.data);
@@ -29,11 +25,30 @@ class IndexClientWebsocket extends ClientWebsocket {
                     this.sendData(server_data);
                     break;
                 default:
-                    console.log(server_data);
+                    this.showMessage(server_data);
             }
         } catch (e) {
             console.log(e);
             alert("ошибка парсинга сообщения вебсокета");
         }
     }
+
+    showMessage(task_obj) {
+        let task_node = document.createElement('tr');
+        task_node.className = 'task-table__row';
+        task_node.id = 'task-'+task_obj.id;
+        task_node.innerHTML = `
+                <td class='text-center'>${task_obj.id}</td>
+                <td> 
+                    <a class='task-table__link' href="/task/${task_obj.id}" class='underline w-1/3 block h-full w-full'>${task_obj.header}</a> 
+                </td>
+                <td class='text-center'>${task_obj.author_name}</td>
+                <td class='text-center'>${task_obj.created_at}</td>
+                <td class='text-center'></td>
+                <td class='text-center font-semibold text-rose-600'>Новая</td>
+                <td class='text-center'>${task_obj.updated_at}</td>
+        `;
+        this.tasks_header_node.after(task_node);
+    }
 }
+

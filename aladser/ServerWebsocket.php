@@ -71,7 +71,6 @@ class ServerWebsocket implements MessageComponentInterface
 
     private function log(int $id, string $text)
     {
-        $date = date('d-m-Y h:i');
-        echo "$date: resourceId $id - $text\n";
+        echo date('d-m-Y h:i').": resourceId $id - $text\n";
     }
 }
