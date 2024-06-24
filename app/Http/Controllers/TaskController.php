@@ -7,6 +7,7 @@ use App\Models\Task;
 use App\Models\TaskStatus;
 use App\Models\User;
 use App\Models\UserRole;
+use App\Services\WebsocketService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -196,7 +197,7 @@ class TaskController extends Controller
 
         // отправка информации в вебсокет
         if ($is_stored) {
-            ServerWebsocket::send([
+            WebsocketService::send([
                 'id' => $task->id,
                 'header' => $data['header'],
                 'author_name' => Auth::user()->short_full_name,
