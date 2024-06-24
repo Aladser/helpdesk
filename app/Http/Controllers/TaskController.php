@@ -168,7 +168,7 @@ class TaskController extends Controller
         if ($is_updated) {
             WebsocketService::send([
                 'type' => $data['action'],
-                'task-id' => $task->id,
+                'id' => $task->id,
                 'updated_at' => $task->updated_at,
                 'author_login' => $executor->login,
             ]);
@@ -207,7 +207,7 @@ class TaskController extends Controller
         $is_updated = $task->save();
 
         // отправка информации в вебсокет
-        if (is_updated) {
+        if ($is_updated) {
             WebsocketService::send([
                 'type' => 'task-new',
                 'id' => $task->id,

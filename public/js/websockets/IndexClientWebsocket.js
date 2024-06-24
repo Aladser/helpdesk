@@ -5,6 +5,7 @@ class IndexClientWebsocket extends ClientWebsocket {
         this.user_login = user_login;
         this.user_role = user_role;
 
+        this.tasks_table_node = tasks_table_node;
         this.tasks_header_node = tasks_table_node.querySelector('tr');
         this.selected_filter = task_filter_node.querySelector('input:checked').value;
     }
@@ -26,21 +27,27 @@ class IndexClientWebsocket extends ClientWebsocket {
                     this.sendData(server_data);
                     break;
                 case 'task-new':
-                    console.log(server_data);
-                    if(this.selected_filter == 'new') {
-                        this.showMessage(server_data);
+                    if(this.selected_filter == 'new' || this.selected_filter == 'all') {
+                        this.showTask(server_data);
                     }
+                    break;
+                case 'take-task':
+                    this.updateTask(server_data);
+                    break;
+                case 'complete-task':
+                    this.completeTask(server_data);
                     break;
                 default:
                    console.log(server_data);
             }
         } catch (e) {
             console.log(e);
-            alert("ошибка парсинга сообщения вебсокета");
+            alert("Ошибка парсинга сообщения вебсокета");
         }
     }
 
-    showMessage(task_obj) {
+    // показать новую задачу
+    showTask(task_obj) {
         let task_node = document.createElement('tr');
         task_node.className = 'task-table__row';
         task_node.id = 'task-'+task_obj.id;
@@ -56,6 +63,24 @@ class IndexClientWebsocket extends ClientWebsocket {
             <td class='text-center'>${task_obj.updated_at}</td>
         `;
         this.tasks_header_node.after(task_node);
+    }
+
+    // задача взята в работу
+    updateTask(task_obj) {
+        let task_node = this.tasks_table_node.querySelector('#task-'+task_obj.id);
+        if(task_node) {
+            let task_status_node = task_node.querySelectorAll('td')[5];
+            task_status_node.textContent = 'В работе';
+            task_status_node.className = 'text-center font-semibold text-amber-500';
+        }
+    }
+
+    // завершена задача
+    completeTask(task_obj) {
+        let task_node = this.tasks_table_node.querySelector('#task-'+task_obj.id);
+        if(task_node) {
+            task_node.remove();
+        }
     }
 }
 
