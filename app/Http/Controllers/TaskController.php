@@ -165,19 +165,10 @@ class TaskController extends Controller
         }
 
         // отправка информации в вебсокет
-        if ($data['action'] == 'take-task') {
-            $status = 'process';
-        } elseif ($data['action'] == 'complete-task') {
-            $status = 'completed';
-        } else {
-            $status = false;
-        }
-
         if ($is_updated) {
             WebsocketService::send([
-                'type' => 'task-update',
-                'status' => $status,
-                'id' => $task->id,
+                'type' => $data['action'],
+                'task-id' => $task->id,
                 'updated_at' => $task->updated_at,
                 'author_login' => $executor->login,
             ]);
