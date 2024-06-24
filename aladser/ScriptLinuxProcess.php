@@ -55,7 +55,6 @@ class ScriptLinuxProcess
      */
     public function clearLogs($bothFiles = true): void
     {
-        file_put_contents($this->pidsParseFile, '');
         if ($bothFiles) {
             file_put_contents($this->processLogFile, '');
         }
