@@ -142,15 +142,15 @@ class TaskController extends Controller
 
             $task->status_id = 2;
             $task->executor_id = $executor->id;
-            $isUpdated = $task->save();
+            $is_updated = $task->save();
         } elseif ($data['action'] == 'complete-task') {
             // выполнить задачу
 
             $is_report = false;
             $task->status_id = 3;
-            $isUpdated = $task->save();
+            $is_updated = $task->save();
 
-            if ($isUpdated) {
+            if ($is_updated) {
                 // сохранение отчета в комментариях
                 $is_report = true;
                 $comment = new Comment();
@@ -164,14 +164,33 @@ class TaskController extends Controller
             return ['is_updated' => false];
         }
 
+        // отправка информации в вебсокет
+        if ($data['action'] == 'take-task') {
+            $status = 'process';
+        } elseif ($data['action'] == 'complete-task') {
+            $status = 'completed';
+        } else {
+            $status = false;
+        }
+
+        if ($is_updated) {
+            WebsocketService::send([
+                'type' => 'task-update',
+                'status' => $status,
+                'id' => $task->id,
+                'updated_at' => $task->updated_at,
+                'author_login' => $executor->login,
+            ]);
+        }
+
         // ответ сервера
         $response_data = [
-            'is_updated' => $isUpdated,
+            'is_updated' => $is_updated,
             'is_assigned' => $is_assigned,
             'action' => $data['action'],
             'executor' => $executor->full_name,
         ];
-        if ($data['action'] == 'complete-task' && $isUpdated) {
+        if ($data['action'] == 'complete-task' && $is_updated) {
             $response_data['task_completed_report'] = $comment->content;
             $response_data['task_completed_date'] = Carbon::now()->format('d-m-Y H:i');
             $response_data['task_completed_is_report'] = $is_report;
@@ -194,10 +213,10 @@ class TaskController extends Controller
         $task->author_id = Auth::user()->id;
         $task->header = $data['header'];
         $task->content = $data['content'];
-        $is_stored = $task->save();
+        $is_updated = $task->save();
 
         // отправка информации в вебсокет
-        if ($is_stored) {
+        if (is_updated) {
             WebsocketService::send([
                 'type' => 'task-new',
                 'id' => $task->id,

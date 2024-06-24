@@ -26,6 +26,7 @@ class IndexClientWebsocket extends ClientWebsocket {
                     this.sendData(server_data);
                     break;
                 case 'task-new':
+                    console.log(server_data);
                     if(this.selected_filter == 'new') {
                         this.showMessage(server_data);
                     }
