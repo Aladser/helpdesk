@@ -1,5 +1,12 @@
 /** Клиентский вебсокет индексной страницы*/
 class IndexClientWebsocket extends ClientWebsocket {
+    /**цвет статуса*/
+    static task_status_colors = {
+        'Новая':'text-rose-600',
+        'В работе':'text-amber-500',
+        'Выполнена':'text-green-500',
+    };
+
     constructor(websocket_url, user_login, user_role, tasks_table_node, task_filter_node) {
         super(websocket_url);
         this.user_login = user_login;
@@ -19,7 +26,6 @@ class IndexClientWebsocket extends ClientWebsocket {
     onMessage(e) {
         try {
             let server_data = JSON.parse(e.data);
-            console.log(server_data);
 
             switch (server_data.type) {
                 case "onconnection":
@@ -54,10 +60,7 @@ class IndexClientWebsocket extends ClientWebsocket {
         if(task_node) {
             if(this.selected_filter == 'all') {
                 // 'все' + 'есть на странице'
-                let task_status_node = task_node.querySelectorAll('td')[5];
-                task_status_node.textContent = 'В работе';
-                task_status_node.className = 'text-center font-semibold text-amber-500';
-                task_node.querySelectorAll('td')[6].textContent = task_obj.updated_at;
+                this.update_task_node(task_node, task_obj, 'В работе');
             } else if(this.selected_filter == 'new') {
                 // 'новые' + 'есть на странице'
                 task_node.remove();
@@ -78,10 +81,7 @@ class IndexClientWebsocket extends ClientWebsocket {
                 task_node.remove();
             } else if(this.selected_filter == 'all') {
                 // 'все' + 'есть на странице'
-                let task_status_node = task_node.querySelectorAll('td')[5];
-                task_status_node.textContent = 'Выполнена';
-                task_status_node.className = 'text-center font-semibold text-green-500';
-                task_node.querySelectorAll('td')[6].textContent = task_obj.updated_at;
+                this.update_task_node(task_node, task_obj, 'Выполнена');
             }
         } else if(this.selected_filter == 'completed' && this.belongs_filter.value == 'all') {
             // 'завершена'
@@ -89,20 +89,10 @@ class IndexClientWebsocket extends ClientWebsocket {
         }
     }
 
-    // создание элемента задачи
+    // создает элемент задачи
     create_task_node(task_obj, status) {
         // статус задачи
-        let status_classname = false;
-        if(status == 'Новая') {
-            status_classname = 'text-rose-600';
-        } else if(status == 'В работе') {
-            status_classname = 'text-amber-500';
-        } else if(status == 'Выполнена'){
-            status_classname = 'text-green-500';
-        } else {
-            console.log(`status ${status} не найден`);
-            return;
-        }
+        let status_classname = IndexClientWebsocket.task_status_colors[status];
         let executor_name = task_obj.executor_name ? task_obj.executor_name : '';
 
         let task_node = document.createElement('tr');
@@ -121,6 +111,18 @@ class IndexClientWebsocket extends ClientWebsocket {
         `;
 
         this.tasks_table_node.querySelector('tr').after(task_node);
+    }
+
+    // обновляет элемент задачи
+    update_task_node(task_node, task_obj, status) {
+        task_node.querySelectorAll('td')[4].textContent = task_obj.executor_name;
+
+        let status_classname = IndexClientWebsocket.task_status_colors[status];
+        let task_status_node = task_node.querySelectorAll('td')[5];
+        task_status_node.textContent = status;
+        task_status_node.className = 'text-center font-semibold ' + status_classname;
+
+        task_node.querySelectorAll('td')[6].textContent = task_obj.updated_at;
     }
 }
 
