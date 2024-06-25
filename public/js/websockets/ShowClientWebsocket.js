@@ -1,17 +1,5 @@
 /** базовый класс клиентского вебсокета */
 class ShowClientWebsocket extends ClientWebsocket{
-    constructor(websocket_url, user_login, user_role) {
-        super(websocket_url);
-        this.user_login = user_login;
-        this.user_role = user_role;
-    }
-
-    onOpen(e) {
-        console.log(
-            `Соединение ${this.user_login} с вебсокетом ${this.websocket_addr} установлено.`
-        );
-    }
-    
     // получение сообщений
     onMessage(e) {
         try {

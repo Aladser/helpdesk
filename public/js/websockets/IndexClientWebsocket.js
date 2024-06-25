@@ -8,9 +8,7 @@ class IndexClientWebsocket extends ClientWebsocket {
     };
 
     constructor(websocket_url, user_login, user_role, tasks_table_node, task_filter_node) {
-        super(websocket_url);
-        this.user_login = user_login;
-        this.user_role = user_role;
+        super(websocket_url, user_login, user_role);
 
         this.tasks_table_node = tasks_table_node;
         this.selected_filter = task_filter_node.querySelector('input:checked').value;
@@ -21,12 +19,6 @@ class IndexClientWebsocket extends ClientWebsocket {
             this.belongs_filter = belongs_filter_form.belongs;
         }
 
-    }
-
-    onOpen(e) {
-        console.log(
-            `Соединение ${this.user_login} с вебсокетом ${this.websocket_addr} установлено.`
-        );
     }
 
     onMessage(e) {

@@ -1,6 +1,9 @@
 /** базовый класс клиентского вебсокета */
 class ClientWebsocket {
-    constructor(websocket_url) {
+    constructor(websocket_url, user_login, user_role) {
+        this.user_login = user_login;
+        this.user_role = user_role;
+        
         this.websocket_addr = websocket_url;
         this.websocket = new WebSocket(websocket_url);
         this.websocket.onerror = (e) => this.onError(e);
@@ -9,7 +12,9 @@ class ClientWebsocket {
     }
 
     onOpen(e) {
-        console.log(`Соединение с вебсокетом ${this.websocket_addr} установлено.`);
+        console.log(
+            `Соединение ${this.user_login} с вебсокетом ${this.websocket_addr} установлено.`
+        );
     }
 
     // получение ошибок вебсокета
