@@ -54,17 +54,19 @@ class ServerWebsocket implements MessageComponentInterface
                         return;
                     }
 
-                    return;
+                    break;
                 case 'task-new':
                     // новая задача
                     $this->log($from->resourceId, "новая задача = $message");
                     break;
                 case 'take-task':
                     // принята задача
+                    $this->sendMessageToAuthor($request_data->author_login, $message);
                     $this->log($from->resourceId, "задача взята в работу = $message");
                     break;
                 case 'complete-task':
                     // выполнена задача
+                    $this->sendMessageToAuthor($request_data->author_login, $message);
                     $this->log($from->resourceId, "завершена задача = $message");
                     break;
                 case 'comment-new':
@@ -76,7 +78,7 @@ class ServerWebsocket implements MessageComponentInterface
                     $this->sendMessageToAuthor($request_data->author_login, $message);
                     $this->log($from->resourceId, "добавлен комментарий = $message");
 
-                    return;
+                    break;
                 default:
                     var_dump($request_data);
             }

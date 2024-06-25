@@ -117,20 +117,20 @@
                     <td class='text-center'> {{$task->created_at}} </td>
                     
                     @if ($task->executor)
-                    <td class='text-center'> {{$task->executor->short_full_name}}</td>
+                    <td class='task-table__executor text-center'> {{$task->executor->short_full_name}}</td>
                     @else
-                    <td class='text-center'></td>
+                    <td class='task-table__executor text-center'></td>
                     @endif
                     
                     @if($task->status->name == 'new' & !$is_tasks_process)
-                    <td class='text-center font-semibold text-rose-600'>{{$task->status->description}}</td>
+                    <td class='task-table__status text-center font-semibold text-rose-600'>{{$task->status->description}}</td>
                     @elseif($task->status->name == 'process' || $is_tasks_process)
-                    <td class='text-center font-semibold text-amber-500'>{{$task->status->description}}</td>
+                    <td class='task-table__status text-center font-semibold text-amber-500'>{{$task->status->description}}</td>
                     @elseif($task->status->name == 'completed')
-                    <td class='text-center font-semibold text-green-500'>{{$task->status->description}}</td>
+                    <td class='task-table__status text-center font-semibold text-green-500'>{{$task->status->description}}</td>
                     @endif
 
-                    <td class='text-center'> {{$task->updated_at}} </td>
+                    <td class='task-table__updated_at text-center'> {{$task->updated_at}} </td>
                 </tr>
                 @endforeach
             </table>

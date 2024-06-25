@@ -139,7 +139,7 @@ class TaskController extends Controller
         // работает только с CSRF-токеном, PUT-запрос можно отправить только из JS
         $task = Task::find($id);
         $data = $request->all();
-        $author_name = User::find($task->author_id)->short_full_name;
+        $author = User::find($task->author_id);
 
         // проверка на наличие назначения заявки другим пользователем
         if (is_null($data['assigned_person'])) {
@@ -185,7 +185,8 @@ class TaskController extends Controller
                 'header' => $task->header,
                 'created_at' => $task->created_at,
                 'updated_at' => $task->updated_at,
-                'author_name' => $author_name,
+                'author_name' => $author->short_full_name,
+                'author_login' => $author->login,
                 'executor_name' => $executor->short_full_name,
             ]);
         }

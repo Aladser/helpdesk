@@ -24,6 +24,7 @@ class IndexClientWebsocket extends ClientWebsocket {
     onMessage(e) {
         try {
             let server_data = JSON.parse(e.data);
+            console.log(server_data);
 
             switch (server_data.type) {
                 case "onconnection":
@@ -103,9 +104,9 @@ class IndexClientWebsocket extends ClientWebsocket {
             </td>
             <td class='text-center'>${task_obj.author_name}</td>
             <td class='text-center'>${task_obj.created_at}</td>
-            <td class='text-center'>${executor_name}</td>
-            <td class='text-center font-semibold ${status_classname}'>${status}</td>
-            <td class='text-center'>${task_obj.updated_at}</td>
+            <td class='task-table__executor text-center'>${executor_name}</td>
+            <td class='task-table__status text-center font-semibold ${status_classname}'>${status}</td>
+            <td class='task-table__updated_at text-center'>${task_obj.updated_at}</td>
         `;
 
         this.tasks_table_node.querySelector('tr').after(task_node);
@@ -113,14 +114,14 @@ class IndexClientWebsocket extends ClientWebsocket {
 
     // обновляет элемент задачи
     update_task_node(task_node, task_obj, status) {
-        task_node.querySelectorAll('td')[4].textContent = task_obj.executor_name;
+        task_node.querySelector('.task-table__executor').textContent = task_obj.executor_name;
 
         let status_classname = IndexClientWebsocket.task_status_colors[status];
-        let task_status_node = task_node.querySelectorAll('td')[5];
+        let task_status_node = task_node.querySelector('.task-table__status');
         task_status_node.textContent = status;
-        task_status_node.className = 'text-center font-semibold ' + status_classname;
+        task_status_node.classList.add(status_classname);
 
-        task_node.querySelectorAll('td')[6].textContent = task_obj.updated_at;
+        task_node.querySelector('.task-table__updated_at').textContent = task_obj.updated_at;
     }
 }
 
