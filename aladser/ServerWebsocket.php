@@ -73,11 +73,7 @@ class ServerWebsocket implements MessageComponentInterface
                     if ($executor_conn) {
                         $executor_conn->send($message);
                     }
-                    $author_conn = $this->joined_authors_conn_arr[$request_data->author_login];
-                    if ($author_conn) {
-                        $author_conn->send($message);
-                    }
-
+                    $this->sendMessageToAuthor($request_data->author_login, $message);
                     $this->log($from->resourceId, "добавлен комментарий = $message");
 
                     return;
@@ -103,5 +99,14 @@ class ServerWebsocket implements MessageComponentInterface
     private function log(int $id, string $text)
     {
         echo date('d-m-Y h:i').": resourceId $id - $text\n";
+    }
+
+    // оправляет сообщение постановщику
+    private function sendMessageToAuthor($author_login, $message)
+    {
+        $author_conn = $this->joined_authors_conn_arr[$author_login];
+        if ($author_conn) {
+            var_dump($author_conn->send($message));
+        }
     }
 }
