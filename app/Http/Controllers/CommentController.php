@@ -35,22 +35,24 @@ class CommentController extends Controller
 
         $data['message'] = str_replace(PHP_EOL, '<br>', $data['message']);
         $data['created_at'] = $data['created_at']->format('d-m-Y H:i');
-        unset($data['_token']);
-        unset($data['task_id']);
 
         // отправка информации в вебсокет
         if ($data['is_stored']) {
             WebsocketService::send([
                 'type' => 'comment-new',
-                'time' => $data['created_at'],
+                'created_at' => $data['created_at'],
                 'author_name' => $data['author_name'],
                 'author_role' => $data['author_role'],
                 'author_login' => User::find($task->author_id)->login,
                 'executor_login' => User::find($task->executor_id)->login,
-                'content' => $comment->content,
-                'task_id' => $comment->task_id,
+                'content' => $data['message'],
+                'task_id' => $data['task_id'],
+                'is_report' => $data['is_report'] ?? false,
             ]);
         }
+
+        unset($data['_token']);
+        unset($data['task_id']);
 
         return $data;
     }

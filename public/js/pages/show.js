@@ -7,6 +7,7 @@ let appoint_task_btn = task_node.querySelector("#btn-reassign-task");
 
 let new_comment_form = document.querySelector("#new-cmt-form");
 let new_comment_form_textarea = new_comment_form.querySelector("#new-comment-form__textarea");
+/**блок комментариев*/
 let comment_list_block = document.querySelector("#cmt-list-block");
 let new_comment_form_block = document.querySelector("#new-cmt-form-block");
 
@@ -43,11 +44,12 @@ Array.from(document.querySelectorAll('#reassign-user-form__select option')).forE
 })
 //-------------------------------------------------------------------------------------------
 
+
 /**адрес вебсокета*/
 const WEBSOCKET_ADDRESS = document.querySelector("meta[name='websocket']").content;
 const USER_LOGIN = document.querySelector("meta[name='login']").content;
 const USER_ROLE = document.querySelector("meta[name='role']").content;
-const websocket = new ShowClientWebsocket(WEBSOCKET_ADDRESS, USER_LOGIN, USER_ROLE);
+const websocket = new ShowClientWebsocket(WEBSOCKET_ADDRESS, USER_LOGIN, USER_ROLE, comment_list_block);
 
 
 // выбран специалист для назначения задачи
