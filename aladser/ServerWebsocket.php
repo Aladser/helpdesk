@@ -83,8 +83,10 @@ class ServerWebsocket implements MessageComponentInterface
                     var_dump($request_data);
             }
             if (in_array($request_data->type, ['task-new', 'take-task', 'complete-task'])) {
-                foreach ($this->joined_executors_conn_arr as $executor) {
-                    $executor->send($message);
+                foreach ($this->joined_executors_conn_arr as $login => $conn) {
+                    if($login != $request_data->executor_login ) {
+                        $conn->send($message);
+                    }
                 }
             }
         } catch (\Exception $e) {

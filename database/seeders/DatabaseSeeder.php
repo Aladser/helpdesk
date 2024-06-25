@@ -14,7 +14,6 @@ class DatabaseSeeder extends Seeder
         $userSeeder = new UserSeeder();
         $task_statusSeeder = new TaskStatusSeeder();
         $taskSeeder = new TaskSeeder();
-        $commentSeeder = new CommentSeeder();
 
         $userRoleSeeder->run();
         $userStatusSeeder->run();
@@ -22,6 +21,5 @@ class DatabaseSeeder extends Seeder
 
         $task_statusSeeder->run();
         $taskSeeder->run();
-        $commentSeeder->run();
     }
 }

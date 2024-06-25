@@ -188,6 +188,7 @@ class TaskController extends Controller
                 'author_name' => $author->short_full_name,
                 'author_login' => $author->login,
                 'executor_name' => $executor->short_full_name,
+                'executor_login' => $executor->login,
             ]);
         }
 
@@ -200,7 +201,7 @@ class TaskController extends Controller
         ];
         if ($data['action'] == 'complete-task' && $is_updated) {
             $response_data['task_completed_report'] = $comment->content;
-            $response_data['task_completed_date'] = Carbon::now()->format('d-m-Y H:i');
+            $response_data['task_completed_date'] = $task->updated_at;
             $response_data['task_completed_is_report'] = $is_report;
             $response_data['executor_short_full_name'] = $executor->short_full_name;
         }
