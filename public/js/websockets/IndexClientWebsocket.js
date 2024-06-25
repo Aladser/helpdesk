@@ -24,7 +24,7 @@ class IndexClientWebsocket extends ClientWebsocket {
     onMessage(e) {
         try {
             let server_data = JSON.parse(e.data);
-            console.log(server_data);
+            //console.log(server_data);
 
             switch (server_data.type) {
                 case "onconnection":
