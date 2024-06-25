@@ -34,14 +34,14 @@ class IndexClientWebsocket extends ClientWebsocket {
                     break;
                 case 'task-new':
                     if(['new','all'].includes(this.selected_filter)) {
-                        this.create_task_node(server_data, 'Новая');
+                        this.createTaskNode(server_data, 'Новая');
                     }
                     break;
                 case 'take-task':
-                    this.updateTask(server_data);
+                    this.showUpdateTask(server_data);
                     break;
                 case 'complete-task':
-                    this.completeTask(server_data);
+                    this.showCompleteTask(server_data);
                     break;
                 default:
                    console.log(server_data);
@@ -53,13 +53,13 @@ class IndexClientWebsocket extends ClientWebsocket {
     }
 
     // задача взята в работу
-    updateTask(task_obj) {
+    showUpdateTask(task_obj) {
         let task_node = this.tasks_table_node.querySelector('#task-'+task_obj.id);
 
         if(task_node) {
             if(this.selected_filter == 'all') {
                 // 'все' + 'есть на странице'
-                this.update_task_node(task_node, task_obj, 'В работе');
+                this.updateTaskNode(task_node, task_obj, 'В работе');
             } else if(this.selected_filter == 'new') {
                 // 'новые' + 'есть на странице'
                 task_node.remove();
@@ -67,16 +67,16 @@ class IndexClientWebsocket extends ClientWebsocket {
         } else if(this.selected_filter == 'process' && this.belongs_filter) {
             // рабочие задачи исполнителя + все задачи
             if(this.belongs_filter.value == 'all') {
-                this.create_task_node(task_obj, 'В работе');
+                this.createTaskNode(task_obj, 'В работе');
             }
         } else if(this.selected_filter == 'process') {
             // рабочие задачи постановщика
-            this.create_task_node(task_obj, 'В работе');
+            this.createTaskNode(task_obj, 'В работе');
         }
     }
 
-    // завершена задача
-    completeTask(task_obj) {
+    /**показывает завершение задачи*/
+    showCompleteTask(task_obj) {
         let task_node = this.tasks_table_node.querySelector('#task-'+task_obj.id);
 
         if(task_node) {
@@ -85,21 +85,21 @@ class IndexClientWebsocket extends ClientWebsocket {
                 task_node.remove();
             } else if(this.selected_filter == 'all') {
                 // 'все' + 'есть на странице'
-                this.update_task_node(task_node, task_obj, 'Выполнена');
+                this.updateTaskNode(task_node, task_obj, 'Выполнена');
             }
         } else if(this.selected_filter == 'completed' && this.belongs_filter) {
             // выполнены исполнителя + все
             if(this.belongs_filter.value == 'all') {
-                this.create_task_node(task_obj, 'Выполнена');
+                this.createTaskNode(task_obj, 'Выполнена');
             }
         } else if(this.selected_filter == 'completed') {
             // выполнены постановщика
-            this.create_task_node(task_obj, 'Выполнена');
+            this.createTaskNode(task_obj, 'Выполнена');
         }
     }
 
-    // создает элемент задачи
-    create_task_node(task_obj, status) {
+    /**создает элемент задачи*/
+    createTaskNode(task_obj, status) {
         // статус задачи
         let status_classname = IndexClientWebsocket.task_status_colors[status];
         let executor_name = task_obj.executor_name ? task_obj.executor_name : '';
@@ -115,6 +115,7 @@ class IndexClientWebsocket extends ClientWebsocket {
         `;
 
         if(this.user_role == 'executor') {
+            // показ постановщика исполнителям
             task_node_inner_html += `<td class='text-center'>${task_obj.author_name}</td>`;
         }
 
@@ -130,13 +131,13 @@ class IndexClientWebsocket extends ClientWebsocket {
     }
 
     // обновляет элемент задачи
-    update_task_node(task_node, task_obj, status) {
+    updateTaskNode(task_node, task_obj, status) {
         task_node.querySelector('.task-table__executor').textContent = task_obj.executor_name;
 
         let status_classname = IndexClientWebsocket.task_status_colors[status];
         let task_status_node = task_node.querySelector('.task-table__status');
         task_status_node.textContent = status;
-        task_status_node.classList.add(status_classname);
+        task_status_node.className = 'task-table__status text-center font-semibold ' + status_classname;
 
         task_node.querySelector('.task-table__updated_at').textContent = task_obj.updated_at;
     }
