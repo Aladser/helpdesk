@@ -41,7 +41,9 @@ class ServerWebsocket implements MessageComponentInterface
 
             switch ($request_data->type) {
                 case 'onconnection':
+                    // новое подключение
                     $this->joined_users_id_arr[$request_data->user_login] = $request_data->resourceId;
+
                     if ($request_data->user_role == 'executor') {
                         $this->joined_executors_conn_arr[$request_data->user_login] = $from;
                         $this->log($from->resourceId, "подключен исполнитель {$request_data->user_login}");
@@ -51,19 +53,34 @@ class ServerWebsocket implements MessageComponentInterface
                     } else {
                         return;
                     }
-                    break;
+
+                    return;
                 case 'task-new':
+                    // новая задача
                     $this->log($from->resourceId, "новая задача = $message");
                     break;
                 case 'take-task':
+                    // принята задача
                     $this->log($from->resourceId, "задача взята в работу = $message");
                     break;
                 case 'complete-task':
+                    // выполнена задача
                     $this->log($from->resourceId, "завершена задача = $message");
                     break;
                 case 'comment-new':
+                    // отправлен комментарий
+                    $executor_conn = $this->joined_executors_conn_arr[$request_data->executor_login];
+                    if ($executor_conn) {
+                        $executor_conn->send($message);
+                    }
+                    $author_conn = $this->joined_authors_conn_arr[$request_data->author_login];
+                    if ($author_conn) {
+                        $author_conn->send($message);
+                    }
+
                     $this->log($from->resourceId, "добавлен комментарий = $message");
-                    break;
+
+                    return;
                 default:
                     var_dump($request_data);
             }

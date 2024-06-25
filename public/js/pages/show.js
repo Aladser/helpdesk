@@ -43,6 +43,12 @@ Array.from(document.querySelectorAll('#reassign-user-form__select option')).forE
 })
 //-------------------------------------------------------------------------------------------
 
+/**адрес вебсокета*/
+const WEBSOCKET_ADDRESS = document.querySelector("meta[name='websocket']").content;
+const USER_LOGIN = document.querySelector("meta[name='login']").content;
+const USER_ROLE = document.querySelector("meta[name='role']").content;
+const websocket = new ShowClientWebsocket(WEBSOCKET_ADDRESS, USER_LOGIN, USER_ROLE);
+
 
 // выбран специалист для назначения задачи
 appoint_user_select.onchange = () => apply_appoint_user_btn.disabled = false;

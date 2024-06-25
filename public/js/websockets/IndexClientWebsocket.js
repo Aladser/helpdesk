@@ -14,7 +14,13 @@ class IndexClientWebsocket extends ClientWebsocket {
 
         this.tasks_table_node = tasks_table_node;
         this.selected_filter = task_filter_node.querySelector('input:checked').value;
-        this.belongs_filter = document.querySelector("#belongs-filter-form").belongs;
+        
+        // фильтр типа заявок для исполнителей
+        let belongs_filter_form = document.querySelector("#belongs-filter-form");
+        if(belongs_filter_form) {
+            this.belongs_filter = belongs_filter_form.belongs;
+        }
+
     }
 
     onOpen(e) {
