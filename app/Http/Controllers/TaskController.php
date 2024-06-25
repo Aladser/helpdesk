@@ -134,9 +134,9 @@ class TaskController extends Controller
         return view('task.show', $request_data);
     }
 
-    // работает только с CSRF-токеном, PUT-запрос можно отправить только из JS
     public function update(Request $request, $id)
     {
+        // работает только с CSRF-токеном, PUT-запрос можно отправить только из JS
         $task = Task::find($id);
         $data = $request->all();
         $author_name = User::find($task->author_id)->short_full_name;
