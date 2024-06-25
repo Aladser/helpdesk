@@ -1,6 +1,6 @@
 /** Клиентский вебсокет индексной страницы*/
 class IndexClientWebsocket extends ClientWebsocket {
-    /**цвет статуса*/
+    //цвет статуса
     static task_status_colors = {
         'Новая':'text-rose-600',
         'В работе':'text-amber-500',
@@ -52,7 +52,7 @@ class IndexClientWebsocket extends ClientWebsocket {
         }
     }
 
-    // задача взята в работу
+    /**задача взята в работу*/
     showUpdateTask(task_obj) {
         let task_node = this.tasks_table_node.querySelector('#task-'+task_obj.id);
 
@@ -130,7 +130,7 @@ class IndexClientWebsocket extends ClientWebsocket {
         this.tasks_table_node.querySelector('tr').after(task_node);
     }
 
-    // обновляет элемент задачи
+    /**обновляет элемент задачи*/
     updateTaskNode(task_node, task_obj, status) {
         task_node.querySelector('.task-table__executor').textContent = task_obj.executor_name;
 
