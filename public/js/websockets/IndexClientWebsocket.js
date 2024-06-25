@@ -64,8 +64,13 @@ class IndexClientWebsocket extends ClientWebsocket {
                 // 'новые' + 'есть на странице'
                 task_node.remove();
             }
-        } else if(this.selected_filter == 'process' && this.belongs_filter.value == 'all') {
-            // 'в работе' + 'все' 
+        } else if(this.selected_filter == 'process' && this.belongs_filter) {
+            // рабочие задачи исполнителя + все задачи
+            if(this.belongs_filter.value == 'all') {
+                this.create_task_node(task_obj, 'В работе');
+            }
+        } else if(this.selected_filter == 'process') {
+            // рабочие задачи постановщика
             this.create_task_node(task_obj, 'В работе');
         }
     }
@@ -82,8 +87,13 @@ class IndexClientWebsocket extends ClientWebsocket {
                 // 'все' + 'есть на странице'
                 this.update_task_node(task_node, task_obj, 'Выполнена');
             }
-        } else if(this.selected_filter == 'completed' && this.belongs_filter.value == 'all') {
-            // 'завершена'
+        } else if(this.selected_filter == 'completed' && this.belongs_filter) {
+            // выполнены исполнителя + все
+            if(this.belongs_filter.value == 'all') {
+                this.create_task_node(task_obj, 'Выполнена');
+            }
+        } else if(this.selected_filter == 'completed') {
+            // выполнены постановщика
             this.create_task_node(task_obj, 'Выполнена');
         }
     }
@@ -97,18 +107,25 @@ class IndexClientWebsocket extends ClientWebsocket {
         let task_node = document.createElement('tr');
         task_node.className = 'task-table__row';
         task_node.id = 'task-'+task_obj.id;
-        task_node.innerHTML = `
+        let task_node_inner_html = `
             <td class='text-center'>${task_obj.id}</td>
             <td> 
                 <a class='task-table__link' href="/task/${task_obj.id}" class='underline w-1/3 block h-full w-full'>${task_obj.header}</a> 
             </td>
-            <td class='text-center'>${task_obj.author_name}</td>
+        `;
+
+        if(this.user_role == 'executor') {
+            task_node_inner_html += `<td class='text-center'>${task_obj.author_name}</td>`;
+        }
+
+        task_node_inner_html += `
             <td class='text-center'>${task_obj.created_at}</td>
             <td class='task-table__executor text-center'>${executor_name}</td>
             <td class='task-table__status text-center font-semibold ${status_classname}'>${status}</td>
             <td class='task-table__updated_at text-center'>${task_obj.updated_at}</td>
         `;
 
+        task_node.innerHTML = task_node_inner_html;
         this.tasks_table_node.querySelector('tr').after(task_node);
     }
 
