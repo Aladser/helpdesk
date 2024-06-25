@@ -53,13 +53,16 @@ class ServerWebsocket implements MessageComponentInterface
                     }
                     break;
                 case 'task-new':
-                    $this->log($from->resourceId, "новая задача \"$message\"");
+                    $this->log($from->resourceId, "новая задача = $message");
                     break;
                 case 'take-task':
-                    $this->log($from->resourceId, "задача взята в работу $message");
+                    $this->log($from->resourceId, "задача взята в работу = $message");
                     break;
                 case 'complete-task':
-                    $this->log($from->resourceId, "завершена задача $message");
+                    $this->log($from->resourceId, "завершена задача = $message");
+                    break;
+                case 'comment-new':
+                    $this->log($from->resourceId, "добавлен комментарий = $message");
                     break;
                 default:
                     var_dump($request_data);
