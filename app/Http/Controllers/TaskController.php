@@ -139,6 +139,7 @@ class TaskController extends Controller
     {
         $task = Task::find($id);
         $data = $request->all();
+        $author_name = User::find($task->author_id)->short_full_name;
 
         // проверка на наличие назначения заявки другим пользователем
         if (is_null($data['assigned_person'])) {
@@ -181,8 +182,11 @@ class TaskController extends Controller
             WebsocketService::send([
                 'type' => $data['action'],
                 'id' => $task->id,
+                'header' => $task->header,
+                'created_at' => $task->created_at,
                 'updated_at' => $task->updated_at,
-                'author_login' => $executor->login,
+                'author_name' => $author_name,
+                'executor_name' => $executor->short_full_name,
             ]);
         }
 
