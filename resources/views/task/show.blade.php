@@ -10,7 +10,8 @@
     @section('meta')
     <x-meta name='csrf-token'>{{csrf_token()}}</x-meta>
     <x-meta name='login'>{{ Auth::user()->login }}</x-meta>
-    <x-meta name='websocket'>ws://{{env('WEBSOCKET_IP')}}:{{env('WEBSOCKET_PORT')}}</x-meta>
+    <x-meta name='role'>{{ Auth::user()->role->name }}</x-meta>
+    <x-meta name='websocket'>{{$websocket_addr}}</x-meta>
     @endsection
     
     @section('css')
@@ -21,6 +22,8 @@
     <x-js-script>ServerRequest.js</x-js-script>
     <x-js-script>request_handlers/UpdateTaskStatusHandler.js</x-js-script>
     <x-js-script>request_handlers/StoreCommentHandler.js</x-js-script>
+    <x-js-script>websockets/ClientWebsocket.js</x-js-script>
+    <x-js-script>websockets/ShowClientWebsocket.js</x-js-script>
     <x-js-script>pages/show.js</x-js-script>
     @endsection
 

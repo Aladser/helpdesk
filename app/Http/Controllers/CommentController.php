@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Comment;
 use App\Models\Task;
+use App\Models\User;
+use App\Services\WebsocketService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -33,6 +35,22 @@ class CommentController extends Controller
 
         $data['message'] = str_replace(PHP_EOL, '<br>', $data['message']);
         $data['created_at'] = $data['created_at']->format('d-m-Y H:i');
+
+        // отправка информации в вебсокет
+        if ($data['is_stored']) {
+            WebsocketService::send([
+                'type' => 'comment-new',
+                'created_at' => $data['created_at'],
+                'author_name' => $data['author_name'],
+                'author_role' => $data['author_role'],
+                'author_login' => User::find($task->author_id)->login,
+                'executor_login' => User::find($task->executor_id)->login,
+                'content' => $data['message'],
+                'task_id' => $data['task_id'],
+                'is_report' => $data['is_report'] ?? false,
+            ]);
+        }
+
         unset($data['_token']);
         unset($data['task_id']);
 

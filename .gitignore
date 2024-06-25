@@ -16,3 +16,5 @@ yarn-error.log
 
 access.log
 error.log
+logs/
+!logs/.gitignore

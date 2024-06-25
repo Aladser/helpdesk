@@ -13,24 +13,31 @@ let filter_switchers = new Map([
     ["process", document.querySelector("#task-filter-form__process")],
     ["completed", document.querySelector("#task-filter-form__completed")],
 ]);
+
 /**адрес вебсокета*/
 const WEBSOCKET_ADDRESS = document.querySelector("meta[name='websocket']").content;
 const USER_LOGIN = document.querySelector("meta[name='login']").content;
-const websocket = new IndexClientWebsocket(WEBSOCKET_ADDRESS, USER_LOGIN);
+const USER_ROLE = document.querySelector("meta[name='role']").content;
+const TABLE_NODE = document.querySelector('#task-table');
+const TASK_FILTER_NODE = document.querySelector('#task-filter-form');
+const websocket = new IndexClientWebsocket(
+    WEBSOCKET_ADDRESS, 
+    USER_LOGIN, USER_ROLE, 
+    TABLE_NODE, TASK_FILTER_NODE
+);
 
-filter_switchers.forEach(switcher => switcher.onclick = get_tasks_index);
+filter_switchers.forEach(switcher => switcher.onclick = get_tasks_page);
 if(belongs_filter_form) {
-    belongs_filter_form_select.onchange = get_tasks_index;
+    belongs_filter_form_select.onchange = get_tasks_page;
 }
 
 /**получить страницу задач */
-function get_tasks_index() {
+function get_tasks_page() {
+    let task_type_value = filter_form.querySelector("input:checked").value;
     if(belongs_filter_form) {
-        let task_type = filter_form.querySelector("input:checked").value;
-        let task_belongs = belongs_filter_form.belongs.value;
-        window.open(`/task?type=${task_type}&belongs=${task_belongs}`, '_self');
+        let task_belongs_value = belongs_filter_form.belongs.value;
+        window.open(`/task?type=${task_type_value}&belongs=${task_belongs_value}`, '_self');
     } else{
-        let task_type = filter_form.querySelector("input:checked").value;
-        window.open(`/task?type=${task_type}`, '_self');  
+        window.open(`/task?type=${task_type_value}`, '_self');  
     }
 }

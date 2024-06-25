@@ -1,5 +1,5 @@
 <x-app-layout>
-    <?php //-----подключение секций в blade-шаблон-----?>
+    <?php // -----подключение секций в blade-шаблон-----?>
     @section('title')
     <x-title></x-title>
     @endsection
@@ -10,7 +10,8 @@
     
     @section('meta')
     <x-meta name='login'>{{ Auth::user()->login }}</x-meta>
-    <x-meta name='websocket'>ws://{{env('WEBSOCKET_IP')}}:{{env('WEBSOCKET_PORT')}}</x-meta>
+    <x-meta name='role'>{{ Auth::user()->role->name }}</x-meta>
+    <x-meta name='websocket'>{{$websocket_addr}}</x-meta>
     @endsection
     
     @section('css')
@@ -89,20 +90,20 @@
                 @endif
             </div>
 
-            <table class="task-table shadow-md">
+            <table class="task-table shadow-md" id='task-table'>
                 <tr class='bg-dark-theme color-light-theme'>
-                    <td class='text-center'>{{$table_headers[0]}}</td>
-                    <td>{{$table_headers[1]}}</td>
+                    <th class='text-center py-2 border-e'>{{$table_headers[0]}}</th>
+                    <th class='py-2 border-e'>{{$table_headers[1]}}</th>
 
                     @if($user_role !== 'author')
-                    <td class='text-center'>{{$table_headers[2]}}</td>
+                    <th class='text-center py-2 border-e'>{{$table_headers[2]}}</th>
                     @endif
                     
                     @for ($i=3; $i<count($table_headers)-1; $i++)
-                    <td class='text-center'>{{$table_headers[$i]}}</td>
+                    <th class='text-center py-2 border-e'>{{$table_headers[$i]}}</th>
                     
                     @endfor
-                    <td class='text-center' title='Последняя активность'>{{$table_headers[6]}}</td>
+                    <th class='text-center' title='Последняя активность'>{{$table_headers[6]}}</th>
                 </tr>
                 @foreach ($tasks as $task)
                 <tr class='task-table__row' id="task-{{$task->id}}">
@@ -116,20 +117,20 @@
                     <td class='text-center'> {{$task->created_at}} </td>
                     
                     @if ($task->executor)
-                    <td class='text-center'> {{$task->executor->short_full_name}}</td>
+                    <td class='task-table__executor text-center'> {{$task->executor->short_full_name}}</td>
                     @else
-                    <td class='text-center'></td>
+                    <td class='task-table__executor text-center'></td>
                     @endif
                     
                     @if($task->status->name == 'new' & !$is_tasks_process)
-                    <td class='text-center font-semibold text-rose-600'>{{$task->status->description}}</td>
+                    <td class='task-table__status text-center font-semibold text-rose-600'>{{$task->status->description}}</td>
                     @elseif($task->status->name == 'process' || $is_tasks_process)
-                    <td class='text-center font-semibold text-amber-500'>{{$task->status->description}}</td>
+                    <td class='task-table__status text-center font-semibold text-amber-500'>{{$task->status->description}}</td>
                     @elseif($task->status->name == 'completed')
-                    <td class='text-center font-semibold text-green-500'>{{$task->status->description}}</td>
+                    <td class='task-table__status text-center font-semibold text-green-500'>{{$task->status->description}}</td>
                     @endif
 
-                    <td class='text-center'> {{$task->updated_at}} </td>
+                    <td class='task-table__updated_at text-center'> {{$task->updated_at}} </td>
                 </tr>
                 @endforeach
             </table>

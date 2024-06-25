@@ -7,6 +7,7 @@ use App\Models\Task;
 use App\Models\TaskStatus;
 use App\Models\User;
 use App\Models\UserRole;
+use App\Services\WebsocketService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -27,6 +28,12 @@ use Illuminate\Support\Facades\Auth;
 class TaskController extends Controller
 {
     private array $task_filters = ['new' => 1, 'process' => 2, 'completed' => 3];
+    private string $websocket_addr;
+
+    public function __construct()
+    {
+        $this->websocket_addr = WebsocketService::getWebsockerAddr();
+    }
 
     public function index(Request $request)
     {
@@ -75,7 +82,7 @@ class TaskController extends Controller
                 // исполнитель: !все+мои
                 $task_arr = Task::where('status_id', $this->task_filters[$task_status])->where('executor_id', $auth_user->id)->orderBy('updated_at', 'desc')->get();
             } elseif ($auth_user->role->name == 'author') {
-                // автор: !все+
+                // автор: все авторские
                 $task_arr = Task::where('status_id', $this->task_filters[$task_status])->where('author_id', $auth_user->id)->orderBy('updated_at', 'desc')->get();
             } else {
                 // !все
@@ -84,12 +91,14 @@ class TaskController extends Controller
         }
 
         $request_data = [
+            'type' => 'new-task',
             'tasks' => $task_arr,
             'table_headers' => ['ID', 'Тема', 'Постановщик', 'Создана', 'Исполнитель', 'Статус', 'Посл.активность'],
             'user_role' => $auth_user->role->name,
             'task_status' => $task_status,
             'tasks_belongs' => $tasks_belongs,
             'is_tasks_process' => $is_tasks_process,
+            'websocket_addr' => $this->websocket_addr,
         ];
 
         return view('task.index', $request_data);
@@ -110,7 +119,12 @@ class TaskController extends Controller
                 'content' => str_replace(PHP_EOL, '<br>', $comment->content),
             ];
         }
-        $request_data = ['auth_user' => $auth_user, 'task' => Task::find($id), 'comments' => $comments_arr];
+        $request_data = [
+            'auth_user' => $auth_user,
+            'task' => Task::find($id),
+            'comments' => $comments_arr,
+            'websocket_addr' => $this->websocket_addr,
+        ];
 
         // список исполнителей переадресации для исполнителя
         if ($auth_user->role->name !== 'author') {
@@ -120,11 +134,12 @@ class TaskController extends Controller
         return view('task.show', $request_data);
     }
 
-    // работает только с CSRF-токеном, PUT-запрос можно отправить только из JS
     public function update(Request $request, $id)
     {
+        // работает только с CSRF-токеном, PUT-запрос можно отправить только из JS
         $task = Task::find($id);
         $data = $request->all();
+        $author = User::find($task->author_id);
 
         // проверка на наличие назначения заявки другим пользователем
         if (is_null($data['assigned_person'])) {
@@ -140,15 +155,15 @@ class TaskController extends Controller
 
             $task->status_id = 2;
             $task->executor_id = $executor->id;
-            $isUpdated = $task->save();
+            $is_updated = $task->save();
         } elseif ($data['action'] == 'complete-task') {
             // выполнить задачу
 
             $is_report = false;
             $task->status_id = 3;
-            $isUpdated = $task->save();
+            $is_updated = $task->save();
 
-            if ($isUpdated) {
+            if ($is_updated) {
                 // сохранение отчета в комментариях
                 $is_report = true;
                 $comment = new Comment();
@@ -162,14 +177,28 @@ class TaskController extends Controller
             return ['is_updated' => false];
         }
 
+        // отправка информации в вебсокет
+        if ($is_updated) {
+            WebsocketService::send([
+                'type' => $data['action'],
+                'id' => $task->id,
+                'header' => $task->header,
+                'created_at' => $task->created_at,
+                'updated_at' => $task->updated_at,
+                'author_name' => $author->short_full_name,
+                'author_login' => $author->login,
+                'executor_name' => $executor->short_full_name,
+            ]);
+        }
+
         // ответ сервера
         $response_data = [
-            'is_updated' => $isUpdated,
+            'is_updated' => $is_updated,
             'is_assigned' => $is_assigned,
             'action' => $data['action'],
             'executor' => $executor->full_name,
         ];
-        if ($data['action'] == 'complete-task' && $isUpdated) {
+        if ($data['action'] == 'complete-task' && $is_updated) {
             $response_data['task_completed_report'] = $comment->content;
             $response_data['task_completed_date'] = Carbon::now()->format('d-m-Y H:i');
             $response_data['task_completed_is_report'] = $is_report;
@@ -192,7 +221,19 @@ class TaskController extends Controller
         $task->author_id = Auth::user()->id;
         $task->header = $data['header'];
         $task->content = $data['content'];
-        $task->save();
+        $is_updated = $task->save();
+
+        // отправка информации в вебсокет
+        if ($is_updated) {
+            WebsocketService::send([
+                'type' => 'task-new',
+                'id' => $task->id,
+                'header' => $data['header'],
+                'author_name' => Auth::user()->short_full_name,
+                'created_at' => $task->created_at,
+                'updated_at' => $task->updated_at,
+            ]);
+        }
 
         return redirect()->route('task.show', $task->id);
     }

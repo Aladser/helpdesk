@@ -25,9 +25,9 @@
                 <h3 class='text-center font-bold mb-4 text-lg'>Статистика исполнителей</h3>
                 <table class="stat-table w-100 mx-auto">
                     <tr class='bg-dark-theme color-light-theme w-100'>
-                        <td class='px-5 py-4 text-lg'>{{$table_headers[0]}}</td>
-                        <td class='text-center px-8 py-4 text-lg'>{{$table_headers[1]}}</td>
-                        <td class='text-center px-8 py-4 text-lg'>{{$table_headers[2]}}</td>
+                        <th class='px-5 py-2 text-lg'>{{$table_headers[0]}}</th>
+                        <th class='text-center px-8 py-2 text-lg'>{{$table_headers[1]}}</th>
+                        <th class='text-center px-8 py-2 text-lg'>{{$table_headers[2]}}</th>
                     </tr>
 
                     @foreach ($executors_stat_arr as $executor)

@@ -23,21 +23,7 @@ class StoreCommentHandler{
     /**обработать ответ сервера на Сохранить комментарий в БД*/
     handle(response) {
         let response_data = JSON.parse(response);
-        if (response_data.is_stored) {
-            let author_classname = "cmt-list-block__author ";
-            author_classname +=response_data.author_role == "executor" ? "color-lighter-theme": "text-amber-500";
-
-            let comment_node = document.createElement("p");
-            comment_node.className = 'cmt-list-block__comment';
-            comment_node.innerHTML = `
-                    <div>
-                        <div class='cmt-list-block__author ${author_classname}'>${response_data.author_name}</div>
-                        <div class='cmt-list-block__time'>${response_data.created_at}</div>
-                    </div>
-                    <div>${response_data.message}</div>
-            `;
-            this.comment_list_block.prepend(comment_node);
-            
+        if (response_data.is_stored) {    
             this.new_comment_form.message.value = "";
         }
     }

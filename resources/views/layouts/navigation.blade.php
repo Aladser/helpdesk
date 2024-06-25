@@ -19,7 +19,7 @@
                 @if(Auth::user()->role->name !== 'author')
                     <!-- Статистика -->
                     @if(route('statistic') == url()->current())
-                        <div class="h-full main-link shrink-0 flex items-center px-2 w-32 flex justify-center bg-darkest-theme" disabled>Статистика</div>
+                        <div class="h-full main-link shrink-0 flex items-center px-2 w-32 flex justify-center" disabled>Статистика</div>
                     @else
                         <a href="{{route('statistic')}}">
                             <div class="h-full main-link shrink-0 flex items-center px-2 w-32 flex justify-center">Статистика</div>
@@ -27,7 +27,7 @@
                     @endif
                     <!-- Настройки -->
                     @if(route('settings') == url()->current())
-                        <div class="h-full main-link shrink-0 flex items-center px-2 w-32 flex justify-center bg-darkest-theme">Настройки</div>
+                        <div class="h-full main-link shrink-0 flex items-center px-2 w-32 flex justify-center">Настройки</div>
                     @else
                         <a href="{{route('settings')}}">
                             <div class="h-full main-link shrink-0 flex items-center px-2 w-32 flex justify-center">Настройки</div>
