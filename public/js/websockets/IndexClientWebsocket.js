@@ -53,14 +53,17 @@ class IndexClientWebsocket extends ClientWebsocket {
 
         if(task_node) {
             if(this.selected_filter == 'all') {
+                // 'все' + 'есть на странице'
                 let task_status_node = task_node.querySelectorAll('td')[5];
                 task_status_node.textContent = 'В работе';
                 task_status_node.className = 'text-center font-semibold text-amber-500';
                 task_node.querySelectorAll('td')[6].textContent = task_obj.updated_at;
             } else if(this.selected_filter == 'new') {
+                // 'новые' + 'есть на странице'
                 task_node.remove();
             }
         } else if(this.selected_filter == 'process' && this.belongs_filter.value == 'all') {
+            // 'в работе' + 'все' 
             this.create_task_node(task_obj, 'В работе');
         }
     }
@@ -71,15 +74,18 @@ class IndexClientWebsocket extends ClientWebsocket {
 
         if(task_node) {
             if(this.selected_filter == 'process') {
+                // 'в работе' + 'есть на странице'
                 task_node.remove();
             } else if(this.selected_filter == 'all') {
+                // 'все' + 'есть на странице'
                 let task_status_node = task_node.querySelectorAll('td')[5];
                 task_status_node.textContent = 'Выполнена';
                 task_status_node.className = 'text-center font-semibold text-green-500';
                 task_node.querySelectorAll('td')[6].textContent = task_obj.updated_at;
-            } else if(this.selected_filter == 'completed') {
-                
             }
+        } else if(this.selected_filter == 'completed' && this.belongs_filter.value == 'all') {
+            // 'завершена'
+            this.create_task_node(task_obj, 'Выполнена');
         }
     }
 
@@ -94,6 +100,7 @@ class IndexClientWebsocket extends ClientWebsocket {
         } else if(status == 'Выполнена'){
             status_classname = 'text-green-500';
         } else {
+            console.log(`status ${status} не найден`);
             return;
         }
         let executor_name = task_obj.executor_name ? task_obj.executor_name : '';
