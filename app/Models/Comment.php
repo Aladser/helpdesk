@@ -22,6 +22,6 @@ class Comment extends Model
     // форматированная дата создания
     public function getCreatedAtAttribute($value)
     {
-        return Carbon::parse($value)->format('d-m-Y H:m');
+        return Carbon::parse($value)->format('d-m-Y H:i');
     }
 }

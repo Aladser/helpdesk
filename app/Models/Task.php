@@ -7,8 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Task extends Model
 {
-    public $timestamps = true;
-
     public function status()
     {
         return $this->belongsTo(TaskStatus::class, 'status_id', 'id');
@@ -32,12 +30,12 @@ class Task extends Model
     // форматированная дата создания
     public function getCreatedAtAttribute($value)
     {
-        return Carbon::parse($value)->format('d-m-Y H:m');
+        return Carbon::parse($value)->format('d-m-Y H:i');
     }
 
     // форматированная дата обновления
     public function getUpdatedAtAttribute($value)
     {
-        return Carbon::parse($value)->format('d-m-Y H:m');
+        return Carbon::parse($value)->format('d-m-Y H:i');
     }
 }

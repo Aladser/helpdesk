@@ -39,7 +39,7 @@
                 <p id='task__status' class='mb-2 text-green-500'>{{ $task->status->description }}</p>
                 @endif
                 
-                <p class='text-slate-400 italic' title='время создания'>{{$task->created_at}}</p>
+                <p class='text-slate-400 italic' title='время создания'>{{$task->updated_at}}</p>
             </div>
             
             <h3 class="font-semibold text-lg mb-4">{{$task->header}}</h3>
