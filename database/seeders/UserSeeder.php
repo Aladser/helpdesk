@@ -15,8 +15,7 @@ class UserSeeder extends Seeder
 
     public function run()
     {
-        $hash_password = Hash::make(12345678);
-        // Пароль: 12345678
+        $hash_password = Hash::make('_strongpassword_');
         User::create([
             'login' => 'admin',
             'role_id' => 1,
