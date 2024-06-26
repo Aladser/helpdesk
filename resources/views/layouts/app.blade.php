@@ -11,9 +11,11 @@
 
         <link rel="stylesheet" href="{{ asset('css/app.css') }}">
         <link rel="stylesheet" href="{{ asset('css/theme.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/general.css') }}">
         @yield('css')
         
         <script src="{{ asset('js/app.js') }}" defer></script>
+        <x-js-script>general.js</x-js-script>
         <script src="https://cdn.tailwindcss.com"></script>
         @yield('js')
     </head>
