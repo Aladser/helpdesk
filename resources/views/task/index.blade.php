@@ -90,6 +90,7 @@
                 @endif
             </div>
 
+
             <table class="task-table shadow-md" id='task-table'>
                 <tr class='bg-dark-theme color-light-theme'>
                     <th class='text-center py-2 border-e'>{{$table_headers[0]}}</th>
