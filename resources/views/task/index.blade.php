@@ -9,7 +9,6 @@
     @endsection
     
     @section('meta')
-    <x-meta name='login'>{{ Auth::user()->login }}</x-meta>
     <x-meta name='role'>{{ Auth::user()->role->name }}</x-meta>
     <x-meta name='websocket'>{{$websocket_addr}}</x-meta>
     @endsection

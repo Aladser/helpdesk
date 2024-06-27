@@ -18,10 +18,6 @@
                     <span class='inline-block w-32 text-xl'>роль</span> 
                     {{$auth_user->role->description}}
                 </p>
-                <p class='text-2xl'>
-                    <span class='inline-block w-32 text-xl'>статус</span> 
-                    {{$auth_user->status->description}}
-                </p>
             </div>
         </div>
     </div>

@@ -1,21 +1,36 @@
 const USER_STATUS_NODE = document.querySelector("#user-status");
+const USER_NAME_NODE = document.querySelector('meta[name="login"]');
 
-// Смена статуса при клике на элементе списка статусов
+// ----- СТАТУС ПОЛЬЗОВАТЕЛЯ -----
+// если пользователь - исполнитель
 if (USER_STATUS_NODE) {
-    const USER_STATUS_HEADER_NODE = USER_STATUS_NODE.querySelector(
-        "#user-status__header"
-    );
+    const USER_STATUS_HEADER_NODE = USER_STATUS_NODE.querySelector("#user-status__header");
 
-    let status_obj_arr = {
+    // проверка наличия пользователя в сессии браузера
+    let session_user_login = window.sessionStorage.getItem('user-login');
+    if(session_user_login) {
+        if(session_user_login == USER_NAME_NODE.content) {
+            USER_STATUS_HEADER_NODE.textContent =  window.sessionStorage.getItem('user-status');
+            USER_STATUS_HEADER_NODE.className = window.sessionStorage.getItem('user_status-classname');
+        }
+    } else {
+        USER_STATUS_HEADER_NODE.className = 'user-status-non-ready';
+    }
+
+    // установка статуса пользователем
+    let status_dict = {
         "ready": { name: "Готов", class_name: "user-status-ready" },
         "non-ready": { name: "Не готов", class_name: "user-status-non-ready" },
     };
-
     USER_STATUS_NODE.querySelectorAll(".user-status__item").forEach((elem) => {
-        elem.addEventListener("click", function (e) {
+        elem.addEventListener("click", function () {
+            // клик на статусе в выпадающем списке
             let status = this.getAttribute("value");
-            USER_STATUS_HEADER_NODE.textContent = status_obj_arr[status].name;
-            USER_STATUS_HEADER_NODE.className = status_obj_arr[status].class_name;
+            USER_STATUS_HEADER_NODE.textContent = status_dict[status].name;
+            USER_STATUS_HEADER_NODE.className = status_dict[status].class_name;
+            window.sessionStorage.setItem('user-login', USER_NAME_NODE.content);
+            window.sessionStorage.setItem('user-status', USER_STATUS_HEADER_NODE.textContent);
+            window.sessionStorage.setItem('user_status-classname', USER_STATUS_HEADER_NODE.className);
         });
     });
 }

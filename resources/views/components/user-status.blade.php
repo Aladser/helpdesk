@@ -2,7 +2,7 @@
     <x-dropdown align="right" width="48">
         <x-slot name="trigger">
             <button class="flex items-center text-sm font-medium focus:outline-none transition duration-150 ease-in-out color-theme ">
-                <div id='user-status__header' class='user-status-non-ready'>Не готов</div>
+                <div id='user-status__header'>Не готов</div>
 
                 <div class="ml-1 color-light-theme">
                     <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">

@@ -28,23 +28,25 @@ class IndexClientWebsocket extends ClientWebsocket {
 
             switch (server_data.type) {
                 case "onconnection":
+                    // установление соединения: отправка данных подключаемого пользователя
                     server_data.user_login = this.user_login;
                     server_data.user_role = this.user_role;
                     this.sendData(server_data);
                     break;
                 case 'task-new':
+                    // новая задача - стоят фильтры все, новые
                     if(['new','all'].includes(this.selected_filter)) {
                         this.createTaskNode(server_data, 'Новая');
                     }
                     break;
                 case 'take-task':
+                    // задача принтята в работу
                     this.showUpdateTask(server_data);
                     break;
                 case 'complete-task':
+                    // выполнена задача
                     this.showCompleteTask(server_data);
                     break;
-                default:
-                   console.log(server_data);
             }
         } catch (e) {
             console.log(e);

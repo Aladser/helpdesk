@@ -5,6 +5,7 @@
     0.05rem 0.05rem 0.1rem white,
     0 0 0.75rem rgb(0, 180, 0),
     0 0 1rem white;
+    font-weight: bolder;
 }
 .user-status-non-ready {
     color: rgb(248, 70, 70);
@@ -12,6 +13,7 @@
     0.05rem 0.05rem 0.1rem white,
     0 0 0.75rem rgb(255, 85, 85),
     0 0 1rem white;
+    font-weight: bolder;
 }
 .main-link:hover {
     background-color: var(--color-theme);

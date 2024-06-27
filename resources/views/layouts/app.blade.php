@@ -3,6 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name='login' content="{{ Auth::user()->login }}">
         <?php // подключение yield из blade?>
         @yield('meta')
 
@@ -15,8 +16,8 @@
         @yield('css')
         
         <script src="{{ asset('js/app.js') }}" defer></script>
-        <x-js-script>general.js</x-js-script>
         <script src="https://cdn.tailwindcss.com"></script>
+        <x-js-script>general.js</x-js-script>
         @yield('js')
     </head>
     <body class="font-sans antialiased">
