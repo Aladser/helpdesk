@@ -33,10 +33,6 @@ class IndexClientWebsocket extends ClientWebsocket {
                     server_data.user_role = this.user_role;
                     this.sendData(server_data);
                     break;
-                case 'connection-estabilished':
-                    // завершено установление соединения
-                    console.log(`Соединение ${server_data.user_login} с вебсокетом ${this.websocket_addr} установлено.`);
-                    break;
                 case 'task-new':
                     // новая задача - стоят фильтры все, новые
                     if(['new','all'].includes(this.selected_filter)) {

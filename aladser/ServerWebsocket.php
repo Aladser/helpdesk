@@ -47,13 +47,6 @@ class ServerWebsocket implements MessageComponentInterface
                     if ($request_data->user_role == 'executor') {
                         $this->joined_executors_conn_arr[$request_data->user_login] = $from;
                         $this->log($from->resourceId, "подключен исполнитель {$request_data->user_login}");
-
-                        // отправка клиенту исполнителя сообщение об установке соединения
-                        $connection_estabilished_message = [
-                            'type' => 'connection-estabilished',
-                            'user_login' => $request_data->user_login,
-                        ];
-                        $from->send(json_encode($connection_estabilished_message));
                     } elseif ($request_data->user_role == 'author') {
                         $this->joined_authors_conn_arr[$request_data->user_login] = $from;
                         $this->log($from->resourceId, "подключен постановщик {$request_data->user_login}");

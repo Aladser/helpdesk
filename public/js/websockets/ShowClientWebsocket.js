@@ -15,10 +15,6 @@ class ShowClientWebsocket extends ClientWebsocket{
                     server_data.user_role = this.user_role;
                     this.sendData(server_data);
                     break;
-                case 'connection-estabilished':
-                    // завершено установление соединения
-                    console.log(`Соединение ${server_data.user_login} с вебсокетом ${this.websocket_addr} установлено.`);
-                    break;
                 case 'comment-new':
                     this.createCommentNode(server_data)
                     break;
