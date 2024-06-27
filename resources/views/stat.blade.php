@@ -7,10 +7,6 @@
     <x-header>Статистика</x-header>
     @endsection
 
-    @section('meta')
-    <x-meta name='login'>{{ Auth::user()->login }}</x-meta>
-    @endsection
-    
     @section('css')
     <x-css-link>css/stat.css</x-css-link>
     @endsection
