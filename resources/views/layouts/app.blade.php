@@ -15,7 +15,6 @@
         @yield('css')
         
         <script src="{{ asset('js/app.js') }}" defer></script>
-        <x-js-script>general.js</x-js-script>
         <script src="https://cdn.tailwindcss.com"></script>
         @yield('js')
     </head>
@@ -25,5 +24,6 @@
             @yield('header')
             <main>{{ $slot }}</main>
         </div>
+        <x-js-script>general.js</x-js-script>
     </body>
 </html>

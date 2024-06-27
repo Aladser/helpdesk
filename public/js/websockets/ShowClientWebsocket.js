@@ -7,18 +7,21 @@ class ShowClientWebsocket extends ClientWebsocket{
     // получение сообщений
     onMessage(e) {
         try {
-            let server_data_obj = JSON.parse(e.data);
+            let server_data = JSON.parse(e.data);
 
-            switch (server_data_obj.type) {
+            switch (server_data.type) {
                 case "onconnection":
-                    server_data_obj.user_login = this.user_login;
-                    server_data_obj.user_role = this.user_role;
-                    this.sendData(server_data_obj);
+                    server_data.user_login = this.user_login;
+                    server_data.user_role = this.user_role;
+                    this.sendData(server_data);
+                    break;
+                case 'connection-estabilished':
+                    // завершено установление соединения
+                    console.log(`Соединение ${server_data.user_login} с вебсокетом ${this.websocket_addr} установлено.`);
                     break;
                 case 'comment-new':
-                    this.createCommentNode(server_data_obj)
-                default:
-                   console.log(server_data_obj);
+                    this.createCommentNode(server_data)
+                    break;
             }
         } catch (e) {
             console.log(e);

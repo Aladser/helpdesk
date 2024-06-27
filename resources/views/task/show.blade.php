@@ -30,7 +30,7 @@
     <div class="py-8 mx-4">
         <div id='task' class="max-w-7xl mx-auto sm:px-6 lg:px-8 p-4 bg-white shadow-md mb-4">
             <div class='flex justify-between mb-2 font-semibold'>
-                <!--статус-->
+                <!--статус задачи-->
                 @if($task->status->name == 'new')
                 <p id='task__status' class='mb-2 text-rose-600'>{{ $task->status->description }}</p>
                 @elseif($task->status->name == 'process')
@@ -39,7 +39,7 @@
                 <p id='task__status' class='mb-2 text-green-500'>{{ $task->status->description }}</p>
                 @endif
                 
-                <p class='text-slate-400 italic' title='время создания'>{{$task->created_at}}</p>
+                <p class='text-slate-400 italic'>cоздана: {{$task->created_at}}</p>
             </div>
             
             <h3 class="font-semibold text-lg mb-4">{{$task->header}}</h3>
