@@ -2,6 +2,7 @@
 
 namespace Aladser;
 
+use App\Services\ExecutorConnFileService;
 use Ratchet\ConnectionInterface;
 use Ratchet\MessageComponentInterface;
 
@@ -34,23 +35,9 @@ class ServerWebsocket implements MessageComponentInterface
         $user_login = array_search($conn->resourceId, $this->joined_users_id_arr);
         if ($this->joined_executors_conn_arr[$user_login]) {
             unset($this->joined_executors_conn_arr[$user_login]);
+            ExecutorConnFileService::remove_connection($user_login);
+
             $this->log($conn->resourceId, "отключен исполнитель $user_login");
-
-            // ***удаление подключения из файла***
-            $file_content = file_get_contents($this->executors_file);
-            $file_content_arr = explode("\n", $file_content);
-
-            foreach ($file_content_arr as $key => $value) {
-                if ($value == $user_login) {
-                    unset($file_content_arr[$key]);
-                } elseif ($value == '') {
-                    unset($file_content_arr[$key]);
-                }
-            }
-
-            $file_content = implode("\n", $file_content_arr);
-            $file_content .= $file_content != '' ? "\n" : '';
-
             file_put_contents($this->executors_file, $file_content);
         } elseif ($this->joined_authors_conn_arr[$user_login]) {
             unset($this->joined_authors_conn_arr[$user_login]);
@@ -71,15 +58,12 @@ class ServerWebsocket implements MessageComponentInterface
 
                     if ($request_data->user_role == 'executor') {
                         $this->joined_executors_conn_arr[$request_data->user_login] = $from;
-
-                        // ***запись подключения в файл***
-                        $file_content = file_get_contents($this->executors_file);
-                        $file_content .= $request_data->user_login."\n";
-                        file_put_contents($this->executors_file, $file_content);
+                        ExecutorConnFileService::write_connection($request_data->user_login);
 
                         $this->log($from->resourceId, "подключен исполнитель {$request_data->user_login}");
                     } elseif ($request_data->user_role == 'author') {
                         $this->joined_authors_conn_arr[$request_data->user_login] = $from;
+
                         $this->log($from->resourceId, "подключен постановщик {$request_data->user_login}");
                     } else {
                         return;
