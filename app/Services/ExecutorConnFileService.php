@@ -31,7 +31,7 @@ class ExecutorConnFileService
             }
         }
 
-        $file_content = implode("\n", $file_content_arr);
+        $file_content = implode(PHP_EOL, $file_content_arr)."\n";
         file_put_contents($file_path, $file_content);
     }
 

@@ -92,9 +92,9 @@ class ServerWebsocket implements MessageComponentInterface
                     var_dump($request_data);
             }
             if (in_array($request_data->type, ['task-new', 'take-task', 'complete-task'])) {
-                foreach ($this->joined_users_arr['executor'] as $login => $conn) {
-                    if ($login != $request_data->executor_login) {
-                        $conn->send($message);
+                foreach ($this->joined_users_arr['executor'] as $login => $user_conn) {
+                    if ($user_conn['login'] != $request_data->executor_login) {
+                        $user_conn['conn']->send($message);
                     }
                 }
             }
@@ -117,9 +117,11 @@ class ServerWebsocket implements MessageComponentInterface
     // оправляет сообщение постановщику
     private function sendMessageToAuthor($author_login, $message)
     {
-        $author_conn = $this->joined_users_arr['author'][$author_login];
-        if ($author_conn) {
-            $author_conn->send($message);
+        foreach ($this->joined_users_arr['author'] as $key => $userConn) {
+            if ($userConn['login'] == $author_login) {
+                $userConn['conn']->send($message);
+                break;
+            }
         }
     }
 }
