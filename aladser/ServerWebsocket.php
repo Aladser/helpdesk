@@ -28,16 +28,16 @@ class ServerWebsocket implements MessageComponentInterface
 
     public function onClose(ConnectionInterface $conn)
     {
-        $user_login = array_search($conn->resourceId, $this->joined_users_id_arr);
-        if ($this->joined_users_arr['executor'][$user_login]) {
-            unset($this->joined_users_arr['executor'][$user_login]);
-            ExecutorConnFileService::remove_connection($user_login);
-
-            $this->log($conn->resourceId, "отключен исполнитель $user_login");
-        } elseif ($this->joined_users_arr['author'][$user_login]) {
-            unset($this->joined_users_arr['author'][$user_login]);
-
-            $this->log($conn->resourceId, "отключен постановщик $user_login");
+        if ($this->joined_users_arr['executor'][$conn->resourceId]) {
+            // отключение исполнителя
+            $executor_conn = $this->joined_users_arr['executor'][$conn->resourceId];
+            ExecutorConnFileService::remove_connection($executor_conn['login']);
+            $this->log($conn->resourceId, "отключен исполнитель {$executor_conn['login']}");
+            unset($this->joined_users_arr['executor'][$conn->resourceId]);
+        } elseif ($this->joined_users_arr['author'][$conn->resourceId]) {
+            // отключение постановщика
+            $this->log($conn->resourceId, "отключен постановщик {$this->joined_users_arr['author'][$conn->resourceId]['login']}");
+            unset($this->joined_users_arr['author'][$conn->resourceId]);
         }
     }
 
@@ -49,9 +49,11 @@ class ServerWebsocket implements MessageComponentInterface
             switch ($request_data->type) {
                 case 'onconnection':
                     // новое подключение
-                    $this->joined_users_id_arr[$request_data->user_login] = $request_data->resourceId;
+                    $this->joined_users_arr[$request_data->user_role][$request_data->resourceId] = [
+                        'login' => $request_data->user_login,
+                        'conn' => $from,
+                    ];
 
-                    $this->joined_users_arr[$request_data->user_role][$request_data->user_login] = $from;
                     if ($request_data->user_role == 'executor') {
                         ExecutorConnFileService::write_connection($request_data->user_login);
                         $this->log($from->resourceId, "подключен исполнитель {$request_data->user_login}");
