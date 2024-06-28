@@ -2,6 +2,7 @@
 
 namespace Aladser;
 
+use App\Services\ExecutorConnFileService;
 use Ratchet\ConnectionInterface;
 use Ratchet\MessageComponentInterface;
 
@@ -10,12 +11,8 @@ class ServerWebsocket implements MessageComponentInterface
 {
     // массив подключенных пользователей
     private $joined_users_id_arr = [];
-    // массив исполнителей
-    private $joined_executors_conn_arr = [];
-    // массив постановищиков
-    private $joined_authors_conn_arr = [];
-
-    private string $executors_file;
+    // массив подключений
+    private array $joined_users_arr = [];
 
     public function __construct()
     {
@@ -32,28 +29,13 @@ class ServerWebsocket implements MessageComponentInterface
     public function onClose(ConnectionInterface $conn)
     {
         $user_login = array_search($conn->resourceId, $this->joined_users_id_arr);
-        if ($this->joined_executors_conn_arr[$user_login]) {
-            unset($this->joined_executors_conn_arr[$user_login]);
+        if ($this->joined_users_arr['executor'][$user_login]) {
+            unset($this->joined_users_arr['executor'][$user_login]);
+            ExecutorConnFileService::remove_connection($user_login);
+
             $this->log($conn->resourceId, "отключен исполнитель $user_login");
-
-            // ***удаление подключения из файла***
-            $file_content = file_get_contents($this->executors_file);
-            $file_content_arr = explode("\n", $file_content);
-
-            foreach ($file_content_arr as $key => $value) {
-                if ($value == $user_login) {
-                    unset($file_content_arr[$key]);
-                } elseif ($value == '') {
-                    unset($file_content_arr[$key]);
-                }
-            }
-
-            $file_content = implode("\n", $file_content_arr);
-            $file_content .= $file_content != '' ? "\n" : '';
-
-            file_put_contents($this->executors_file, $file_content);
-        } elseif ($this->joined_authors_conn_arr[$user_login]) {
-            unset($this->joined_authors_conn_arr[$user_login]);
+        } elseif ($this->joined_users_arr['author'][$user_login]) {
+            unset($this->joined_users_arr['author'][$user_login]);
 
             $this->log($conn->resourceId, "отключен постановщик $user_login");
         }
@@ -69,17 +51,11 @@ class ServerWebsocket implements MessageComponentInterface
                     // новое подключение
                     $this->joined_users_id_arr[$request_data->user_login] = $request_data->resourceId;
 
+                    $this->joined_users_arr[$request_data->user_role][$request_data->user_login] = $from;
                     if ($request_data->user_role == 'executor') {
-                        $this->joined_executors_conn_arr[$request_data->user_login] = $from;
-
-                        // ***запись подключения в файл***
-                        $file_content = file_get_contents($this->executors_file);
-                        $file_content .= $request_data->user_login."\n";
-                        file_put_contents($this->executors_file, $file_content);
-
+                        ExecutorConnFileService::write_connection($request_data->user_login);
                         $this->log($from->resourceId, "подключен исполнитель {$request_data->user_login}");
                     } elseif ($request_data->user_role == 'author') {
-                        $this->joined_authors_conn_arr[$request_data->user_login] = $from;
                         $this->log($from->resourceId, "подключен постановщик {$request_data->user_login}");
                     } else {
                         return;
@@ -102,7 +78,7 @@ class ServerWebsocket implements MessageComponentInterface
                     break;
                 case 'comment-new':
                     // отправлен комментарий
-                    $executor_conn = $this->joined_executors_conn_arr[$request_data->executor_login];
+                    $executor_conn = $this->joined_users_arr['executor'][$request_data->executor_login];
                     if ($executor_conn) {
                         $executor_conn->send($message);
                     }
@@ -114,7 +90,7 @@ class ServerWebsocket implements MessageComponentInterface
                     var_dump($request_data);
             }
             if (in_array($request_data->type, ['task-new', 'take-task', 'complete-task'])) {
-                foreach ($this->joined_executors_conn_arr as $login => $conn) {
+                foreach ($this->joined_users_arr['executor'] as $login => $conn) {
                     if ($login != $request_data->executor_login) {
                         $conn->send($message);
                     }
@@ -139,9 +115,9 @@ class ServerWebsocket implements MessageComponentInterface
     // оправляет сообщение постановщику
     private function sendMessageToAuthor($author_login, $message)
     {
-        $author_conn = $this->joined_authors_conn_arr[$author_login];
+        $author_conn = $this->joined_users_arr['author'][$author_login];
         if ($author_conn) {
-            var_dump($author_conn->send($message));
+            $author_conn->send($message);
         }
     }
 }
