@@ -10,6 +10,8 @@ class ExecutorConnFileService
     /***записывает подключение исполнителя в файл***/
     public static function write_connection($login)
     {
+        var_dump('write '.$login);
+
         $file_path = self::executors_filepath();
         $file_content = file_get_contents($file_path);
         $file_content .= "$login\n";
@@ -19,6 +21,8 @@ class ExecutorConnFileService
     /***удаляет подключение исполнителя из файла***/
     public static function remove_connection($login)
     {
+        var_dump('remove '.$login);
+
         $file_path = self::executors_filepath();
         $file_content = file_get_contents($file_path);
         $file_content_arr = explode("\n", $file_content);
