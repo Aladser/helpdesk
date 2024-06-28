@@ -55,7 +55,6 @@ class ServerWebsocket implements MessageComponentInterface
                     ];
 
                     if ($request_data->user_role == 'executor') {
-                        ExecutorConnFileService::write_connection($request_data->user_login, $from->resourceId);
                         $this->log($from->resourceId, "подключен исполнитель {$request_data->user_login}");
                     } elseif ($request_data->user_role == 'author') {
                         $this->log($from->resourceId, "подключен постановщик {$request_data->user_login}");
