@@ -13,7 +13,7 @@ class ExecutorConnFileService
         $file_path = self::executors_filepath();
         $file_content = file_get_contents($file_path);
 
-        $executors_dict = $file_content == '' ? (object)[] : json_decode($file_content);
+        $executors_dict = $file_content == '' ? (object) [] : json_decode($file_content);
         $executors_dict->$id = $login;
         $file_content = json_encode($executors_dict);
 
@@ -21,7 +21,7 @@ class ExecutorConnFileService
     }
 
     /***удаляет подключение исполнителя из файла***/
-    public static function remove_connection($login, $id)
+    public static function remove_connection($id)
     {
         $file_path = self::executors_filepath();
         $file_content = file_get_contents($file_path);
@@ -43,13 +43,14 @@ class ExecutorConnFileService
     public static function get_executors_array()
     {
         $file_content = file_get_contents(self::executors_filepath());
-        $executors_dict = $file_content == '' ? (object)[] : json_decode($file_content);
+        $executors_dict = $file_content == '' ? (object) [] : json_decode($file_content);
 
         return $executors_dict;
     }
 
     /**очистить пользователей */
-    public static function clear_connections() {
-        file_put_contents(self::executors_filepath(), "");
+    public static function clear_connections()
+    {
+        file_put_contents(self::executors_filepath(), '');
     }
 }
