@@ -5,33 +5,31 @@ namespace App\Services;
 // **Отслеживает подключенных исполнителей*/
 class ExecutorConnFileService
 {
-    private static string $EXECUTORS_FILEPATH = '/storage/executors';
+    private static string $EXECUTORS_FILEPATH = '/storage/executors.json';
 
     /***записывает подключение исполнителя в файл***/
-    public static function write_connection($login)
+    public static function write_connection($login, $id)
     {
         $file_path = self::executors_filepath();
         $file_content = file_get_contents($file_path);
-        $file_content .= "$login\n";
+
+        $executors_dict = $file_content == '' ? (object) [] : json_decode($file_content);
+        $executors_dict->$id = $login;
+        $file_content = json_encode($executors_dict);
+
         file_put_contents($file_path, $file_content);
     }
 
     /***удаляет подключение исполнителя из файла***/
-    public static function remove_connection($login)
+    public static function remove_connection($id)
     {
         $file_path = self::executors_filepath();
         $file_content = file_get_contents($file_path);
-        $file_content_arr = explode("\n", $file_content);
 
-        foreach ($file_content_arr as $key => $value) {
-            if ($value == $login) {
-                unset($file_content_arr[$key]);
-            } elseif ($value == '') {
-                unset($file_content_arr[$key]);
-            }
-        }
+        $executors_dict = json_decode($file_content);
+        unset($executors_dict->$id);
 
-        $file_content = implode("\n", $file_content_arr);
+        $file_content = json_encode($executors_dict);
         file_put_contents($file_path, $file_content);
     }
 
@@ -42,10 +40,17 @@ class ExecutorConnFileService
     }
 
     /**получить список исполнителей */
-    public static function get_executors_array(): array
+    public static function get_executors_array()
     {
         $file_content = file_get_contents(self::executors_filepath());
+        $executors_dict = $file_content == '' ? (object) [] : json_decode($file_content);
 
-        return explode("\n", $file_content);
+        return $executors_dict;
+    }
+
+    /**очистить пользователей */
+    public static function clear_connections()
+    {
+        file_put_contents(self::executors_filepath(), '');
     }
 }
