@@ -5,7 +5,7 @@ namespace App\Services;
 // **Отслеживает подключенных исполнителей*/
 class ExecutorConnFileService
 {
-    private static string $EXECUTORS_FILEPATH = '/storage/executors';
+    private static string $EXECUTORS_FILEPATH = '/storage/executors.json';
 
     /***записывает подключение исполнителя в файл***/
     public static function write_connection($login, $id)

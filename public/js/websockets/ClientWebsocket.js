@@ -24,8 +24,22 @@ class ClientWebsocket {
 
     // получение сообщений
     onMessage(e) {
-        let data = JSON.parse(e.data);
-        console.log(data);
+        try {
+            let server_data = JSON.parse(e.data);
+            //console.log(server_data);
+
+            switch (server_data.type) {
+                case "onconnection":
+                    // установление соединения: отправка данных подключаемого пользователя
+                    server_data.user_login = this.user_login;
+                    server_data.user_role = this.user_role;
+                    this.sendData(server_data);
+                    break;
+            }
+        } catch (e) {
+            console.log(e);
+            alert("Ошибка парсинга сообщения вебсокета");
+        }
     }
 
     // отправка сообщений
