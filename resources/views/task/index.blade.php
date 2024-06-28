@@ -18,8 +18,8 @@
     @endsection
 
     @section('js')
-    <x-js-script>websockets/ClientWebsocket.js</x-js-script>
-    <x-js-script>websockets/IndexClientWebsocket.js</x-js-script>
+    <script src="{{asset('/js/websockets/ClientWebsocket.js')}}"></script>
+    <script src="{{asset('/js/websockets/IndexClientWebsocket.js')}}"></script>
     <x-js-script>pages/index.js</x-js-script>
     @endsection
 
