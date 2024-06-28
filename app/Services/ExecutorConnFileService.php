@@ -10,15 +10,17 @@ class ExecutorConnFileService
     /***записывает подключение исполнителя в файл***/
     public static function write_connection($login)
     {
-        $file_content = file_get_contents(self::executors_filepath());
+        $file_path = self::executors_filepath();
+        $file_content = file_get_contents($file_path);
         $file_content .= "$login\n";
-        file_put_contents(self::executors_filepath(), $file_content);
+        file_put_contents($file_path, $file_content);
     }
 
     /***удаляет подключение исполнителя из файла***/
     public static function remove_connection($login)
     {
-        $file_content = file_get_contents(self::executors_filepath());
+        $file_path = self::executors_filepath();
+        $file_content = file_get_contents($file_path);
         $file_content_arr = explode("\n", $file_content);
 
         foreach ($file_content_arr as $key => $value) {
@@ -30,7 +32,7 @@ class ExecutorConnFileService
         }
 
         $file_content = implode("\n", $file_content_arr);
-        file_put_contents(self::executors_filepath(), $file_content);
+        file_put_contents($file_path, $file_content);
     }
 
     /**путь к файлу исполнителей*/

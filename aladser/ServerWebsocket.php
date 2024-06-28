@@ -34,7 +34,6 @@ class ServerWebsocket implements MessageComponentInterface
             ExecutorConnFileService::remove_connection($user_login);
 
             $this->log($conn->resourceId, "отключен исполнитель $user_login");
-            file_put_contents($this->executors_file, $file_content);
         } elseif ($this->joined_users_arr['author'][$user_login]) {
             unset($this->joined_users_arr['author'][$user_login]);
 
