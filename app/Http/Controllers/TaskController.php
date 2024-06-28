@@ -290,6 +290,7 @@ class TaskController extends Controller
                 'process_tasks_count' => $total_process_tasks_count,
                 'completed_tasks_count' => $total_completed_tasks_count,
                 'executors_stat_arr' => $executors_stat_arr,
+                'websocket_addr' => $this->websocket_addr,
             ]
         );
     }

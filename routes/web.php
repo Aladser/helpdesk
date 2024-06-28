@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\TaskController;
+use App\Services\WebsocketService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -15,7 +16,7 @@ Route::get('/dashboard', function () {return redirect('/'); })->middleware(['aut
 Route::resource('/task', TaskController::class)->except(['edit', 'destroy'])->middleware(['auth']);
 // профиль пользователя
 Route::get('/profile', function () {
-    return view('profile', ['auth_user' => Auth::user()]);
+    return view('profile', ['auth_user' => Auth::user(), 'websocket_addr' => WebsocketService::getWebsockerAddr()]);
 })->middleware(['auth'])->name('profile');
 // AUTH папка
 require __DIR__.'/auth.php';
@@ -25,7 +26,7 @@ Route::post('/comment', [CommentController::class, 'store'])->name('comment.stor
 Route::get('/statistic', [TaskController::class, 'stat'])->middleware(['auth', 'admin'])->name('statistic');
 // настройки
 Route::get('/settings', function () {
-    return view('settings');
+    return view('settings', ['websocket_addr' => WebsocketService::getWebsockerAddr()]);
 })->middleware(['auth', 'admin'])->name('settings');
 // 403
 Route::get('/403', function () {
