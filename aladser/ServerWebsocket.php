@@ -31,7 +31,7 @@ class ServerWebsocket implements MessageComponentInterface
         if ($this->joined_users_arr['executor'][$conn->resourceId]) {
             // отключение исполнителя
             $executor_conn = $this->joined_users_arr['executor'][$conn->resourceId];
-            ExecutorConnFileService::remove_connection($executor_conn['login']);
+            ExecutorConnFileService::remove_connection($executor_conn['login'], $conn->resourceId);
             $this->log($conn->resourceId, "отключен исполнитель {$executor_conn['login']}");
             unset($this->joined_users_arr['executor'][$conn->resourceId]);
         } elseif ($this->joined_users_arr['author'][$conn->resourceId]) {
@@ -55,7 +55,7 @@ class ServerWebsocket implements MessageComponentInterface
                     ];
 
                     if ($request_data->user_role == 'executor') {
-                        ExecutorConnFileService::write_connection($request_data->user_login);
+                        ExecutorConnFileService::write_connection($request_data->user_login, $from->resourceId);
                         $this->log($from->resourceId, "подключен исполнитель {$request_data->user_login}");
                     } elseif ($request_data->user_role == 'author') {
                         $this->log($from->resourceId, "подключен постановщик {$request_data->user_login}");
