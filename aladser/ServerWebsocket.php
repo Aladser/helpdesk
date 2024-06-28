@@ -93,7 +93,7 @@ class ServerWebsocket implements MessageComponentInterface
             }
             if (in_array($request_data->type, ['task-new', 'take-task', 'complete-task'])) {
                 foreach ($this->joined_users_arr['executor'] as $login => $user_conn) {
-                    if ($user_conn['login'] != $request_data->executor_login) {
+                    if ($user_conn['conn'] != $from) {
                         $user_conn['conn']->send($message);
                     }
                 }

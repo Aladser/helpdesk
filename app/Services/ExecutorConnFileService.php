@@ -47,4 +47,9 @@ class ExecutorConnFileService
 
         return $executors_dict;
     }
+
+    /**очистить пользователей */
+    public static function clear_connections() {
+        file_put_contents(self::executors_filepath(), "");
+    }
 }
