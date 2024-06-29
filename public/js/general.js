@@ -21,11 +21,11 @@ if (USER_STATUS_NODE) {
         if(session_user_login == USER_NAME_NODE.content) {
             USER_STATUS_HEADER_NODE.textContent =  window.sessionStorage.getItem('user-status');
             USER_STATUS_HEADER_NODE.className = window.sessionStorage.getItem('user_status-classname');
-            sendUserStatusToServer(USER_NAME_NODE.content);
         }
     } else {
         USER_STATUS_HEADER_NODE.className = 'user-status-non-ready';
     }
+    sendUserStatusToServer(USER_NAME_NODE.content);
 
     // установка статуса пользователем
     let status_dict = {

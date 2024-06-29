@@ -8,7 +8,7 @@ class ExecutorConnFileService
     private static string $EXECUTORS_FILEPATH = '/storage/executors.json';
 
     /***записывает подключение исполнителя в файл***/
-    public static function write_connection(string $login, int $id, int $status = 0)
+    public static function write_connection($login, $id, $status = 0)
     {
         $file_path = self::executors_filepath();
         $file_content = file_get_contents($file_path);
