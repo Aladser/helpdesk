@@ -13,6 +13,8 @@ class ServerWebsocket implements MessageComponentInterface
     private $joined_users_id_arr = [];
     // массив подключений
     private array $joined_users_arr = [];
+    // БД коннектор
+    private DBQuery $db_connector;
 
     public function __construct()
     {
@@ -21,6 +23,8 @@ class ServerWebsocket implements MessageComponentInterface
 
     public function onOpen(ConnectionInterface $conn)
     {
+        $this->db_connector = new DBQuery('pgsql', env('DB_HOST'), env('DB_DATABASE'), env('DB_USERNAME'), env('DB_PASSWORD'));
+
         // запрос имени пользователя
         $message = json_encode(['type' => 'onconnection', 'resourceId' => $conn->resourceId]);
         $conn->send($message);
