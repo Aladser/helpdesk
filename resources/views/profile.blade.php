@@ -15,7 +15,7 @@
     @if(Auth::user()->role->name == 'executor')
         @section('js')
         <x-js-script>websockets/ClientWebsocket.js</x-js-script>
-        <x-js-script>websockets/websocket_standart.js</x-js-script>
+        <x-js-script>websockets/websocket_standard.js</x-js-script>
         @endsection
     @endif
 

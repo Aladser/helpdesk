@@ -15,10 +15,10 @@
         <link rel="stylesheet" href="{{ asset('css/general.css') }}">
         @yield('css')
         
-        <script src="{{ asset('js/app.js') }}" defer></script>
+        <x-js-script>app.js</x-js-script>
         <script src="https://cdn.tailwindcss.com"></script>
-        <x-js-script>general.js</x-js-script>
         @yield('js')
+        <x-js-script>general.js</x-js-script>
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-theme color-theme">
