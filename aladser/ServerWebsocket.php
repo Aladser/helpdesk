@@ -76,8 +76,11 @@ class ServerWebsocket implements MessageComponentInterface
                         $sql = 'update connections set is_active = :is_active where conn_id = :conn_id';
                         $this->db_connector->queryPrepared($sql, ['conn_id' => $from->resourceId, 'is_active' => $request_data->status]);
                     } else {
-                        $sql = 'insert into connections (conn_id, login, is_active) values (:conn_id, :login, :is_active)';
-                        $this->db_connector->queryPrepared($sql, ['conn_id' => $from->resourceId, 'login' => $request_data->login, 'is_active' => $request_data->status]);
+                        $id = $this->db_connector->queryPrepared('select id from users where login = :login', ['login' => $request_data->login])['id'];
+                        if ($id) {
+                            $sql = 'insert into connections (conn_id, user_id, is_active) values (:conn_id, :user_id, :is_active)';
+                            $this->db_connector->queryPrepared($sql, ['conn_id' => $from->resourceId, 'user_id' => $id, 'is_active' => $request_data->status]);
+                        }
                     }
 
                     break;
