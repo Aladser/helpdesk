@@ -2,8 +2,8 @@
 
 namespace App\Http\Middleware;
 
-use App\Services\ExecutorConnFileService;
 use Aladser\ScriptLinuxProcess;
+use App\Models\Connection;
 use Illuminate\Http\Request;
 
 /** класс запуска вебсокета */
@@ -12,7 +12,6 @@ class IsActiveWebsocket
     // проверяет активность вебсокета
     public function handle(Request $request, \Closure $next)
     {
-
         $os = explode(' ', php_uname())[0];
         if ($os !== 'Windows') {
             $websocket = new ScriptLinuxProcess(
@@ -22,7 +21,7 @@ class IsActiveWebsocket
                 dirname(__DIR__, 3).'/logs/pids.log'
             );
             if (!$websocket->isActive()) {
-                ExecutorConnFileService::clear_connections();
+                Connection::truncate();
                 $websocket->run();
             }
         }

@@ -18,12 +18,11 @@ class ServerWebsocket implements MessageComponentInterface
     public function __construct()
     {
         $this->executors_file = dirname(__FILE__).'/executors';
+        $this->db_connector = new DBQuery('pgsql', env('DB_HOST'), env('DB_DATABASE'), env('DB_USERNAME'), env('DB_PASSWORD'));
     }
 
     public function onOpen(ConnectionInterface $conn)
     {
-        $this->db_connector = new DBQuery('pgsql', env('DB_HOST'), env('DB_DATABASE'), env('DB_USERNAME'), env('DB_PASSWORD'));
-
         // запрос имени пользователя
         $message = json_encode(['type' => 'onconnection', 'resourceId' => $conn->resourceId]);
         $conn->send($message);
@@ -71,8 +70,16 @@ class ServerWebsocket implements MessageComponentInterface
                     break;
                 case 'user-status':
                     // установка статуса пользователя
-                    $sql = 'insert into connections (conn_id, login, is_active) values (:conn_id, :login, :is_active)';
-                    $this->db_connector->queryPrepared($sql, ['conn_id' => $from->resourceId, 'login' => $request_data->login, 'is_active' => $request_data->status]);
+                    $sql = 'select count(*) as count from connections where conn_id = :conn_id';
+                    $is_existed = $this->db_connector->queryPrepared($sql, ['conn_id' => $from->resourceId], false)[0]['count'] > 0;
+                    if ($is_existed) {
+                        $sql = 'update connections set is_active = :is_active where conn_id = :conn_id';
+                        $this->db_connector->queryPrepared($sql, ['conn_id' => $from->resourceId, 'is_active' => $request_data->status]);
+                    } else {
+                        $sql = 'insert into connections (conn_id, login, is_active) values (:conn_id, :login, :is_active)';
+                        $this->db_connector->queryPrepared($sql, ['conn_id' => $from->resourceId, 'login' => $request_data->login, 'is_active' => $request_data->status]);
+                    }
+
                     break;
                 case 'task-new':
                     // новая задача
