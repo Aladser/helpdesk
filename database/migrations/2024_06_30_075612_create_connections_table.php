@@ -11,9 +11,9 @@ class CreateConnectionsTable extends Migration
     public function up()
     {
         Schema::create('connections', function (Blueprint $table) {
-            $table->bigInteger('conn_id')->unsigned();
+            $table->bigInteger('conn_id')->unsigned()->unique();
             $table->string('login');
-            $table->boolean('is_active')->default(false);
+            $table->integer('is_active')->default(0);
         });
     }
 

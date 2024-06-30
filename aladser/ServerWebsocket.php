@@ -2,7 +2,6 @@
 
 namespace Aladser;
 
-use App\Services\ExecutorConnFileService;
 use Ratchet\ConnectionInterface;
 use Ratchet\MessageComponentInterface;
 
@@ -35,7 +34,10 @@ class ServerWebsocket implements MessageComponentInterface
         if ($this->joined_users_arr['executor'][$conn->resourceId]) {
             // отключение исполнителя
             $executor_conn = $this->joined_users_arr['executor'][$conn->resourceId];
-            ExecutorConnFileService::remove_connection($conn->resourceId);
+
+            $sql = 'delete from connections where conn_id = :conn_id';
+            $this->db_connector->queryPrepared($sql, ['conn_id' => $conn->resourceId]);
+
             $this->log($conn->resourceId, "отключен исполнитель {$executor_conn['login']}");
             unset($this->joined_users_arr['executor'][$conn->resourceId]);
         } elseif ($this->joined_users_arr['author'][$conn->resourceId]) {
@@ -69,7 +71,8 @@ class ServerWebsocket implements MessageComponentInterface
                     break;
                 case 'user-status':
                     // установка статуса пользователя
-                    ExecutorConnFileService::write_connection($request_data->login, $from->resourceId, $request_data->status);
+                    $sql = 'insert into connections (conn_id, login, is_active) values (:conn_id, :login, :is_active)';
+                    $this->db_connector->queryPrepared($sql, ['conn_id' => $from->resourceId, 'login' => $request_data->login, 'is_active' => $request_data->status]);
                     break;
                 case 'task-new':
                     // новая задача
