@@ -3,16 +3,27 @@ class ClientWebsocket {
     constructor(websocket_url, user_login, user_role) {
         this.user_login = user_login;
         this.user_role = user_role;
-        
+        this.queue = [];
+
         this.websocket_addr = websocket_url;
         this.websocket = new WebSocket(websocket_url);
         this.websocket.onerror = (e) => this.onError(e);
         this.websocket.onmessage = (e) => this.onMessage(e);
         this.websocket.onopen = (e) => this.onOpen(e);
+
+        // Обработка события открытия соединения - отправление очереди сообщений
+        this.websocket.addEventListener("open", () => {
+            this.queue.forEach((message) => {
+                this.sendData(message);
+            });
+            this.queue = [];
+        });
     }
 
     onOpen(e) {
-        console.log(`Соединение ${this.user_login} с вебсокетом ${this.websocket_addr} установлено.`);
+        console.log(
+            `Соединение ${this.user_login} с вебсокетом ${this.websocket_addr} установлено.`
+        );
     }
 
     // получение ошибок вебсокета
@@ -44,6 +55,10 @@ class ClientWebsocket {
 
     // отправка сообщений
     sendData(data) {
-        this.websocket.send(JSON.stringify(data));
+        try {
+            this.websocket.send(JSON.stringify(data));
+        } catch (e) {
+            this.queue.push(data);
+        }
     }
 }
