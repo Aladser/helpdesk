@@ -14,7 +14,6 @@
     
     @section('js')
     <x-js-script>websockets/ClientWebsocket.js</x-js-script>
-    <x-js-script>websockets/websocket_standart.js</x-js-script>
     @endsection
     
     <div class="py-8 mx-4">

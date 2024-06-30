@@ -2,7 +2,6 @@
 
 namespace Aladser;
 
-use App\Services\ExecutorConnFileService;
 use Ratchet\ConnectionInterface;
 use Ratchet\MessageComponentInterface;
 
@@ -13,10 +12,13 @@ class ServerWebsocket implements MessageComponentInterface
     private $joined_users_id_arr = [];
     // массив подключений
     private array $joined_users_arr = [];
+    // БД коннектор
+    private DBQuery $db_connector;
 
     public function __construct()
     {
         $this->executors_file = dirname(__FILE__).'/executors';
+        $this->db_connector = new DBQuery('pgsql', env('DB_HOST'), env('DB_DATABASE'), env('DB_USERNAME'), env('DB_PASSWORD'));
     }
 
     public function onOpen(ConnectionInterface $conn)
@@ -31,7 +33,10 @@ class ServerWebsocket implements MessageComponentInterface
         if ($this->joined_users_arr['executor'][$conn->resourceId]) {
             // отключение исполнителя
             $executor_conn = $this->joined_users_arr['executor'][$conn->resourceId];
-            ExecutorConnFileService::remove_connection($executor_conn['login'], $conn->resourceId);
+
+            $sql = 'delete from connections where conn_id = :conn_id';
+            $this->db_connector->queryPrepared($sql, ['conn_id' => $conn->resourceId]);
+
             $this->log($conn->resourceId, "отключен исполнитель {$executor_conn['login']}");
             unset($this->joined_users_arr['executor'][$conn->resourceId]);
         } elseif ($this->joined_users_arr['author'][$conn->resourceId]) {
@@ -56,11 +61,26 @@ class ServerWebsocket implements MessageComponentInterface
 
                     if ($request_data->user_role == 'executor') {
                         $this->log($from->resourceId, "подключен исполнитель {$request_data->user_login}");
-                        ExecutorConnFileService::write_connection($request_data->user_login, $from->resourceId);
                     } elseif ($request_data->user_role == 'author') {
                         $this->log($from->resourceId, "подключен постановщик {$request_data->user_login}");
                     } else {
                         return;
+                    }
+
+                    break;
+                case 'user-status':
+                    // установка статуса пользователя
+                    $sql = 'select count(*) as count from connections where conn_id = :conn_id';
+                    $is_existed = $this->db_connector->queryPrepared($sql, ['conn_id' => $from->resourceId], false)[0]['count'] > 0;
+                    if ($is_existed) {
+                        $sql = 'update connections set is_active = :is_active where conn_id = :conn_id';
+                        $this->db_connector->queryPrepared($sql, ['conn_id' => $from->resourceId, 'is_active' => $request_data->status]);
+                    } else {
+                        $id = $this->db_connector->queryPrepared('select id from users where login = :login', ['login' => $request_data->login])['id'];
+                        if ($id) {
+                            $sql = 'insert into connections (conn_id, user_id, is_active) values (:conn_id, :user_id, :is_active)';
+                            $this->db_connector->queryPrepared($sql, ['conn_id' => $from->resourceId, 'user_id' => $id, 'is_active' => $request_data->status]);
+                        }
                     }
 
                     break;

@@ -10,7 +10,7 @@ use App\Models\UserRole;
 use App\Services\WebsocketService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Services\ExecutorConnFileService;
+
 /*
 | GET|HEAD  | task                            | task.index          | App\Http\Controllers\TaskController@index   | web                                                |
 |           |                                 |                     |                                             | App\Http\Middleware\Authenticate                   |
