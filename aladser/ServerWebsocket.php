@@ -2,6 +2,7 @@
 
 namespace Aladser;
 
+use Illuminate\Database\Capsule\Manager;
 use Ratchet\ConnectionInterface;
 use Ratchet\MessageComponentInterface;
 
@@ -13,9 +14,27 @@ class ServerWebsocket implements MessageComponentInterface
     // БД коннектор
     private DBQuery $db_connector;
 
+    private $manager;
+
     public function __construct()
     {
         $this->db_connector = new DBQuery('pgsql', env('DB_HOST'), env('DB_DATABASE'), env('DB_USERNAME'), env('DB_PASSWORD'));
+
+        $this->manager = new Manager();
+
+        $this->manager->addConnection([
+            'driver' => env('DB_CONNECTION'),
+            'host' => env('DB_HOST'),
+            'database' => env('DB_DATABASE'),
+            'username' => env('DB_USERNAME'),
+            'password' => env('DB_PASSWORD'),
+            'charset' => 'utf8',
+            'collation' => 'utf8_unicode_ci',
+            'prefix' => '',
+        ]);
+
+        // Позволяет использовать статичные вызовы при работе с Capsule.
+        $this->manager->setAsGlobal();
     }
 
     public function onOpen(ConnectionInterface $conn)
@@ -67,8 +86,7 @@ class ServerWebsocket implements MessageComponentInterface
                     break;
                 case 'user-status':
                     // установка статуса пользователя
-                    $sql = 'select count(*) as count from connections where conn_id = :conn_id';
-                    $is_existed = $this->db_connector->queryPrepared($sql, ['conn_id' => $from->resourceId], false)[0]['count'] > 0;
+                    $is_existed = Manager::table('connections')->where('conn_id', $from->resourceId)->count() > 0;
                     if ($is_existed) {
                         $sql = 'update connections set is_active = :is_active where conn_id = :conn_id';
                         $this->db_connector->queryPrepared($sql, ['conn_id' => $from->resourceId, 'is_active' => $request_data->status]);
