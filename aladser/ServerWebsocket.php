@@ -2,23 +2,32 @@
 
 namespace Aladser;
 
+use Illuminate\Database\Capsule\Manager;
 use Ratchet\ConnectionInterface;
 use Ratchet\MessageComponentInterface;
 
 /** Cерверная часть вебсокета */
 class ServerWebsocket implements MessageComponentInterface
 {
-    // массив подключенных пользователей
-    private $joined_users_id_arr = [];
     // массив подключений
     private array $joined_users_arr = [];
-    // БД коннектор
-    private DBQuery $db_connector;
 
     public function __construct()
     {
-        $this->executors_file = dirname(__FILE__).'/executors';
-        $this->db_connector = new DBQuery('pgsql', env('DB_HOST'), env('DB_DATABASE'), env('DB_USERNAME'), env('DB_PASSWORD'));
+        // соединение с БД
+        $manager = new Manager();
+        $manager->addConnection([
+            'driver' => env('DB_CONNECTION'),
+            'host' => env('DB_HOST'),
+            'database' => env('DB_DATABASE'),
+            'username' => env('DB_USERNAME'),
+            'password' => env('DB_PASSWORD'),
+            'charset' => 'utf8',
+            'collation' => 'utf8_unicode_ci',
+            'prefix' => '',
+        ]);
+        // Позволяет использовать статичные вызовы при работе с Capsule.
+        $manager->setAsGlobal();
     }
 
     public function onOpen(ConnectionInterface $conn)
@@ -32,11 +41,9 @@ class ServerWebsocket implements MessageComponentInterface
     {
         if ($this->joined_users_arr['executor'][$conn->resourceId]) {
             // отключение исполнителя
+            Manager::table('connections')->where('conn_id', $conn->resourceId)->delete();
+
             $executor_conn = $this->joined_users_arr['executor'][$conn->resourceId];
-
-            $sql = 'delete from connections where conn_id = :conn_id';
-            $this->db_connector->queryPrepared($sql, ['conn_id' => $conn->resourceId]);
-
             $this->log($conn->resourceId, "отключен исполнитель {$executor_conn['login']}");
             unset($this->joined_users_arr['executor'][$conn->resourceId]);
         } elseif ($this->joined_users_arr['author'][$conn->resourceId]) {
@@ -70,17 +77,16 @@ class ServerWebsocket implements MessageComponentInterface
                     break;
                 case 'user-status':
                     // установка статуса пользователя
-                    $sql = 'select count(*) as count from connections where conn_id = :conn_id';
-                    $is_existed = $this->db_connector->queryPrepared($sql, ['conn_id' => $from->resourceId], false)[0]['count'] > 0;
-                    if ($is_existed) {
-                        $sql = 'update connections set is_active = :is_active where conn_id = :conn_id';
-                        $this->db_connector->queryPrepared($sql, ['conn_id' => $from->resourceId, 'is_active' => $request_data->status]);
+                    $connection = Manager::table('connections')->where('conn_id', $from->resourceId);
+                    if ($connection->exists()) {
+                        $connection->update(['is_active' => $request_data->status]);
                     } else {
-                        $id = $this->db_connector->queryPrepared('select id from users where login = :login', ['login' => $request_data->login])['id'];
-                        if ($id) {
-                            $sql = 'insert into connections (conn_id, user_id, is_active) values (:conn_id, :user_id, :is_active)';
-                            $this->db_connector->queryPrepared($sql, ['conn_id' => $from->resourceId, 'user_id' => $id, 'is_active' => $request_data->status]);
-                        }
+                        $user_id = Manager::table('users')->where('login', $request_data->login)->select('id')->first()->id;
+                        Manager::table('connections')->insert([
+                            'conn_id' => $from->resourceId,
+                            'user_id' => $user_id,
+                            'is_active' => $request_data->status,
+                        ]);
                     }
 
                     break;

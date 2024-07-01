@@ -12,16 +12,18 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 /*
-| GET|HEAD  | task                            | task.index          | App\Http\Controllers\TaskController@index   | web                                                |
-|           |                                 |                     |                                             | App\Http\Middleware\Authenticate                   |
-| POST      | task                            | task.store          | App\Http\Controllers\TaskController@store   | web                                                |
-|           |                                 |                     |                                             | App\Http\Middleware\Authenticate                   |
-| GET|HEAD  | task/create                     | task.create         | App\Http\Controllers\TaskController@create  | web                                                |
-|           |                                 |                     |                                             | App\Http\Middleware\Authenticate                   |
-| GET|HEAD  | task/{task}                     | task.show           | App\Http\Controllers\TaskController@show    | web                                                |
-|           |                                 |                     |                                             | App\Http\Middleware\Authenticate                   |
-| PUT|PATCH | task/{task}                     | task.update         | App\Http\Controllers\TaskController@update  | web                                                |
-|           |                                 |                     |                                             | App\Http\Middleware\Authenticate                   |
+| php artisan route:list
+|
+| GET|HEAD  | task                            | task.index          | App\Http\Controllers\TaskController@index
+|           |                                 |                     |
+| POST      | task                            | task.store          | App\Http\Controllers\TaskController@store
+|           |                                 |                     |
+| GET|HEAD  | task/create                     | task.create         | App\Http\Controllers\TaskController@create
+|           |                                 |                     |
+| GET|HEAD  | task/{task}                     | task.show           | App\Http\Controllers\TaskController@show
+|           |                                 |                     |
+| PUT|PATCH | task/{task}                     | task.update         | App\Http\Controllers\TaskController@update
+|           |                                 |                     |
 */
 
 class TaskController extends Controller
@@ -34,6 +36,7 @@ class TaskController extends Controller
         $this->websocket_addr = WebsocketService::getWebsockerAddr();
     }
 
+    // ----- СТРАНИЦА СПИСКА ЗАДАЧ -----
     public function index(Request $request)
     {
         $auth_user = Auth::user();
@@ -92,7 +95,7 @@ class TaskController extends Controller
         $request_data = [
             'type' => 'new-task',
             'tasks' => $task_arr,
-            'table_headers' => ['ID', 'Тема', 'Постановщик', 'Создана', 'Исполнитель', 'Статус', 'Посл.активность'],
+            'table_headers' => ['ID', 'Тема', 'Заявка от', 'Создана', 'Исполнитель', 'Статус', 'Активность'],
             'user_role' => $auth_user->role->name,
             'task_status' => $task_status,
             'tasks_belongs' => $tasks_belongs,
@@ -103,6 +106,7 @@ class TaskController extends Controller
         return view('task.index', $request_data);
     }
 
+    // ----- СТРАНИЦА ЗАДАЧИ -----
     public function show($id)
     {
         $auth_user = Auth::user();
@@ -133,6 +137,13 @@ class TaskController extends Controller
         return view('task.show', $request_data);
     }
 
+    // ----- СТРАНИЦА СОЗДАНИЯ ЗАДАЧИ-----
+    public function create()
+    {
+        return view('task.create', ['auth_user' => Auth::user()]);
+    }
+
+    // ----- ОБНОВЛЕНИЕ ЗАДАЧИ В БД -----
     public function update(Request $request, $id)
     {
         // работает только с CSRF-токеном, PUT-запрос можно отправить только из JS
@@ -208,11 +219,7 @@ class TaskController extends Controller
         return json_encode($response_data);
     }
 
-    public function create()
-    {
-        return view('task.create', ['auth_user' => Auth::user()]);
-    }
-
+    // ----- СОХРАНИТЬ ЗАДАЧУ В БД -----
     public function store(Request $request)
     {
         $data = $request->all();
@@ -238,6 +245,7 @@ class TaskController extends Controller
         return redirect()->route('task.show', $task->id);
     }
 
+    // ----- СТРАНИЦА СТАТИСТИКИ ЗАДАЧ -----
     public function stat(Request $request)
     {
         $tasks_arr = Task::all();
@@ -285,7 +293,7 @@ class TaskController extends Controller
         return view(
             'stat',
             [
-                'table_headers' => ['Пользователь', 'Число заявок в работе', 'Число завершенных заявок'],
+                'table_headers' => ['Пользователь', 'В работе', 'Завершено'],
                 'new_tasks_count' => $new_tasks_count,
                 'process_tasks_count' => $total_process_tasks_count,
                 'completed_tasks_count' => $total_completed_tasks_count,

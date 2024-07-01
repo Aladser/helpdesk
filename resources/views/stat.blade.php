@@ -1,10 +1,10 @@
 <x-app-layout>
     @section('title')
-    <x-title>статистика</x-title>
+    <x-title>статистика заявок</x-title>
     @endsection
 
     @section('header')
-    <x-header>Статистика</x-header>
+    <x-header>Статистика заявок</x-header>
     @endsection
 
     @section('meta')
