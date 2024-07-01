@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Aladser\ScriptLinuxProcess;
 use App\Models\Connection;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 /** класс запуска вебсокета */
 class IsActiveWebsocket
@@ -22,6 +23,7 @@ class IsActiveWebsocket
             );
             if (!$websocket->isActive()) {
                 Connection::truncate();
+                DB::table('users')->update(['status_id' => 3]);
                 $websocket->run();
             }
         }
