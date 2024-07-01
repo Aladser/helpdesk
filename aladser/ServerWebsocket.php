@@ -45,6 +45,9 @@ class ServerWebsocket implements MessageComponentInterface
 
             $executor_conn = $this->joined_users_arr['executor'][$conn->resourceId];
             $this->log($conn->resourceId, "отключен исполнитель {$executor_conn['login']}");
+            // сброс подключения пользователя
+            $user = Manager::table('users')->where('login', $executor_conn['login'])->update(['status_id' => 3]);
+
             unset($this->joined_users_arr['executor'][$conn->resourceId]);
         } elseif ($this->joined_users_arr['author'][$conn->resourceId]) {
             // отключение постановщика
@@ -77,17 +80,27 @@ class ServerWebsocket implements MessageComponentInterface
                     break;
                 case 'user-status':
                     // установка статуса пользователя
+
+                    // поиск пользователя
+                    $user = Manager::table('users')->where('login', $request_data->login);
+                    if (!$user->exists()) {
+                        echo "Пользователь $request_data->login не существует\n";
+
+                        return;
+                    }
+                    $user_id = $user->first()->id;
+
+                    // поиск соединения
                     $connection = Manager::table('connections')->where('conn_id', $from->resourceId);
-                    if ($connection->exists()) {
-                        $connection->update(['is_active' => $request_data->status]);
-                    } else {
-                        $user_id = Manager::table('users')->where('login', $request_data->login)->select('id')->first()->id;
+                    if (!$connection->exists()) {
                         Manager::table('connections')->insert([
                             'conn_id' => $from->resourceId,
                             'user_id' => $user_id,
-                            'is_active' => $request_data->status,
                         ]);
                     }
+                    // обновление статуса пользователя
+                    $status_id = Manager::table('user_statuses')->where('name', $request_data->status)->first()->id;
+                    $user->update(['status_id' => $status_id]);
 
                     break;
                 case 'task-new':

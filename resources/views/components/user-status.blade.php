@@ -14,7 +14,7 @@
 
         <x-slot name="content">
             <span value='ready' class='user-status__item text-green-500 block px-4 py-2 text-sm leading-5 color-theme hover:font-bold focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out cursor-pointer'>Готов</span>
-            <span value='non-ready' class='user-status__item text-rose-500 block px-4 py-2 text-sm leading-5 color-theme hover:font-bold focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out cursor-pointer'>Не готов</span>
+            <span value='non_ready' class='user-status__item text-rose-500 block px-4 py-2 text-sm leading-5 color-theme hover:font-bold focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out cursor-pointer'>Не готов</span>
         </x-slot>
     </x-dropdown>
 </div>
