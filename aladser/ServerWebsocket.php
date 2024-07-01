@@ -11,18 +11,12 @@ class ServerWebsocket implements MessageComponentInterface
 {
     // массив подключений
     private array $joined_users_arr = [];
-    // БД коннектор
-    private DBQuery $db_connector;
-
-    private $manager;
 
     public function __construct()
     {
-        $this->db_connector = new DBQuery('pgsql', env('DB_HOST'), env('DB_DATABASE'), env('DB_USERNAME'), env('DB_PASSWORD'));
-
-        $this->manager = new Manager();
-
-        $this->manager->addConnection([
+        // соединение с БД
+        $manager = new Manager();
+        $manager->addConnection([
             'driver' => env('DB_CONNECTION'),
             'host' => env('DB_HOST'),
             'database' => env('DB_DATABASE'),
@@ -32,9 +26,8 @@ class ServerWebsocket implements MessageComponentInterface
             'collation' => 'utf8_unicode_ci',
             'prefix' => '',
         ]);
-
         // Позволяет использовать статичные вызовы при работе с Capsule.
-        $this->manager->setAsGlobal();
+        $manager->setAsGlobal();
     }
 
     public function onOpen(ConnectionInterface $conn)
@@ -48,11 +41,9 @@ class ServerWebsocket implements MessageComponentInterface
     {
         if ($this->joined_users_arr['executor'][$conn->resourceId]) {
             // отключение исполнителя
+            Manager::table('connections')->where('conn_id', $conn->resourceId)->delete();
+
             $executor_conn = $this->joined_users_arr['executor'][$conn->resourceId];
-
-            $sql = 'delete from connections where conn_id = :conn_id';
-            $this->db_connector->queryPrepared($sql, ['conn_id' => $conn->resourceId]);
-
             $this->log($conn->resourceId, "отключен исполнитель {$executor_conn['login']}");
             unset($this->joined_users_arr['executor'][$conn->resourceId]);
         } elseif ($this->joined_users_arr['author'][$conn->resourceId]) {
@@ -86,16 +77,16 @@ class ServerWebsocket implements MessageComponentInterface
                     break;
                 case 'user-status':
                     // установка статуса пользователя
-                    $is_existed = Manager::table('connections')->where('conn_id', $from->resourceId)->count() > 0;
-                    if ($is_existed) {
-                        $sql = 'update connections set is_active = :is_active where conn_id = :conn_id';
-                        $this->db_connector->queryPrepared($sql, ['conn_id' => $from->resourceId, 'is_active' => $request_data->status]);
+                    $connection = Manager::table('connections')->where('conn_id', $from->resourceId);
+                    if ($connection->exists()) {
+                        $connection->update(['is_active' => $request_data->status]);
                     } else {
-                        $id = $this->db_connector->queryPrepared('select id from users where login = :login', ['login' => $request_data->login])['id'];
-                        if ($id) {
-                            $sql = 'insert into connections (conn_id, user_id, is_active) values (:conn_id, :user_id, :is_active)';
-                            $this->db_connector->queryPrepared($sql, ['conn_id' => $from->resourceId, 'user_id' => $id, 'is_active' => $request_data->status]);
-                        }
+                        $user_id = Manager::table('users')->where('login', $request_data->login)->select('id')->first()->id;
+                        Manager::table('connections')->insert([
+                            'conn_id' => $from->resourceId,
+                            'user_id' => $user_id,
+                            'is_active' => $request_data->status,
+                        ]);
                     }
 
                     break;
