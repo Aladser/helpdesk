@@ -8,8 +8,6 @@ use Ratchet\MessageComponentInterface;
 /** Cерверная часть вебсокета */
 class ServerWebsocket implements MessageComponentInterface
 {
-    // массив подключенных пользователей
-    private $joined_users_id_arr = [];
     // массив подключений
     private array $joined_users_arr = [];
     // БД коннектор
@@ -17,7 +15,6 @@ class ServerWebsocket implements MessageComponentInterface
 
     public function __construct()
     {
-        $this->executors_file = dirname(__FILE__).'/executors';
         $this->db_connector = new DBQuery('pgsql', env('DB_HOST'), env('DB_DATABASE'), env('DB_USERNAME'), env('DB_PASSWORD'));
     }
 
