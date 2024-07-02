@@ -23,6 +23,7 @@
     0 0 1rem white;
     font-weight: bolder;
 }
-link:hover {
+
+.main-link:hover {
     background-color: var(--color-theme);
 }
