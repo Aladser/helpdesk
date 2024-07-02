@@ -40,14 +40,13 @@ class ServerWebsocket implements MessageComponentInterface
     public function onClose(ConnectionInterface $conn)
     {
         if ($this->joined_users_arr['executor'][$conn->resourceId]) {
+            $executor_conn = $this->joined_users_arr['executor'][$conn->resourceId];
             // отключение исполнителя
             Manager::table('connections')->where('conn_id', $conn->resourceId)->delete();
+            // сброс статуса пользователя
+            Manager::table('users')->where('login', $executor_conn['login'])->update(['status_id' => 3]);
 
-            $executor_conn = $this->joined_users_arr['executor'][$conn->resourceId];
             $this->log($conn->resourceId, "отключен исполнитель {$executor_conn['login']}");
-            // сброс подключения пользователя
-            $user = Manager::table('users')->where('login', $executor_conn['login'])->update(['status_id' => 3]);
-
             unset($this->joined_users_arr['executor'][$conn->resourceId]);
         } elseif ($this->joined_users_arr['author'][$conn->resourceId]) {
             // отключение постановщика
@@ -65,8 +64,8 @@ class ServerWebsocket implements MessageComponentInterface
                 case 'onconnection':
                     // новое подключение
                     $this->joined_users_arr[$request_data->user_role][$request_data->resourceId] = [
-                        'login' => $request_data->user_login,
                         'conn' => $from,
+                        'login' => $request_data->user_login,
                     ];
 
                     if ($request_data->user_role == 'executor') {
@@ -119,13 +118,20 @@ class ServerWebsocket implements MessageComponentInterface
                     break;
                 case 'comment-new':
                     // отправлен комментарий
-                    $executor_conn = $this->joined_users_arr['executor'][$request_data->executor_login];
-                    if ($executor_conn) {
-                        $executor_conn->send($message);
-                    }
-                    $this->sendMessageToAuthor($request_data->author_login, $message);
-                    $this->log($from->resourceId, "добавлен комментарий = $message");
 
+                    $executor_conn = $this->joined_users_arr['executor'][$conn->resourceId];
+
+                    // исполнителю
+                    foreach ($this->joined_users_arr['executor'] as $key => $userConn) {
+                        if ($userConn['login'] == $request_data->executor_login) {
+                            $userConn['conn']->send($message);
+                            break;
+                        }
+                    }
+                    // автору
+                    $this->sendMessageToAuthor($request_data->author_login, $message);
+
+                    $this->log($from->resourceId, "добавлен комментарий = $message");
                     break;
                 default:
                     var_dump($request_data);

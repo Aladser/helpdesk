@@ -11,8 +11,8 @@ class CreateConnectionsTable extends Migration
     public function up()
     {
         Schema::create('connections', function (Blueprint $table) {
-            $table->id();
-            $table->bigInteger('conn_id')->unsigned()->nullable(false);
+            // $table->id();
+            $table->bigInteger('conn_id')->unsigned()->nullable(false)->unique()->primary();
             $table->bigInteger('user_id')->unsigned();
 
             $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
