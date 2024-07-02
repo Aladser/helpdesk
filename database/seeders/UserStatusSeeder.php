@@ -9,8 +9,11 @@ class UserStatusSeeder extends Seeder
 {
     public function run()
     {
-        UserStatus::create(['name' => 'active', 'description' => 'Активен']);
-        UserStatus::create(['name' => 'non_active', 'description' => 'Неактивен']);
-        UserStatus::create(['name' => 'disabled', 'description' => 'Отключен']);
+        $names = ['ready', 'process', 'non_ready'];
+        $descriptions = ['Готов', 'В работе', 'Не готов'];
+
+        for ($i = 0; $i < count($names); ++$i) {
+            UserStatus::create(['name' => $names[$i], 'description' => $descriptions[$i]]);
+        }
     }
 }

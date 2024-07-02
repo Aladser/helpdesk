@@ -18,7 +18,7 @@
         <x-js-script>app.js</x-js-script>
         <script src="https://cdn.tailwindcss.com"></script>
         @yield('js')
-        <x-js-script>general.js</x-js-script>
+        <x-js-script>user_status.js</x-js-script>
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-theme color-theme">

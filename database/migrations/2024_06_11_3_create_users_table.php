@@ -16,7 +16,10 @@ class CreateUsersTable extends Migration
             $table->string('patronym')->nullable(true);
             $table->string('password');
             $table->bigInteger('role_id')->unsigned();
+            $table->bigInteger('status_id')->unsigned()->default(3);
+
             $table->foreign('role_id')->references('id')->on('user_roles')->cascadeOnDelete();
+            $table->foreign('status_id')->references('id')->on('user_statuses')->cascadeOnDelete();
             $table->rememberToken();
         });
     }

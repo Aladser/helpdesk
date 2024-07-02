@@ -6,7 +6,12 @@ class ClientWebsocket {
         this.queue = [];
 
         this.websocket_addr = websocket_url;
-        this.websocket = new WebSocket(websocket_url);
+        try {
+            this.websocket = new WebSocket(websocket_url);
+        } catch(e) {
+            alert(e);
+        }
+
         this.websocket.onerror = (e) => this.onError(e);
         this.websocket.onmessage = (e) => this.onMessage(e);
         this.websocket.onopen = (e) => this.onOpen(e);
