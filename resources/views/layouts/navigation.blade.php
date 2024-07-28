@@ -1,11 +1,11 @@
 <nav x-data="{ open: false }" class="bg-dark-theme color-light-theme border-b border-gray-100">
     <!-- Primary Navigation Menu -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ">
+    <div class="mx-auto px-4 sm:px-6 lg:px-8 ">
         <div class="flex justify-between h-16">
             <div class="flex">
                 <!-- Лого -->
                 <div class="shrink-0 flex items-center me-4">
-                    <img class='mx-auto' src="/images/favicon-32.png" alt="Лого">
+                    <img class='me-4' src="/images/favicon-32.png" alt="Лого"> <span class='font-bold'>Helpdesk</span>
                 </div>
                 <!-- Главная -->
                 @if(route('index') == url()->current())
