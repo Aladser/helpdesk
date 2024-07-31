@@ -16,9 +16,6 @@ class CommentController extends Controller
     {
         $auth_user = Auth::user();
         $data = $request->all();
-        var_dump($_FILES);
-
-        return;
 
         $data['author_name'] = $auth_user->short_full_name;
         $data['author_role'] = $auth_user->role->name;

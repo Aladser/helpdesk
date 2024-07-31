@@ -42,7 +42,7 @@ Array.from(document.querySelectorAll('#reassign-user-form__select option')).forE
 
 // ----- <ДОБАВЛЕНИЕ ИЗОБРАЖЕНИЯ В КОММЕНТАРИЙ> -----
 /** Список загружаемых файлов */
-let uploaded_image_array = [];
+let uploaded_image_array = {};
 /**кнопка выбора изображения*/
 let select_image_btn = document.querySelector('#block-submit__image-input-btn');
 /**input выбора файла*/
@@ -54,6 +54,7 @@ select_image_btn.onclick = () =>  select_image_input.click();
 select_image_input.addEventListener('change', function(e){
     new_cmt_form_img_block.classList.remove('hidden');
     new_cmt_form_img_block.innerHTML = '';
+    
     for(let i=0 ;i<this.files.length; i++) {
         // создание блока изображения
         let img_block = document.createElement('div');
@@ -70,19 +71,18 @@ select_image_input.addEventListener('change', function(e){
         button.title = 'удалить изображение';
         button.textContent = 'X';
         img_block.append(button);
-        
+
         new_cmt_form_img_block.append(img_block);
         
         // кнопка удаления изображения
         button.onclick = () => {
             let img_elem = button.closest('.new-cmt-form__img-elem');
             let img_src = img_elem.querySelector('img').src;
-            let index = uploaded_image_array.indexOf(img_src);
-            uploaded_image_array.splice(index, 1);
+            delete uploaded_image_array[img_src];
             img_elem.remove();
         };
 
-        uploaded_image_array.push(img.src);
+        uploaded_image_array[img.src] = this.files[i];
     }
 });
 // ----- </ДОБАВЛЕНИЕ ИЗОБРАЖЕНИЯ В КОММЕНТАРИЙ> -----
