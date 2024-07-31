@@ -12,6 +12,10 @@ class StoreCommentHandler{
     /**cохранить комментарий в БД*/
     send(e, formData) {
         e.preventDefault();
+        for (let i=0; i<this.new_comment_form.images.files.length; i++) {
+            formData.append('images[]', this.new_comment_form.images.files[i])
+        }
+
         ServerRequest.execute({
             URL: "/comment",
             processFunc: (data) => this.handle(data),
@@ -22,6 +26,12 @@ class StoreCommentHandler{
 
     /**обработать ответ сервера на Сохранить комментарий в БД*/
     handle(response) {
+        
+        // ------- TEST------
+        console.log(response);
+        return;
+        // -----------------
+
         let response_data = JSON.parse(response);
         if (response_data.is_stored) {    
             this.new_comment_form.message.value = "";

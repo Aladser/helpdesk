@@ -96,13 +96,18 @@
             @else
             <div id='new-cmt-form-block' class='block-submit relative text-sm'>
             @endif
-                <form id='new-cmt-form' methof='POST' action="{{route('comment.store')}}">
+                <form id='new-cmt-form' methof='POST' action="{{route('comment.store')}}" class='flex border '>
                     @csrf
                     <input id='task__id' name='task_id' type="hidden" value='{{$task->id}}'>
-                    <textarea rows=3  id='new-comment-form__textarea' class='block-submit__textarea' placeholder='Введите сообщение здесь ...' name='message' required></textarea>
-                    <input type='submit' class='block-submit__btn button-theme'>
+                    <input type="file" name='images' id="block-submit__image-input" accept="image/*" class='hidden' multiple>
+
+                    <button type='button' id="block-submit__image-input-btn" class='color-theme p-1 bg-gray-100 hover:bg-gray-200' title='прикрепить изображение'>✚</button>
+                    <textarea rows=3  id='new-comment-form__textarea' placeholder='Введите сообщение здесь ...' name='message' class='block-submit__textarea'></textarea>
+                    <input type='submit' class='cursor-pointer button-theme' value='Отправить'>
                 </form>
+                <div id='new-cmt-form__img-block' class='flex mt-2 mb-3 ms-4'></div>
             </div>
+
 
             <!-- комментарии -->
             <div id='cmt-list-block'>
