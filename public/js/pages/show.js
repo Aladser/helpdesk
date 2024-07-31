@@ -89,7 +89,7 @@ select_image_input.addEventListener('change', function(e){
 
 
 /**-- ОТПРАВКА КОММЕНТАРИЕВ НА СЕРВЕР --*/
-let storeCommentHandler = new StoreCommentHandler(new_comment_form, comment_list_block, uploaded_image_array);
+let storeCommentHandler = new StoreCommentHandler(new_comment_form, comment_list_block, uploaded_image_array, new_cmt_form_img_block);
 
 
 // ----- адрес вебсокета -----
