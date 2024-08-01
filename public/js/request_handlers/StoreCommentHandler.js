@@ -34,7 +34,6 @@ class StoreCommentHandler{
     handle(response) {
 
         let response_data = JSON.parse(response);
-        console.log(response_data);
 
         if (response_data.is_stored) {    
             this.new_comment_form.reset();
