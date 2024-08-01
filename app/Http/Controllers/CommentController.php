@@ -12,14 +12,32 @@ use Illuminate\Support\Facades\Auth;
 
 class CommentController extends Controller
 {
+    private string $mediaFolder;
+
+    public function __construct()
+    {
+        $this->mediaFolder = dirname(__FILE__, 4).'/'.env('MEDIA_ROOT').'/';
+    }
+
     public function store(Request $request)
     {
         $auth_user = Auth::user();
         $data = $request->all();
 
         var_dump($_FILES['images']['tmp_name']);
+        var_dump($this->mediaFolder);
 
         return;
+
+        // загрузка изображения в папку media
+        if (count($_FILES['images']['tmp_name'])) {
+            try {
+                $is_uploaded = move_uploaded_file($_FILES['image']['tmp_name'], $this->mediaFolder.$_FILES['image']['name']);
+                $image_filepath = $_FILES['image']['name'];
+            } catch (\Exception $e) {
+                Log::error($e);
+            }
+        }
 
         $data['author_name'] = $auth_user->short_full_name;
         $data['author_role'] = $auth_user->role->name;
