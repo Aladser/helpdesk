@@ -53,7 +53,6 @@ select_image_btn.onclick = () =>  select_image_input.click();
 
 select_image_input.addEventListener('change', function(e){
     new_cmt_form_img_block.classList.remove('hidden');
-    new_cmt_form_img_block.innerHTML = '';
     
     for(let i=0 ;i<this.files.length; i++) {
         // создание блока изображения
