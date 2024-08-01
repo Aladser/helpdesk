@@ -30,10 +30,12 @@ class TaskController extends Controller
 {
     private array $task_filters = ['new' => 1, 'process' => 2, 'completed' => 3];
     private string $websocket_addr;
+    private string $imageFolder;
 
     public function __construct()
     {
         $this->websocket_addr = WebsocketService::getWebsockerAddr();
+        $this->imageFolder = dirname(__FILE__, 4).'/'.env('MEDIA_ROOT').'/';
     }
 
     // ----- СТРАНИЦА СПИСКА ЗАДАЧ -----
@@ -114,14 +116,22 @@ class TaskController extends Controller
         $comments = Comment::where('task_id', $id)->orderBy('created_at', 'desc')->get();
         $comments_arr = [];
         foreach ($comments as $comment) {
+            // изображения комментария
+            $image_arr = [];
+            foreach ($comment->images as $image) {
+                array_push($image_arr, '/'.env('MEDIA_ROOT').'/'.$image->name);
+            }
+
             $comments_arr[] = [
                 'role' => $comment->author->role->name,
                 'author_name' => $comment->author->short_full_name,
                 'created_at' => $comment->created_at,
                 'is_report' => $comment->is_report,
                 'content' => str_replace(PHP_EOL, '<br>', $comment->content),
+                'images' => $image_arr,
             ];
         }
+
         $request_data = [
             'auth_user' => $auth_user,
             'task' => Task::find($id),
@@ -129,7 +139,7 @@ class TaskController extends Controller
             'websocket_addr' => $this->websocket_addr,
         ];
 
-        // список исполнителей переадресации для исполнителя
+        // список исполнителей для переадресации задачи
         if ($auth_user->role->name !== 'author') {
             $request_data['executors'] = User::where('role_id', 2)->where('id', '<>', $auth_user->id)->select('id', 'name', 'surname', 'patronym')->get();
         }

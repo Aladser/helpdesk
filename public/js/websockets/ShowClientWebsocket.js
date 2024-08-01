@@ -16,6 +16,7 @@ class ShowClientWebsocket extends ClientWebsocket{
                     this.sendData(server_data);
                     break;
                 case 'comment-new':
+                    console.log(server_data);
                     this.createCommentNode(server_data)
                     break;
             }
@@ -30,19 +31,28 @@ class ShowClientWebsocket extends ClientWebsocket{
         comment_node.className = 'cmt-list-block__comment';
         let author_color_class = comment_obj.author_role=='executor' ? 'color-lighter-theme' : 'text-amber-500';
         
+        // автор и дата создания
         let comment_node_content = `
             <div>
                 <div class='cmt-list-block__author ${author_color_class}'>${comment_obj.author_name}</div>
                 <div class='cmt-list-block__time'>${comment_obj.created_at}</div>
             </div>
-            <div>
+                <div>
         `;
+
+        // статус выполнения задачи
         if(comment_obj.is_report) {
-            comment_node_content += `
-                <div class='text-green-500 font-semibold'>Задача выполнена</div>
-            `;
+            comment_node_content += "<div class='text-green-500 font-semibold'>Задача выполнена</div>";
         }
-        comment_node_content += (comment_obj.content + '</div>');
+
+        // сообщение
+        comment_node_content += comment_obj.content;
+
+        // изображения
+        comment_obj.image_arr.forEach(image => comment_node_content += `<img src="${image}" alt="${image}" class="p-2">`);
+
+        comment_node_content += '</div>';
+
         comment_node.innerHTML = comment_node_content;
         this.comment_list_block.prepend(comment_node);
     }

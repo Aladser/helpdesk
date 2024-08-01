@@ -19,6 +19,11 @@ class Comment extends Model
         return $this->belongsTo(Task::class, 'task_id', 'id');
     }
 
+    public function images()
+    {
+        return $this->hasMany(CommentImage::class, 'comment_id', 'id');
+    }
+
     // форматированная дата создания
     public function getCreatedAtAttribute($value)
     {
