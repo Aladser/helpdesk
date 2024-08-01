@@ -17,7 +17,7 @@ class StoreCommentHandler{
     send(e, formData) {
         e.preventDefault();
 
-        // загрузка изображений на сервер
+        // подготовка изображений для загрузки на сервер
         for (var key in this.uploaded_image_array) {
             formData.append('images[]', this.uploaded_image_array[key]);
         }
@@ -33,11 +33,9 @@ class StoreCommentHandler{
     /**обработать ответ сервера на Сохранить комментарий в БД*/
     handle(response) {
 
-        console.log(response);
-        return;
-
         let response_data = JSON.parse(response);
         console.log(response_data);
+
         if (response_data.is_stored) {    
             this.new_comment_form.reset();
             this.new_cmt_form_img_block.innerHTML = "";
