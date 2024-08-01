@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\Auth;
 
 class CommentController extends Controller
 {
-    /** папка для хранения изображений */
     private string $imageFolder;
 
     public function __construct()
@@ -21,11 +20,14 @@ class CommentController extends Controller
         $this->imageFolder = dirname(__FILE__, 4).'/'.env('MEDIA_ROOT').'/';
     }
 
+    // ----- СОХРАНИТЬ КОММЕНТАРИЙ -----
     public function store(Request $request)
     {
         $auth_user = Auth::user();
         $data = $request->all();
         $data['created_at'] = Carbon::now();
+        // массив изображений комментария
+        $image_arr = [];
 
         // обновление активности задачи
         $task = Task::find($data['task_id']);
@@ -50,11 +52,15 @@ class CommentController extends Controller
                     // сохранение изображения из кэша браузера
                     $is_uploaded = move_uploaded_file($_FILES['images']['tmp_name'][$i], $this->imageFolder.$image_name);
 
-                    // добавление изображения в БД
-                    $comment_image = new CommentImage();
-                    $comment_image->name = $image_name;
-                    $comment_image->comment_id = $comment->id;
-                    $comment_image->save();
+                    if ($is_uploaded) {
+                        // добавление в массив изображений для отдачи фронтенду
+                        array_push($image_arr, '/'.env('MEDIA_ROOT').'/'.$image_name);
+                        // добавление изображения в БД
+                        $comment_image = new CommentImage();
+                        $comment_image->name = $image_name;
+                        $comment_image->comment_id = $comment->id;
+                        $comment_image->save();
+                    }
                 }
             } catch (\Exception $e) {
                 var_dump($e);
@@ -72,6 +78,7 @@ class CommentController extends Controller
                 'executor_login' => User::find($task->executor_id)->login,
                 'content' => str_replace(PHP_EOL, '<br>', $data['message']),
                 'task_id' => $data['task_id'],
+                'image_arr' => $image_arr,
                 'is_report' => $data['is_report'] ?? false,
             ]);
         }

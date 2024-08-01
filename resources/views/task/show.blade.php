@@ -130,7 +130,7 @@
                     </div>
 
                     <!--изображения-->
-                    @foreach ($comment['images'] as $image) <img src="{{$image['path']}}" alt="{{$image['path']}}" class="p-2"> @endforeach
+                    @foreach ($comment['images'] as $image) <img src="{{$image}}" alt="{{$image}}" class="p-2"> @endforeach
                 </div>
                 @endforeach
             </div>

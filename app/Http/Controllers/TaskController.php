@@ -30,7 +30,6 @@ class TaskController extends Controller
 {
     private array $task_filters = ['new' => 1, 'process' => 2, 'completed' => 3];
     private string $websocket_addr;
-    /** папка для хранения изображений */
     private string $imageFolder;
 
     public function __construct()
@@ -120,7 +119,7 @@ class TaskController extends Controller
             // изображения комментария
             $image_arr = [];
             foreach ($comment->images as $image) {
-                array_push($image_arr, ['id' => $image->id, 'path' => '/'.env('MEDIA_ROOT').'/'.$image->name]);
+                array_push($image_arr, '/'.env('MEDIA_ROOT').'/'.$image->name);
             }
 
             $comments_arr[] = [
@@ -132,6 +131,7 @@ class TaskController extends Controller
                 'images' => $image_arr,
             ];
         }
+
         $request_data = [
             'auth_user' => $auth_user,
             'task' => Task::find($id),
@@ -139,7 +139,7 @@ class TaskController extends Controller
             'websocket_addr' => $this->websocket_addr,
         ];
 
-        // список исполнителей переадресации для исполнителя
+        // список исполнителей для переадресации задачи
         if ($auth_user->role->name !== 'author') {
             $request_data['executors'] = User::where('role_id', 2)->where('id', '<>', $auth_user->id)->select('id', 'name', 'surname', 'patronym')->get();
         }
