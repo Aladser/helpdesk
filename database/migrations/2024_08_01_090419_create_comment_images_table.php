@@ -10,7 +10,7 @@ class CreateCommentImagesTable extends Migration
     {
         Schema::create('comment_images', function (Blueprint $table) {
             $table->id();
-            $table->string('image', 255);
+            $table->string('name', 255);
             $table->bigInteger('comment_id')->unsigned();
 
             $table->foreign('comment_id')->references('id')->on('comments')->cascadeOnDelete();

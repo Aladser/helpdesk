@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Comment;
+use App\Models\CommentImage;
 use App\Models\Task;
 use App\Models\User;
 use App\Services\WebsocketService;
@@ -12,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 
 class CommentController extends Controller
 {
+    /** папка для хранения изображений */
     private string $mediaFolder;
 
     public function __construct()
@@ -24,21 +26,6 @@ class CommentController extends Controller
         $auth_user = Auth::user();
         $data = $request->all();
 
-        var_dump($_FILES['images']['tmp_name']);
-        var_dump($this->mediaFolder);
-
-        return;
-
-        // загрузка изображения в папку media
-        if (count($_FILES['images']['tmp_name'])) {
-            try {
-                $is_uploaded = move_uploaded_file($_FILES['image']['tmp_name'], $this->mediaFolder.$_FILES['image']['name']);
-                $image_filepath = $_FILES['image']['name'];
-            } catch (\Exception $e) {
-                Log::error($e);
-            }
-        }
-
         $data['author_name'] = $auth_user->short_full_name;
         $data['author_role'] = $auth_user->role->name;
         $data['created_at'] = Carbon::now();
@@ -48,18 +35,36 @@ class CommentController extends Controller
         $task->updated_at = $data['created_at'];
         $task->save();
 
-        // добавление комментария
+        // добавление комментария в БД
         $comment = new Comment();
         $comment->task_id = $data['task_id'];
         $comment->author_id = $auth_user->id;
-        $comment->content = $data['message'];
+        $comment->content = $data['message'] ? $data['message'] : '';
         $comment->created_at = $data['created_at'];
         $data['is_stored'] = $comment->save();
 
-        $data['message'] = str_replace(PHP_EOL, '<br>', $data['message']);
-        $data['created_at'] = $data['created_at']->format('d-m-Y H:i');
+        // загрузка изображения в папку media
+        if (gettype($_FILES['images']['tmp_name']) == 'array') {
+            try {
+                for ($i = 0; $i < count($_FILES['images']['tmp_name']); ++$i) {
+                    // формирование имени файла
+                    $image_name = $comment->id.'_'.$_FILES['images']['name'][$i];
 
-        // отправка информации в вебсокет
+                    // сохранение изображения из кэша браузера
+                    $is_uploaded = move_uploaded_file($_FILES['images']['tmp_name'][$i], $this->mediaFolder.$image_name);
+
+                    // добавление изображения в БД
+                    $comment_image = new CommentImage();
+                    $comment_image->name = $image_name;
+                    $comment_image->comment_id = $comment->id;
+                    $comment_image->save();
+                }
+            } catch (\Exception $e) {
+                var_dump($e);
+            }
+        }
+
+        // отправка комментария в вебсокет
         if ($data['is_stored']) {
             WebsocketService::send([
                 'type' => 'comment-new',
@@ -76,6 +81,8 @@ class CommentController extends Controller
 
         unset($data['_token']);
         unset($data['task_id']);
+        $data['message'] = str_replace(PHP_EOL, '<br>', $data['message']);
+        $data['created_at'] = $data['created_at']->format('d-m-Y H:i');
 
         return $data;
     }
