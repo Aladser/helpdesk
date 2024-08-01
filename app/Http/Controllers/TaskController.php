@@ -30,10 +30,13 @@ class TaskController extends Controller
 {
     private array $task_filters = ['new' => 1, 'process' => 2, 'completed' => 3];
     private string $websocket_addr;
+    /** папка для хранения изображений */
+    private string $imageFolder;
 
     public function __construct()
     {
         $this->websocket_addr = WebsocketService::getWebsockerAddr();
+        $this->imageFolder = dirname(__FILE__, 4).'/'.env('MEDIA_ROOT').'/';
     }
 
     // ----- СТРАНИЦА СПИСКА ЗАДАЧ -----
@@ -114,12 +117,19 @@ class TaskController extends Controller
         $comments = Comment::where('task_id', $id)->orderBy('created_at', 'desc')->get();
         $comments_arr = [];
         foreach ($comments as $comment) {
+            // изображения комментария
+            $image_arr = [];
+            foreach ($comment->images as $image) {
+                array_push($image_arr, ['id' => $image->id, 'path' => '/'.env('MEDIA_ROOT').'/'.$image->name]);
+            }
+
             $comments_arr[] = [
                 'role' => $comment->author->role->name,
                 'author_name' => $comment->author->short_full_name,
                 'created_at' => $comment->created_at,
                 'is_report' => $comment->is_report,
                 'content' => str_replace(PHP_EOL, '<br>', $comment->content),
+                'images' => $image_arr,
             ];
         }
         $request_data = [

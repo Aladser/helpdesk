@@ -14,11 +14,11 @@ use Illuminate\Support\Facades\Auth;
 class CommentController extends Controller
 {
     /** папка для хранения изображений */
-    private string $mediaFolder;
+    private string $imageFolder;
 
     public function __construct()
     {
-        $this->mediaFolder = dirname(__FILE__, 4).'/'.env('MEDIA_ROOT').'/';
+        $this->imageFolder = dirname(__FILE__, 4).'/'.env('MEDIA_ROOT').'/';
     }
 
     public function store(Request $request)
@@ -48,7 +48,7 @@ class CommentController extends Controller
                     $image_name = $comment->id.'_'.$_FILES['images']['name'][$i];
 
                     // сохранение изображения из кэша браузера
-                    $is_uploaded = move_uploaded_file($_FILES['images']['tmp_name'][$i], $this->mediaFolder.$image_name);
+                    $is_uploaded = move_uploaded_file($_FILES['images']['tmp_name'][$i], $this->imageFolder.$image_name);
 
                     // добавление изображения в БД
                     $comment_image = new CommentImage();

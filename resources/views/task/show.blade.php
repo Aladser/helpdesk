@@ -115,22 +115,22 @@
                 <div class='cmt-list-block__comment'>
                     <div>
                         @if($comment['role'] == 'executor')
-                        <div class='cmt-list-block__author color-lighter-theme'>{{$comment['author_name']}}</div>
+                            <div class='cmt-list-block__author color-lighter-theme'>{{$comment['author_name']}}</div>
                         @else
-                        <div class='cmt-list-block__author text-amber-500'>{{$comment['author_name']}}</div>
+                            <div class='cmt-list-block__author text-amber-500'>{{$comment['author_name']}}</div>
                         @endif
 
-                        <div class='cmt-list-block__time'>
-                            {{$comment['created_at']}}
-                        </div>
+                        <div class='cmt-list-block__time'>{{$comment['created_at']}}</div>
                     </div>
+
                     <!--для показа тегов в сообщении-->
                     <div>
-                        @if($comment['is_report'])
-                        <div class='text-green-500 font-semibold'>Задача выполнена</div>
-                        @endif
+                        @if($comment['is_report']) <div class='text-green-500 font-semibold'>Задача выполнена</div> @endif
                         <?php echo $comment['content']; ?>
                     </div>
+
+                    <!--изображения-->
+                    @foreach ($comment['images'] as $image) <img src="{{$image['path']}}" alt="{{$image['path']}}" class="p-2"> @endforeach
                 </div>
                 @endforeach
             </div>
