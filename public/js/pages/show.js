@@ -16,11 +16,13 @@ let appoint_user_block = document.querySelector("#reassign-user-list-block");
 /**кнопка "Подтвердить назначить задачи"*/
 let apply_appoint_user_btn = false;
 /**select списка техспецов*/
-let appoint_user_select = false;
+let appoint_user_select_node = false;
 if( appoint_user_block) {
-    appoint_user_select = appoint_user_block.querySelector("#reassign-user-form__select");
+    appoint_user_select_node = appoint_user_block.querySelector("#reassign-user-form__select");
     apply_appoint_user_btn = appoint_user_block.querySelector("#reassign-user-list-block__btn-appoint");
 }
+// выбран специалист для назначения задачи
+appoint_user_select_node.onchange = () => apply_appoint_user_btn.disabled = false;
 
 /**обработчик обновления статуса задачи*/
 let updateTaskStatusHandler = new UpdateTaskStatusHandler(
@@ -38,6 +40,12 @@ Array.from(document.querySelectorAll('#reassign-user-form__select option')).forE
         techsupport_arr[spec.value] = spec.id.slice(9); 
     }
 })
+
+// ----- адрес вебсокета -----
+const WEBSOCKET_ADDRESS = document.querySelector("meta[name='websocket']").content;
+const USER_LOGIN = document.querySelector("meta[name='login']").content;
+const USER_ROLE = document.querySelector("meta[name='role']").content;
+const websocket = new ShowClientWebsocket(WEBSOCKET_ADDRESS, USER_LOGIN, USER_ROLE, comment_list_block);
 
 
 // ----- <ДОБАВЛЕНИЕ ИЗОБРАЖЕНИЯ В КОММЕНТАРИЙ> -----
@@ -87,21 +95,8 @@ select_image_input.addEventListener('change', function(e){
 // ----- </ДОБАВЛЕНИЕ ИЗОБРАЖЕНИЯ В КОММЕНТАРИЙ> -----
 
 
-/**-- ОТПРАВКА КОММЕНТАРИЕВ НА СЕРВЕР --*/
+// ----- <ОТПРАВКА КОММЕНТАРИЯ НА СЕРВЕР> -----
 let storeCommentHandler = new StoreCommentHandler(new_comment_form, comment_list_block, uploaded_image_array, new_cmt_form_img_block);
-
-
-// ----- адрес вебсокета -----
-const WEBSOCKET_ADDRESS = document.querySelector("meta[name='websocket']").content;
-const USER_LOGIN = document.querySelector("meta[name='login']").content;
-const USER_ROLE = document.querySelector("meta[name='role']").content;
-const websocket = new ShowClientWebsocket(WEBSOCKET_ADDRESS, USER_LOGIN, USER_ROLE, comment_list_block);
-
-
-// выбран специалист для назначения задачи
-appoint_user_select.onchange = () => apply_appoint_user_btn.disabled = false;
-
-// сохранить комментарий
 new_comment_form.addEventListener("submit", function (e) {
     e.preventDefault();
     if(this.message.value == '' && this.images.files.length == 0) {
@@ -110,7 +105,6 @@ new_comment_form.addEventListener("submit", function (e) {
     }
     storeCommentHandler.send(e, new FormData(this));
 });
-
 
 let isShiftPressed = false;
 // отпускание клавиши Shift или Enter
@@ -133,6 +127,7 @@ new_comment_form_textarea.addEventListener("keydown", function (e) {
         isShiftPressed = true;
     }
 });
+// ----- </ОТПРАВКА КОММЕНТАРИЯ НА СЕРВЕР> -----
 
 
 /**кнопка скрытия формы "Назначить задачу"*/
@@ -166,7 +161,7 @@ if (appoint_task_btn) {
 
 // назначить ответственного за задачу - отправка запроса
 apply_appoint_user_btn.onclick = () => {
-    let user_id = techsupport_arr[appoint_user_select.value];
+    let user_id = techsupport_arr[appoint_user_select_node.value];
     hide_appoint_user_form_btn.click();
     updateTaskStatusHandler.send('take-task', null, user_id);
 };
