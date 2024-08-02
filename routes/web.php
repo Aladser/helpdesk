@@ -28,7 +28,13 @@ Route::get('/statistic', [TaskController::class, 'stat'])->middleware(['auth', '
 Route::get('/settings', function () {
     return view('settings', ['websocket_addr' => WebsocketService::getWebsockerAddr()]);
 })->middleware(['auth', 'admin'])->name('settings');
-// 403
+
+// Error 403
 Route::get('/403', function () {
     return view('403');
 })->name('403');
+
+// Error 500
+Route::get('/500', function () {
+    return view('500');
+})->name('500');
