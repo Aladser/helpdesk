@@ -43,27 +43,29 @@ class CommentController extends Controller
         $data['is_stored'] = $comment->save();
 
         // загрузка изображения в папку media
-        if (gettype($_FILES['images']['tmp_name']) == 'array') {
-            try {
-                for ($i = 0; $i < count($_FILES['images']['tmp_name']); ++$i) {
-                    // формирование имени файла
-                    $image_name = $comment->id.'_'.$_FILES['images']['name'][$i];
+        if (array_key_exists('images', $_FILES)) {
+            if (gettype($_FILES['images']['tmp_name']) == 'array') {
+                try {
+                    for ($i = 0; $i < count($_FILES['images']['tmp_name']); ++$i) {
+                        // формирование имени файла
+                        $image_name = $comment->id.'_'.$_FILES['images']['name'][$i];
 
-                    // сохранение изображения из кэша браузера
-                    $is_uploaded = move_uploaded_file($_FILES['images']['tmp_name'][$i], $this->imageFolder.$image_name);
+                        // сохранение изображения из кэша браузера
+                        $is_uploaded = move_uploaded_file($_FILES['images']['tmp_name'][$i], $this->imageFolder.$image_name);
 
-                    if ($is_uploaded) {
-                        // добавление в массив изображений для отдачи фронтенду
-                        array_push($image_arr, '/'.env('MEDIA_ROOT').'/'.$image_name);
-                        // добавление изображения в БД
-                        $comment_image = new CommentImage();
-                        $comment_image->name = $image_name;
-                        $comment_image->comment_id = $comment->id;
-                        $comment_image->save();
+                        if ($is_uploaded) {
+                            // добавление в массив изображений для отдачи фронтенду
+                            array_push($image_arr, '/'.env('MEDIA_ROOT').'/'.$image_name);
+                            // добавление изображения в БД
+                            $comment_image = new CommentImage();
+                            $comment_image->name = $image_name;
+                            $comment_image->comment_id = $comment->id;
+                            $comment_image->save();
+                        }
                     }
+                } catch (\Exception $e) {
+                    var_dump($e);
                 }
-            } catch (\Exception $e) {
-                var_dump($e);
             }
         }
 

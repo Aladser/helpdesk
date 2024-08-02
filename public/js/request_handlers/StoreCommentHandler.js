@@ -32,12 +32,15 @@ class StoreCommentHandler{
 
     /**обработать ответ сервера на Сохранить комментарий в БД*/
     handle(response) {
-
         let response_data = JSON.parse(response);
-
         if (response_data.is_stored) {    
             this.new_comment_form.reset();
             this.new_cmt_form_img_block.innerHTML = "";
+
+            // очистка словаря загруженных изображений
+            for(let key in this.uploaded_image_array) {
+                delete this.uploaded_image_array[key];
+            }
         }
     }
 }
